@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="input_supporting_text">This text is passed as argument to the next opened screen</string>
+    <string name="input_read_only_text">Read-only text</string>
+</resources>

@@ -1,0 +1,17 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: open-turo/actions-jvm/lint@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

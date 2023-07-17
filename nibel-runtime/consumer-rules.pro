@@ -1,0 +1,3 @@
+-keep @com.turo.nibel.runtime.EntryFactoryProvider public class **
+-keepclassmembers @com.turo.nibel.runtime.EntryFactoryProvider class ** { public <methods>; }
+-keepnames public class * extends com.turo.nibel.annotations.ExternalDestination
