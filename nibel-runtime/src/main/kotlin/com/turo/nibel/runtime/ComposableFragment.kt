@@ -14,8 +14,9 @@ import com.turo.nibel.annotations.UiEntry
 import com.turo.nibel.annotations.UiExternalEntry
 
 /**
- * If a composable function is annotated with [UiEntry] or [UiExternalEntry] and [ImplementationType.Fragment]
- * is used, a `{ComposableName}Entry` class is generated which is a descendant of this base class.
+ * If a composable function is annotated with [UiEntry] or [UiExternalEntry] and
+ * [ImplementationType.Fragment] is used, a `{ComposableName}Entry` class is generated which is a
+ * descendant of this base class.
  */
 abstract class ComposableFragment : Fragment() {
 

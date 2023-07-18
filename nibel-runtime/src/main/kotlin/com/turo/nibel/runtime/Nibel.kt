@@ -7,18 +7,24 @@ import com.turo.nibel.annotations.ImplementationType
 import com.turo.nibel.annotations.UiEntry
 import com.turo.nibel.annotations.UiExternalEntry
 import com.turo.nibel.annotations.LegacyExternalEntry
+import com.turo.nibel.annotations.LegacyEntry
 
 /**
- * Nibel - is a type-safe navigation library that enables a seamless adoption of Jetpack Compose in
+ * Nibel - is a type-safe navigation library for seamless adoption of Jetpack Compose in
  * fragment-based Android apps.
  *
- * To start using it, annotate
- * Nibel provides the following building blocks to help you with a seamless adoption of Jetpack Compose
- * in your codebase.
+ * By leveraging the power of annotation processing Nibel provides a unified way of navigating
+ * between screens in the following navigation scenarios:
+ * - **fragment → compose**
+ * - **compose → compose**
+ * - **compose → fragment**
  *
- * [UiEntry]
- * [UiExternalEntry]
- * [NavigationController]
+ * Nibel's core building blocks:
+ * - [UiEntry] and [UiExternalEntry] annotations are used to mark composable functions as screen
+ * entries.
+ * - [NavigationController] performs a navigation between compose screens.
+ * - [LegacyEntry] and [LegacyExternalEntry] annotation are applied to fragments to allow navigation
+ * from compose screens to fragments.
  */
 object Nibel {
     internal val serializer = Serializer()
@@ -78,7 +84,7 @@ object Nibel {
         get() = _NavigationDelegate ?: notConfiguredError()
 
     /**
-     *
+     * Nibel initializer that should be called before performing navigation to screen entries.
      */
     fun configure(
         destinations: Map<Class<out ExternalDestination>, EntryFactory<*, *>> = emptyMap(),

@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 
+/**
+ * Default key for passing arguments during the navigation.
+ */
 const val NIBEL_ARGS = "nibel_args"
 
 /**
