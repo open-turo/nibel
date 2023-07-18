@@ -1,6 +1,5 @@
 # Nibel 💫
-
-Nibel  —  is a type-safe navigation library for seamless integration of Jetpack Compose in fragment-based Android apps.
+Nibel — is a type-safe navigation library for seamless integration of Jetpack Compose in fragment-based Android apps.
 
 When we built it at Turo, our goal was to ensure a proper Jetpack Compose experience for the team when creating new features while keeping them compatible with the rest of the codebase automatically.
 
@@ -11,22 +10,18 @@ By leveraging the power of annotation processing Nibel provides a unified and ty
 - **compose → fragment**
 
 Nibel supports both **single-module** and **multi-module** navigation out-of-the-box. The latter is especially useful when navigating between feature modules that do not depend on each other directly.
-
-- [Materials](#materials)
 - [Installation](#installation)
 - [Basic usage](#basic-usage)
 - [Multi-module navigation](#multi-module-navigation)
-- [Customization](#customization)
 - [Sample app](#sample-app)
+- [More documentation](#more-documentation)
 
 ## Materials
-
 - Blog post [Designing Jetpack Compose architecture for a gradual transition from fragments on Android](https://medium.com/turo-engineering/designing-jetpack-compose-architecture-for-a-gradual-transition-from-fragments-on-android-b11ee5f19ba8).
 - Blog post [Introducing Nibel - a navigation library for seamless adoption of Jetpack Compose in fragment-based Android apps]().
 - Conference talk [Designing Jetpack Compose architecture for gradual migration from fragments on Android](https://android-worldwide.com/register/).
 
 ## Installation
-
 Nibel consists of 2 components: **runtime** and **compiler**. The latter enables code generation to provide a type-safe way of navigating between screens.
 
 In the `build.gradle.kts` of your feature module add the dependencies below.
@@ -54,8 +49,7 @@ The latest version of Nibel is [![Maven Central](https://maven-badges.herokuapp.
 
 To start using Nibel, just call the `Nibel.configure()` function to initialize it in the `Application.OnCreate`.
 
-### Defining a screen
-
+### Delaring a screen
 When working with Nibel, all you need to do is to annotate a composable function that represents a screen with a `@UiEntry` annotation.
 
 ```kotlin
@@ -66,16 +60,16 @@ When working with Nibel, all you need to do is to annotate a composable function
 fun FirstScreen() { ... }
 ```
 
-When you build the code, Nibel will generate a `{ComposableName}Entry` class for the annotated composable that serves as an entry point to the screen.
+When you build the code, there will be generated a `{ComposableName}Entry` class that serves as an entry point to the screen.
 
-The type of the generated entry differs depending on the `ImplementationType` used in the annotation. Each type serves a specific scenario and can be one of:
-
+The type of the generated entry differs depending on the `ImplementationType` specified in the annotation. Each type serves a specific scenario and can be one of:
 - `Fragment` - generates a fragment that uses the annotated composable as its content. It makes the compose screen look like a fragment to other fragments and is crucial in **fragment → compose** navigation scenarios.
-- `Composable` - generates a lightweight entry over a composable and reduces the performance overhead by avoiding instantiation of fragment-related classes for this screen. It is normally used in **compose → compose** and **compose → fragment** navigation scenarios.
+- `Composable` - generates a small wrapper class over a composable. It is normally used in **compose → compose** and **compose → fragment** navigation scenarios.
+
+> Use `ImplementationType.Composable` as much as you can to reduce the performance overhead by avoiding instantiation of fragment-related classes for each screen under-the-hood.
 
 ### Navigating fragment to compose
-
-When you need to navigate from an existing fragment to a `FirstScreen` composable, you should treat a generated `FirstScreenEntry` as a fragment and use a transaction for navigation.
+To navigate from an existing fragment to a `FirstScreen` composable you should treat a generated `FirstScreenEntry` as a fragment and use a transaction for navigation.
 
 ```kotlin
 class ZeroScreenFragment : Fragment() {
@@ -86,10 +80,8 @@ class ZeroScreenFragment : Fragment() {
 }
 ```
 
-### Defining a screen with args
-
-Nibel makes it easy to define screens with arguments in a type-safe manner. Just use the class of your `Parcelable` args in the `@UiEntry` annotation.
-
+### Declaring a screen with args
+For screens with arguments, just pass the class of your `Parcelable` args in the `@UiEntry` annotation.
 ```kotlin
 @UiEntry(
   type = ImplementationType.Composable,
@@ -100,16 +92,17 @@ fun SecondScreen(
   args: SecondScreenArgs, // optional param
 ) { ... }
 ```
+Optionally, arguments could be declared in params of the composable function, so that the instance is automatically provided by Nibel.
 
-> Parameters of the composable function are optional. You can learn more about using composable functions with params with Nibel [here](#composable-function-params).
+> **Warning**: If argument types in the annotation and function params do not match, a compile time error will be thrown.
 
 ### Navigating compose to compose
+The core navigation component within compose screens is `NavigationController`. It can be optionally declared in params of the composable function, so that the instance is automatically provided by Nibel.
 
-If you want to navigate from one compose screen to another, use `NavigationController` provided by Nibel. Just create an instance of a screen entry and pass it to the `navigateTo` function.
-Here is the example of navigating from `FirstScreen` to `SecondScreen` both of which we declared earlier.
+To navigate from `FirstScreen` to `SecondScreen`, use `navigateTo` with an instance of a generated entry class.
 
 ```kotlin
-@UiEntry(Fragment)
+@UiEntry(type = ImplementationType.Fragment)
 @Composable
 fun FirstScreen(
   navigator: NavigationController // optional param
@@ -120,51 +113,43 @@ fun FirstScreen(
 }
 ```
 
-> You can navigate between screens of any implementation type. It is recommended to use `ImplementationType.Composable` for every compose screen for better performance. The only exception are those screens that are navigated from actual fragments, as they should use `ImplementationType.Fragment`.
+> You can navigate between screens of any `ImplementationType` with no limitations but it is recommended to use `Composable` for every screen unless it is reached from an existing fragment.
 
 ### Navigating compose to fragment
-
-You might find yourself in a situation where you need to navigate from a compose screen to an existing fragment.
+When adopting Jetpack Compose there if often the need to navigate from compose screens to old fragments.
 
 ```kotlin
 class ThirdScreenFragment : Fragment() { ... }
 ```
-
-To navigate from `SecondScreen` composable to `ThirdScreenFragment` just wrap the latter with `FragmentEntry` and use the navigation controller.
-
+To navigate from `SecondScreen` composable to `ThirdScreenFragment` just wrap the latter with `FragmentEntry`.
 ```kotlin
-@UiEntry(Composable, SecondScreenArgs::class)
-@Composable
-fun SecondScreen(navigator: NavigationController) {
-  ...
-  val fragment = ThirdScreenFragment()
-  navigator.navigateTo(FragmentEntry(fragment))
-}
+val fragment = ThirdScreenFragment()
+navigator.navigateTo(FragmentEntry(fragment))
 ```
 
 ## Multi-module navigation
+In multi-module apps it is common to have feature modules that do not depend on each other directly. This leads to inability of obraining direct references to generated entry classes.
 
-In multi-module apps it is crucial to be able to navigate between feature modules that do not depend on each other. In this case, it is impossible to have a direct reference to a generated entry class from another module.
+Nibel provides an easy way of multi-module navigation in a type-safe manner using a concept of destinations. Destination — is a simple data type that stands for a navigation intent. It is located in a separate module available to other feature modules.
 
 ```
-featureA          featureB
-   │                  │
-   └──► navigation ◄──┘
+ featureA          featureB  
+  module            module  
+    │                  │  
+    └──► navigation ◄──┘  
+           module  
 ```
 
-Nibel provides an easy way of navigating between feature modules in a type-safe manner using a concept of destinations.
-
-### Defining a destination
-
-Destination is a simple class that defines a navigation intent between feature modules. It is a simple object that should implement `DestinationWithNoArgs`. It should be declared in a separate module, that is available to other feature modules.
-
+### Declaring a destination
+The most basic destination is an `object` that implements `DestinationWithNoArgs` an is declared in a separate navigation module, available to other feature modules.
 ```kotlin
+// navigation module available to other feature modules
 object FirstScreenDestination : DestinationWithNoArgs
 ```
-
-Instead of `@UiEntry` we should use `@UiExternalEntry`. External is an entry that makes it possible to navigate to this screen from other feature modules.
+A destination then must be associated with a corresponding compose screen. This time there should be used `UiExternalEntry` annotation instead of `UiEntry`.
 
 ```kotlin
+// feature module
 @UiExternalEntry(
   type = ImplementationType.Fragment,
   destination = FirstScreenDestination::class
@@ -172,13 +157,12 @@ Instead of `@UiEntry` we should use `@UiExternalEntry`. External is an entry tha
 @Composable
 fun FirstScreen() { ... }
 ```
+A destination must be associated with **exactly one** compose screen. Otherwise, a compile time error will be thrown.
 
-Every external entry should be associated with a corresponding destination type. A destination can be related only to a single external entry. Using it with multiple entries will result in a compile time error.
+> `UiExternalEntry` includes all the functionallity of `UiEntry`. This includes generating entry classes for navigating within a single feature module.
 
 ### Navigating fragment to compose
-
-When you need to navigate from an existing fragment to `FirstScreen` composable, use `Nibel.newFragmentEntry` to instantiate a new entry associated with its destination. In this case an instance of `FirstScreenEntry` is created that should be treated as a fragment and used in a transaction for navigation.
-
+To navigate from an existing fragment to a `FirstScreen` composable, use a destination to obtain a `FirstScreenEntry` instance by calling `Nibel.newFragmentEntry`.  Treat it as a fragment and use a transaction for navigation.
 ```kotlin
 class ZeroScreenFragment : Fragment() {
   ...
@@ -190,9 +174,7 @@ class ZeroScreenFragment : Fragment() {
 ```
 
 ### Defining a destination with args
-
-For a screen with arguments, make sure its associated destination implements `DestinationWithArgs` where the args should be `Parcelable`.
-
+For a screen with arguments, make sure its associated destination is a `data class` that implements `DestinationWithArgs` where the args should be  `Parcelable`.
 ```kotlin
 data class SecondScreenDestination(
   override val args: SecondScreenArgs // Parcelable args
@@ -204,175 +186,49 @@ Now, all that's left to do is to connect the destination type with a `@UiExterna
 ```kotlin
 @UiExternalEntry(
   type = ImplementationType.Composable,
-  args = SecondScreenDestination::class
+  destination = SecondScreenDestination::class
 )
 @Composable
-fun SecondScreen(
-  args: SecondScreenArgs, // optional param.
-) { ... }
+fun SecondScreen(args: SecondScreenArgs) { ... }
 ```
 
 ### Navigating compose to compose
-
-If you want to navigate from one compose screen to another, use `NavigationController` provided by Nibel. Use an instance of a destination that is associated with the screen you want to havigate to.
-Here is the example of navigating from `FirstScreen` to `SecondScreen` both of which we declared earlier.
+To navigate from `FirstScreen` to `SecondScreen` both of which are composables defined above, use `navigateTo` with an instance of a destination assiciated with the target screen.
 
 ```kotlin
-@UiExternalEntry(...)
-@Composable
-fun FirstScreen(navigator: NavigationController) {
-  ...
-  val args = SecondScreenArgs(...)
-  navigator.navigateTo(SecondScreenDestination(args))
-}
+val args = SecondScreenArgs(...)
+navigator.navigateTo(SecondScreenDestination(args))
 ```
 
 ### Navigating compose to fragment
 
+To navigate from `SecondScreen` composable to `ThirdScreenFragment` annotate the latter with `@LegacyExternalEntry` and associate it with a destination.
 ```kotlin
-@LegacyExternalEntry(
-  destination = ThirdScreenDestination::class
-)
+@LegacyExternalEntry(destination = ThirdScreenDestination::class)
 class ThirdScreenFragment : Fragment() {
   ...
+  // Accessing screen arguments
   arguments?.getNibelArgs<ThirdScreenArgs>()
 }
 ```
-
+Then, use the destination for navigation.
 ```kotlin
-@UiExternalEntry(...)
-@Composable
-fun SecondScreen(navigator: NavigationController) {
-  ...
-  val args = ThirdScreenArgs(...)
-  navigator.navigateTo(ThirdScreenFragmentEntry.newInstance(args))
-}
+val args = ThirdScreenArgs(...)
+navigator.navigateTo(ThirdScreenDestination(args))
 ```
-
-## Customization
-
-### Applying a theme
-
-```kotlin
-object CustomRootContent : RootDelegate {
-
-    @Composable
-    override fun Content(content: @Composable () -> Unit) {
-        AppTheme {
-            content()
-        }
-    }
-}
-```
-
-```kotlin
-Nibel.configure(rootDelegate = AppRootContent)
-```
-
-### Parametrized navigation
-
-```kotlin
-navigator.navigateTo(
-  destination = NextScreenDestination,
-  fragmentSpec = FragmentTransactionSpec(...),
-  composeSpec = ComposeNavigationSpec(...)
-)
-```
-
-`replace` , `addToBackstack`, `containerId`
-
-- `fragmentSpec` - when you navigate to:
-  - a composable annotated with `Fragment` implementation type.
-  - a regular fragment.
-- `composeSpec` - when you navigate to:
-  - a composable annotated with `Composable` implementation type.
-
-Nibel provides `FragmentTransactionSpec` as a default fragment spec and `ComposeNavigationSpec` as default compose spec for navigation.
-
-#### Custom params
-
-```kotlin
-navigator.navigateTo(
-    destination = SecondScreenDestination,
-    fragmentSpec = FragmentTransactionSpec(
-        replace = false,
-        addToBackStack = false,
-        containerId = R.id.custom_container_id
-    )
-)
-```
-
-#### Custom navigation logic
-
-Additionally, you can modify the entire behavior of a `FragmentTransactionSpec` by extending it with a custom class.
-
-```kotlin
-class CustomFragmentSpec(
-    val customParam: ...,
-) : FragmentTransactionSpec(...) {
-
-    override FragmentTransactionContext.navigateTo(entry: FragmentEntry) {
-    fragmentManager.commit {
-        // custom transaction logic
-    }
-}
-}
-```
-
-#### Default navigation specs
-
-If you want to specify default project-wide specs for the navigation, you can do it with `Nibel.configure` function.
-
-```kotlin
-Nibel.configure(
-    fragmentSpec = CustomFragmentSpec(),
-    composeSpec = CustomComposeSpec()
-)
-```
-
-### Custom args key
-
-```kotlin
-Nibel.configure(
-    argsKey = "custom_args_key"
-)
-```
-
-## Compatibility with architecture libraries
-
-### [Android architecture components](https://developer.android.com/topic/architecture)
-
-Nibel is compatible with [Hilt](https://developer.android.com/training/dependency-injection/hilt-android) and [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) architecture components out-of-the-box. Just initialize a view model in your composable entry with `hiltViewModel`.
-
-```Kotlin
-@UiEntry(type = Composable, args = DemoArgs::class)
-@Composable
-fun DemoScreen(viewModel: DemoViewModel = hiltViewModel()) { ... }
-```
-
-Retrieve the arguments from the `SavedStateHandle` as you would normally do in your view model.
-
-```kotlin
-@HiltViewModel
-class DemoViewModel(handle: SavedStateHandle): ViewModel() {
-    val args = handle.getNibelArgs<DemoArgs>()
-}
-```
-
-Nibel uses [Compose Navigation](https://developer.android.com/jetpack/compose/navigation) library under-the-hood which provides a compatibility with Android architecture components as shown above.
-
-### [Mavericks](https://github.com/airbnb/mavericks)
-
-TBD
 
 ## Sample app
+Check out a [sample app]() for demonstration of various scenarios of using Nibel in practice.
+
+## More documentation
+- [Customization]()
+- [Understanding generated code]()
+- [Integration with architecture libraries]()
 
 ## Contributing
-
 Pull requests are welcome! See [here](https://github.com/open-turo/contributions) for guidelines on how to contribute to this project.
 
 ## License
-
 ```
 MIT License
 
