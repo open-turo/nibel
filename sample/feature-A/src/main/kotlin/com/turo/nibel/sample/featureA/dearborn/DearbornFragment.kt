@@ -7,7 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.turo.nibel.runtime.Nibel
+import nibel.runtime.Nibel
 import com.turo.nibel.sample.common.CommonScreenFragment
 import com.turo.nibel.sample.common.NextButtonsAdapter
 import com.turo.nibel.sample.featureA.yokohama.YokohamaArgs

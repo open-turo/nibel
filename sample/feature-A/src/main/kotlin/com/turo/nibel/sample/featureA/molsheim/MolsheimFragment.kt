@@ -7,8 +7,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.turo.nibel.annotations.LegacyEntry
-import com.turo.nibel.runtime.getNibelArgs
+import nibel.annotations.LegacyEntry
+import nibel.runtime.getNibelArgs
 import com.turo.nibel.sample.common.CommonScreenFragment
 import com.turo.nibel.sample.common.NextButtonsAdapter
 import dagger.hilt.android.AndroidEntryPoint

@@ -5,10 +5,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.turo.nibel.annotations.ImplementationType
-import com.turo.nibel.annotations.UiEntry
-import com.turo.nibel.runtime.LocalImplementationType
-import com.turo.nibel.runtime.NavigationController
+import nibel.annotations.ImplementationType
+import nibel.annotations.UiEntry
+import nibel.runtime.LocalImplementationType
+import nibel.runtime.NavigationController
 import com.turo.nibel.sample.common.CommonScreen
 import com.turo.nibel.sample.common.SideEffectHandler
 import com.turo.nibel.sample.featureB.modena.ModenaScreenEntry

@@ -1,7 +1,7 @@
 package com.turo.nibel.sample
 
 import android.app.Application
-import com.turo.nibel.runtime.Nibel
+import nibel.runtime.Nibel
 import com.turo.nibel.sample.ui.RootContent
 import dagger.hilt.android.HiltAndroidApp
 

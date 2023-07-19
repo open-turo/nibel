@@ -6,7 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.turo.nibel.annotations.LegacyExternalEntry
+import nibel.annotations.LegacyExternalEntry
 import com.turo.nibel.sample.common.CommonScreenFragment
 import com.turo.nibel.sample.common.NextButtonsAdapter
 import com.turo.nibel.sample.navigation.GaydonDestination

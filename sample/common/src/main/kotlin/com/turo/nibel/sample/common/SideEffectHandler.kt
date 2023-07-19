@@ -2,8 +2,8 @@ package com.turo.nibel.sample.common
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.turo.nibel.runtime.LocalNavigationController
-import com.turo.nibel.runtime.NavigationController
+import nibel.runtime.LocalNavigationController
+import nibel.runtime.NavigationController
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 

@@ -2,7 +2,7 @@ package com.turo.nibel.sample.featureB.modena
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.turo.nibel.runtime.getNibelArgs
+import nibel.runtime.getNibelArgs
 import com.turo.nibel.sample.navigation.ModenaArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

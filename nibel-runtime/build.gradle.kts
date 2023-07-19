@@ -9,7 +9,7 @@ group = NibelMetadata.ARTIFACT_GROUP
 version = NibelMetadata.ARIFACT_VERSION
 
 android {
-    namespace = "com.turo.nibel.runtime"
+    namespace = "nibel.runtime"
 }
 
 dependencies {
