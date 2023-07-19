@@ -145,5 +145,7 @@ object Nibel {
         }
     }
 
-    private fun notConfiguredError(): Nothing = error("Nibel must be configured!")
+    private fun notConfiguredError(): Nothing = error(
+        "Nibel is not configured. Use Nibel.configure() function before using Nibel."
+    )
 }
