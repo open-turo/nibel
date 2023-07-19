@@ -22,7 +22,7 @@ class NibelAndroidApplicationPlugin : NibelConventionPlugin({
 
         signingConfigs {
             create("release") {
-                storeFile = file("release.jks")
+                storeFile = file("release-keystore.jks")
                 storePassword = "123456"
                 keyAlias = "release"
                 keyPassword = "123456"
