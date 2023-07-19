@@ -1,0 +1,60 @@
+import com.turo.nibel.buildtools.NibelConventionPlugin
+import com.turo.nibel.buildtools.mavenPublishing
+import com.turo.nibel.buildtools.sourceSets
+import com.vanniktech.maven.publish.SonatypeHost
+import org.gradle.jvm.tasks.Jar
+
+class NibelMavenPublishPlugin : NibelConventionPlugin({
+    with(pluginManager) {
+        apply("com.vanniktech.maven.publish")
+    }
+
+    tasks.register("javadocJar", Jar::class.java) {
+        dependsOn(tasks.named("dokkaHtml"))
+        archiveClassifier.set("javadoc")
+        from("$buildDir/dokka/html")
+    }
+
+    tasks.register("sourcesJar", Jar::class.java) {
+        archiveClassifier.set("sources")
+        from(sourceSets.getByName("main").allJava.srcDirs)
+    }
+
+    mavenPublishing {
+        val version: String by properties
+        coordinates(
+            groupId = NibelMetadata.ARTIFACT_GROUP,
+            artifactId = project.name,
+            version = version
+        )
+
+        pom {
+            name.set("Nibel")
+            description.set("Type-safe navigation library for seamless adoption of Jetpack Compose in fragment-based Android apps.")
+            inceptionYear.set("2023")
+            url.set("https://github.com/open-turo/nibel")
+            licenses {
+                license {
+                    name.set("The MIT License")
+                    url.set("https://opensource.org/license/mit/")
+                    distribution.set("https://opensource.org/license/mit/")
+                }
+            }
+            developers {
+                developer {
+                    id.set("openturo")
+                    name.set("Turo Open Source")
+                    url.set("https://github.com/open-turo")
+                }
+            }
+            scm {
+                url.set("https://github.com/open-turo/nibel")
+                connection.set("scm:git:git://github.com/open-turo/nibel.git")
+                developerConnection.set("scm:git:ssh://git@github.com/open-turo/nibel.git")
+            }
+        }
+
+        publishToMavenCentral(SonatypeHost.DEFAULT)
+        signAllPublications()
+    }
+})

@@ -1,12 +1,10 @@
 plugins {
     id("nibel.android.library")
     id("nibel.android.compose.base")
+    id("nibel.maven.publish")
     id("kotlin-parcelize")
     id("org.jetbrains.dokka")
 }
-
-group = NibelMetadata.ARTIFACT_GROUP
-version = NibelMetadata.ARIFACT_VERSION
 
 android {
     namespace = "nibel.runtime"

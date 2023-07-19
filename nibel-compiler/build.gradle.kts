@@ -1,15 +1,12 @@
 plugins {
     id("nibel.metadata")
+    id("nibel.maven.publish")
     kotlin("jvm")
     id("com.google.devtools.ksp")
     id("org.jetbrains.dokka")
 }
 
-group = NibelMetadata.ARTIFACT_GROUP
-version = NibelMetadata.ARIFACT_VERSION
-
 dependencies {
-
     implementation(projects.nibelAnnotations)
     implementation(projects.nibelStub)
 

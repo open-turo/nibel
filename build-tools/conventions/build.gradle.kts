@@ -22,6 +22,7 @@ dependencies {
 
     compileOnly(libs.gradlePlugin.android.api)
     compileOnly(libs.gradlePlugin.kotlin)
+    compileOnly(libs.gradlePlugin.mavenPublish)
 }
 
 @Suppress("UNUSED_VARIABLE")
@@ -50,6 +51,10 @@ gradlePlugin {
         val metadata by registering {
             id = "nibel.metadata"
             implementationClass = "NibelMetadataPlugin"
+        }
+        val mavenPublish by registering {
+            id = "nibel.maven.publish"
+            implementationClass = "NibelMavenPublishPlugin"
         }
     }
 }

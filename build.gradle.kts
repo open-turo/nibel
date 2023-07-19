@@ -6,4 +6,5 @@ plugins {
     id("com.google.devtools.ksp") version libs.versions.ksp apply false
     id("com.google.dagger.hilt.android") version libs.versions.dagger apply false
     id("org.jetbrains.dokka") version libs.versions.dokka apply false
+    id("com.vanniktech.maven.publish") version libs.versions.mavenPublish apply false
 }

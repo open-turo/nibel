@@ -10,6 +10,5 @@ object NibelMetadata {
 
     val JAVA_VERSION = JavaVersion.VERSION_1_8
 
-    const val ARTIFACT_GROUP = "com.turo.nibel"
-    const val ARIFACT_VERSION = "0.0.1"
+    const val ARTIFACT_GROUP = "com.openturo.nibel"
 }

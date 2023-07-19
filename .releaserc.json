@@ -15,7 +15,7 @@
     [
       "semantic-release-github-pullrequest",
       {
-        "assets": ["package.json", "README.md", "gradle.properties"],
+        "assets": ["package.json", "gradle.properties"],
         "baseRef": "main"
       }
     ]
