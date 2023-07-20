@@ -28,6 +28,10 @@ dependencies {
 @Suppress("UNUSED_VARIABLE")
 gradlePlugin {
     plugins {
+        val metadata by registering {
+            id = "nibel.metadata"
+            implementationClass = "NibelMetadataPlugin"
+        }
         val application by registering {
             id = "nibel.android.application"
             implementationClass = "NibelAndroidApplicationPlugin"
@@ -48,9 +52,9 @@ gradlePlugin {
             id = "nibel.android.common"
             implementationClass = "NibelAndroidCommonPlugin"
         }
-        val metadata by registering {
-            id = "nibel.metadata"
-            implementationClass = "NibelMetadataPlugin"
+        val kotlinJvmLibrary by registering {
+            id = "nibel.kotlin.jvm.library"
+            implementationClass = "NibelKotlinJvmLibraryPlugin"
         }
         val mavenPublish by registering {
             id = "nibel.maven.publish"
