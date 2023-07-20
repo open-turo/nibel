@@ -1,6 +1,6 @@
 plugins {
-    id("nibel.android.library")
-    id("nibel.android.compose")
+    id("sample.android.library")
+    id("sample.android.compose")
     id("kotlin-parcelize")
     id("com.google.devtools.ksp")
     kotlin("kapt")

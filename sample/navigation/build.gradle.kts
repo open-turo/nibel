@@ -1,5 +1,5 @@
 plugins {
-    id("nibel.android.library")
+    id("sample.android.library")
     id("kotlin-parcelize")
 }
 

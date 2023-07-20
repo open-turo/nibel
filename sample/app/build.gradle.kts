@@ -1,6 +1,6 @@
 plugins {
-    id("nibel.android.application")
-    id("nibel.android.compose")
+    id("sample.android.application")
+    id("sample.android.compose")
     id("kotlin-parcelize")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")

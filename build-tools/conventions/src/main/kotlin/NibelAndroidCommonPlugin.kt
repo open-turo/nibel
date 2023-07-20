@@ -21,16 +21,6 @@ class NibelAndroidCommonPlugin : NibelConventionPlugin({
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
 
-        buildTypes {
-            getByName("release") {
-                isMinifyEnabled = true
-                proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
-                )
-            }
-        }
-
         compileOptions {
             sourceCompatibility = NibelMetadata.JAVA_VERSION
             targetCompatibility = NibelMetadata.JAVA_VERSION

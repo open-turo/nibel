@@ -1,6 +1,6 @@
 plugins {
     id("nibel.android.library")
-    id("nibel.android.compose.base")
+    id("nibel.android.compose")
     id("nibel.maven.publish")
     id("kotlin-parcelize")
     id("org.jetbrains.dokka")

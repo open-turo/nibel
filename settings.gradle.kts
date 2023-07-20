@@ -11,6 +11,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        // To use local maven repository, use the command below to publish artifacts.
+        // ./gradlew publishToMavenLocal --no-configuration-cache
+        // Don't forget to disable dependency substitution in sample/build.gradle.kts file.
+        mavenLocal()
     }
 }
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

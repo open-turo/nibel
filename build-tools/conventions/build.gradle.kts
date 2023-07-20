@@ -32,17 +32,9 @@ gradlePlugin {
             id = "nibel.metadata"
             implementationClass = "NibelMetadataPlugin"
         }
-        val application by registering {
-            id = "nibel.android.application"
-            implementationClass = "NibelAndroidApplicationPlugin"
-        }
         val library by registering {
             id = "nibel.android.library"
             implementationClass = "NibelAndroidLibraryPlugin"
-        }
-        val composeBase by registering {
-            id = "nibel.android.compose.base"
-            implementationClass = "NibelAndroidComposeBasePlugin"
         }
         val compose by registering {
             id = "nibel.android.compose"
@@ -59,6 +51,18 @@ gradlePlugin {
         val mavenPublish by registering {
             id = "nibel.maven.publish"
             implementationClass = "NibelMavenPublishPlugin"
+        }
+        val sampleApplication by registering {
+            id = "sample.android.application"
+            implementationClass = "SampleAndroidApplicationPlugin"
+        }
+        val sampleLibrary by registering {
+            id = "sample.android.library"
+            implementationClass = "SampleAndroidLibraryPlugin"
+        }
+        val sampleCompose by registering {
+            id = "sample.android.compose"
+            implementationClass = "SampleAndroidComposePlugin"
         }
     }
 }

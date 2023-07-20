@@ -2,7 +2,7 @@ import com.android.build.api.dsl.ApplicationExtension
 import com.turo.nibel.buildtools.NibelConventionPlugin
 import com.turo.nibel.buildtools.android
 
-class NibelAndroidApplicationPlugin : NibelConventionPlugin({
+class SampleAndroidApplicationPlugin : NibelConventionPlugin({
     with(pluginManager) {
         apply("com.android.application")
         apply("nibel.android.common")
@@ -32,6 +32,11 @@ class NibelAndroidApplicationPlugin : NibelConventionPlugin({
         buildTypes {
             getByName("release") {
                 signingConfig = signingConfigs.getByName("release")
+                isMinifyEnabled = true
+                proguardFiles(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
+                )
             }
         }
 
