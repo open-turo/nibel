@@ -12,8 +12,8 @@ val LocalNavigationController = compositionLocalOf<NavigationController> {
 }
 
 /**
- * Provides information about the [ImplementationType] of a current compose screen. In case the
- * composable function called directly, without Nibel navigation, a `null` is returned.
+ * Provides information about the [ImplementationType] of a current compose screen. In case
+ * composable function is called directly, `null` is returned.
  */
 val LocalImplementationType = compositionLocalOf<ImplementationType?> {
     null

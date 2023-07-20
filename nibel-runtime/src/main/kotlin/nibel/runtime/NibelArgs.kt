@@ -7,28 +7,22 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 
 /**
- * Default key for passing arguments during the navigation.
+ * Default key for navigation arguments.
  */
 const val NIBEL_ARGS = "nibel_args"
 
 /**
- * Converts [Parcelable] args to a [Bundle] to pass them in fragments.
- *
- * A [Nibel.argsKey] is used as a key for storing args.
+ * Convert [Parcelable] args to a [Bundle].
  */
 fun Parcelable.asNibelArgs() = Bundle().apply { putParcelable(Nibel.argsKey, this@asNibelArgs) }
 
 /**
- * Retrieves Nibel args from a [SavedStateHandle].
- *
- * A [Nibel.argsKey] is used as a key for retrieving args.
+ * Retrieve args from a [SavedStateHandle].
  */
 fun <A : Parcelable> SavedStateHandle.getNibelArgs(): A? = get<A>(Nibel.argsKey)
 
 /**
- * Retrieves Nibel args from a [Bundle].
- *
- * A [Nibel.argsKey] is used as a key for retrieving args.
+ * Retrieve args from a [Bundle].
  */
 inline fun <reified A : Parcelable> Bundle.getNibelArgs(): A? =
     if (SDK_INT >= TIRAMISU) getParcelable(Nibel.argsKey, A::class.java)

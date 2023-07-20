@@ -8,25 +8,21 @@ import android.os.Parcelable
 sealed interface Destination
 
 /**
- * A base type for destinations used in multi-module navigation.
+ * A base type for destinations for external multi-module navigation.
  */
 sealed interface ExternalDestination : Destination
 
 /**
- * A destination type for screens with no arguments.
- * Each type of [DestinationWithNoArgs] must be associated with exactly one screen annotated with
- * [UiExternalEntry].
- *
- * See [UiExternalEntry].
+ * An external destination type for screens with no arguments.
+ * Each descendant of [DestinationWithNoArgs] must be associated with exactly one screen annotated
+ * with [UiExternalEntry].
  */
 interface DestinationWithNoArgs : ExternalDestination
 
 /**
- * A destination type for screens with arguments.
- * Each type of [DestinationWithArgs] must be associated with exactly one screen annotated with
- * [UiExternalEntry].
- *
- * See [UiExternalEntry].
+ * An external destination type for screens with arguments.
+ * Each descendant of [DestinationWithArgs] must be associated with exactly one screen annotated
+ * with [UiExternalEntry].
  */
 interface DestinationWithArgs<A : Parcelable> : ExternalDestination {
     /**
@@ -36,6 +32,6 @@ interface DestinationWithArgs<A : Parcelable> : ExternalDestination {
 }
 
 /**
- * A type of a destination that it used for navigating internally in a single feature module.
+ * A base type for destinations for internal single-module navigation.
  */
 interface InternalDestination : Destination

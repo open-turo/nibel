@@ -9,12 +9,7 @@ import kotlin.reflect.KClass
 
 /**
  * [UiEntry] marks a composable function as a screen that is used by Nibel for navigation.
- * For each annotated composable Nibel's annotation processor generates a `{ComposableName}Entry`
- * class to provide a unified and type-safe way of navigating between screens in the following
- * navigation scenarios:
- * - fragment → compose
- * - compose → compose
- * - compose → fragment
+ * For each annotated composable a `{ComposableName}Entry` class is generated.
  *
  * The type of the generated entry differs depending on the [ImplementationType] specified in the
  * annotation. Each type serves a specific scenario and can be either [Fragment] or [Composable].
@@ -26,8 +21,7 @@ import kotlin.reflect.KClass
  * @Composable
  * fun FooScreen() { ... }
  * ```
- * It is possible to declare a screen with arguments by declaring the args of `Parcelable` type in
- * [UiEntry] annotation.
+ * For screens with arguments pass `Parcelable` args class in [UiEntry] annotation.
  *
  * ```
  * @UiEntry(
@@ -37,8 +31,8 @@ import kotlin.reflect.KClass
  * @Composable
  * fun BarScreen(args: BarArgs) { ... }
  * ```
- * If the type of args both in the annotation and the composable params don't match, a compile
- * time error will be thrown.
+ * If the args types in the annotation and the composable params don't match, a compile time error
+ * will be thrown.
  *
  * ### Composable function params
  *
@@ -58,7 +52,7 @@ import kotlin.reflect.KClass
  *   args: BarArgs,
  *   navigator: NavigationController,
  *   type: ImplementationType,
- *   viewModel: FooViewModel = viewModel()
+ *   viewModel: BarViewModel = viewModel()
  * ) { ... }
  * ```
  * ### Composition locals
@@ -76,7 +70,7 @@ import kotlin.reflect.KClass
  * ```
  *
  * ### Generated code
- * Depending on the implementation type used in [UiEntry] a different class is generated as a screen
+ * Depending on the `ImplementationType` in [UiEntry] a different class is generated as a screen
  * entry.
  *
  * #### [ImplementationType.Fragment]

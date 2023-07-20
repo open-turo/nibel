@@ -5,8 +5,8 @@ import android.os.Parcelable
 import androidx.navigation.NavType
 
 /**
- * A [NavType] which implementation is similar to [NavType.ParcelableType] but it allows using [Parcelable] as
- * argument type in compose navigation library which was not possible by default.
+ * A [NavType] which implementation is similar to [NavType.ParcelableType] but allows using
+ * [Parcelable] as argument type in compose navigation library.
  */
 class ParcelableType<P : Parcelable>(
     private val type: Class<P>

@@ -7,11 +7,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.ComposeNavigator
 
 /**
- * [NavigationSpec] defines a type and implementation details of a navigation between certain types
- * of screens.
+ * [NavigationSpec] holds implementation details for navigation between certain types of screens.
  *
- * @param C is a simple object that holds a navigation context represented by an object with
- * components required for navigation in a certain spec.
+ * @param C a holder for classes required to perform a navigation in [navigateTo].
  */
 sealed interface NavigationSpec<C, E : Entry> {
 
@@ -19,26 +17,26 @@ sealed interface NavigationSpec<C, E : Entry> {
 }
 
 /**
- * If [NavigationController] requests a navigation to a fragment, a descendant of a [FragmentSpec]
- * defines implementation details of the navigation.
+ * If [NavigationController] requests a navigation to a fragment, it is delegated to a descendant of
+ * a [FragmentSpec].
  */
 interface FragmentSpec<C> : NavigationSpec<C, FragmentEntry>
 
 /**
- * If [NavigationController] requests a navigation to a composable function directly, a descendant
- * of a [ComposeSpec] defines implementation details of the navigation.
+ * If [NavigationController] requests a navigation to a composable function, it is delegated to a
+ * descendant of [ComposeSpec].
  */
 interface ComposeSpec<C> : NavigationSpec<C, ComposableEntry<*>>
 
 /**
- * A simple class that holds components required to perform a fragment transaction.
+ * A holder for classes required to perform fragment transactions.
  */
 class FragmentTransactionContext(
     val fragmentManager: FragmentManager
 )
 
 /**
- * Implementation of a [FragmentSpec] that performs a fragment transaction.
+ * [FragmentSpec] that performs fragment transactions under-the-hood.
  */
 open class FragmentTransactionSpec(
     val replace: Boolean = true,
@@ -62,11 +60,17 @@ open class FragmentTransactionSpec(
     }
 }
 
+/**
+ * A holder for classes required to navigate with compose navigation library.
+ */
 class ComposeNavigationContext(
     val internalNavController: NavController,
     val exploredEntries: ExploredEntriesRegistry
 )
 
+/**
+ * [ComposeSpec] that performs navigation with compose navigation library under-the-hood.
+ */
 open class ComposeNavigationSpec : ComposeSpec<ComposeNavigationContext> {
 
     override fun ComposeNavigationContext.navigateTo(entry: ComposableEntry<*>) {

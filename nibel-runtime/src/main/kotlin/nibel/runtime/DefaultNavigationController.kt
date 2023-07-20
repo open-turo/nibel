@@ -7,9 +7,10 @@ import nibel.annotations.ExternalDestination
 import nibel.annotations.ImplementationType
 
 /**
- * Default implementation of [NavigationController]. Depending on the
- * - fragment transactions for navigation to fragments or compose screens annotated with [ImplementationType.Fragment]
- * - compose navigation library for navigation
+ * Default implementation of [NavigationController]. Depending on circumstances, relies on 2 tools
+ * for navigation:
+ * - Fragment transaction manager.
+ * - Compose navigation library.
  */
 open class DefaultNavigationController(
     val internalNavController: NavController,

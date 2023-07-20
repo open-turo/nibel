@@ -3,7 +3,7 @@ package nibel.runtime
 import androidx.compose.runtime.Composable
 
 /**
- * A delegated composable function that is called in [ComposableFragment] when setting
+ * A root composable function that wraps the content of every [ComposableFragment].
  */
 interface RootDelegate {
 
@@ -11,9 +11,6 @@ interface RootDelegate {
     fun Content(content: @Composable () -> Unit)
 }
 
-/**
- *
- */
 object EmptyRootDelegate : RootDelegate {
 
     @Composable

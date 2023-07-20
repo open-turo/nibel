@@ -16,9 +16,9 @@ import kotlin.reflect.KClass
  * The key component in multi-module navigation is a destination which is a lightweight data type
  * that serves as a navigation intent. See [ExternalDestination].
  *
- * Each destination is declared in a separate navigation module and is associated with exactly one
+ * Destinations are declared in a separate navigation module and each is associated with exactly one
  * screen. When a screen from another feature module performs a navigation, it uses a corresponding
- * destination type to open its associated screen.
+ * destination instance to open its associated screen.
  *
  * ```
  * featureA          featureB
@@ -61,7 +61,7 @@ import kotlin.reflect.KClass
  * @Composable
  * fun FooScreen(args: BarArgs) { ... }
  * ```
- * If the type of args both in the annotation and the destination don't match, a compile time error
+ * If the args types in the annotation and the composable params don't match, a compile time error
  * will be thrown.
  *
  * ### Composable function params
@@ -100,8 +100,8 @@ import kotlin.reflect.KClass
  * ```
  *
  * ### Generated code
- * Depending on the implementation type used in [UiExternalEntry] a different class is generated as
- * a screen entry.
+ * Depending on the `ImplementationType` in [UiEntry] a different class is generated as a screen
+ * entry.
  *
  * #### [ImplementationType.Fragment]
  *

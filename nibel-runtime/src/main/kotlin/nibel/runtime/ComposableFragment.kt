@@ -14,9 +14,9 @@ import nibel.annotations.UiEntry
 import nibel.annotations.UiExternalEntry
 
 /**
- * If a composable function is annotated with [UiEntry] or [UiExternalEntry] and
- * [ImplementationType.Fragment] is used, a `{ComposableName}Entry` class is generated which is a
- * descendant of this base class.
+ * Base class for generated screen entries when [ImplementationType.Fragment] is used.
+ *
+ * See [UiEntry] and [UiExternalEntry].
  */
 abstract class ComposableFragment : Fragment() {
 

@@ -6,20 +6,20 @@ import kotlin.annotation.AnnotationTarget.CLASS
 import kotlin.reflect.KClass
 
 /**
- * [LegacyEntry] marks an existing fragment class and enables compose → fragment scenarios.
+ * [LegacyEntry] marks an existing fragment class to enable **compose → fragment** navigation
+ * scenarios.
  * Its usage is completely optional as its main purpose is generating a simple factory for the
  * fragment.
  *
  * Its behavior is quite similar to [UiEntry] with [ImplementationType.Fragment].
  *
  * ### Basic usage
- * To define a legacy fragment as an entry, it must be annotated with [LegacyEntry].
+ * To make a legacy fragment an entry, it must be annotated with [LegacyEntry].
  * ```
  * @LegacyEntry()
  * class FooFragment : Fragment() { ... }
  * ```
- * It is possible to declare a screen with arguments by declaring the args of `Parcelable` type in
- * [LegacyEntry] annotation.
+ * For screens with arguments pass `Parcelable` args class in [LegacyEntry] annotation.
  * ```
  * @LegacyEntry(args = BarArgs::class)
  * class BarFragment : Fragment() {

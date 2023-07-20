@@ -5,9 +5,13 @@ import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import nibel.annotations.ImplementationType
+import nibel.annotations.UiEntry
+import nibel.annotations.UiExternalEntry
 
 /**
+ * Base class for generated screen entries when [ImplementationType.Composable] is used.
  *
+ * See [UiEntry] and [UiExternalEntry].
  */
 abstract class ComposableEntry<A : Parcelable>(
     open val args: A?,
