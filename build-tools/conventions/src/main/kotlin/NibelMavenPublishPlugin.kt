@@ -9,17 +9,6 @@ class NibelMavenPublishPlugin : NibelConventionPlugin({
         apply("com.vanniktech.maven.publish")
     }
 
-    tasks.register("javadocJar", Jar::class.java) {
-        dependsOn(tasks.named("dokkaHtml"))
-        archiveClassifier.set("javadoc")
-        from("$buildDir/dokka/html")
-    }
-
-    tasks.register("sourcesJar", Jar::class.java) {
-        archiveClassifier.set("sources")
-        from(sourceSets.getByName("main").allJava.srcDirs)
-    }
-
     mavenPublishing {
         val version: String by properties
         coordinates(
@@ -54,7 +43,7 @@ class NibelMavenPublishPlugin : NibelConventionPlugin({
             }
         }
 
-        publishToMavenCentral(SonatypeHost.DEFAULT)
+        publishToMavenCentral(SonatypeHost.S01)
         signAllPublications()
     }
 })
