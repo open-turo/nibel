@@ -16,13 +16,11 @@ Nibel supports both **single-module** and **multi-module** navigation out-of-the
 - [Basic usage](#basic-usage)
 - [Multi-module navigation](#multi-module-navigation)
 - [Sample app](#sample-app)
-- [More documentation](#more-documentation)
 
 ## Materials
 
 - Blog post [Designing Jetpack Compose architecture for a gradual transition from fragments on Android](https://medium.com/turo-engineering/designing-jetpack-compose-architecture-for-a-gradual-transition-from-fragments-on-android-b11ee5f19ba8).
-- Blog post [Introducing Nibel - a navigation library for seamless adoption of Jetpack Compose in fragment-based Android apps]().
-- Conference talk [Designing Jetpack Compose architecture for gradual migration from fragments on Android](https://android-worldwide.com/register/).
+- Blog post [Introducing Nibel - a navigation library for seamless adoption of Jetpack Compose in fragment-based Android apps](https://medium.com/@morfly/introducing-nibel-a-navigation-library-for-adopting-jetpack-compose-in-fragment-based-apps-541c7b2f3f84).
 
 ## Installation
 
@@ -45,7 +43,7 @@ plugins {
 }
 ```
 
-The latest version of Nibel is [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.turo.nibel/nibel/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.turo.android/nibel)
+The latest version of Nibel is [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.openturo.nibel/nibel-runtime/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.openturo.nibel/nibel-runtime).
 
 ## Basic usage
 
@@ -246,13 +244,7 @@ navigator.navigateTo(ThirdScreenDestination(args))
 
 ## Sample app
 
-Check out a [sample app]() for demonstration of various scenarios of using Nibel in practice.
-
-## More documentation
-
-- [Customization]()
-- [Understanding generated code]()
-- [Integration with architecture libraries]()
+Check out a [sample app](sample) for demonstration of various scenarios of using Nibel in practice.
 
 ## Contributing
 
