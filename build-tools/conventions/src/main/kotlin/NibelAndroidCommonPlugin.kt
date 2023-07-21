@@ -9,7 +9,7 @@ import org.gradle.kotlin.dsl.withType
 
 class NibelAndroidCommonPlugin : NibelConventionPlugin({
     with(pluginManager) {
-        apply("org.jetbrains.kotlin.android")
+        apply(libs.plugins.kotlin.android.get().pluginId)
     }
 
     android<CommonExtension> {

@@ -1,9 +1,9 @@
 plugins {
-    id("nibel.metadata")
-    id("nibel.maven.publish")
+    alias(libs.plugins.nibel.metadata)
+    alias(libs.plugins.nibel.maven.publish)
     kotlin("jvm")
-    id("com.google.devtools.ksp")
-    id("org.jetbrains.dokka")
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.dokka)
 }
 
 dependencies {

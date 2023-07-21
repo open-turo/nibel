@@ -1,11 +1,12 @@
 import com.android.build.api.dsl.ApplicationExtension
 import com.turo.nibel.buildtools.NibelConventionPlugin
 import com.turo.nibel.buildtools.android
+import com.turo.nibel.buildtools.libs
 
 class SampleAndroidApplicationPlugin : NibelConventionPlugin({
     with(pluginManager) {
-        apply("com.android.application")
-        apply("nibel.android.common")
+        apply(libs.plugins.android.application.get().pluginId)
+        apply(libs.plugins.nibel.android.common.get().pluginId)
     }
 
     android<ApplicationExtension> {

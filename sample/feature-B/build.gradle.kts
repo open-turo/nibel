@@ -1,10 +1,10 @@
 plugins {
-    id("sample.android.library")
-    id("sample.android.compose")
+    alias(libs.plugins.sample.android.library)
+    alias(libs.plugins.sample.android.compose)
     id("kotlin-parcelize")
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.ksp)
     kotlin("kapt")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.dagger.hilt.android)
 }
 
 android {
