@@ -19,7 +19,7 @@ import nibel.annotations.LegacyEntry
  * - **compose → compose**
  * - **compose → fragment**
  *
- * The code building blocks:
+ * The core building blocks of Nibel are:
  * - [UiEntry] and [UiExternalEntry] annotations are used to mark composable functions as screen
  * entries.
  * - [NavigationController] performs a navigation between screens.
