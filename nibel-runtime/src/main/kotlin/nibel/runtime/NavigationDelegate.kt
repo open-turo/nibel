@@ -41,7 +41,7 @@ open class ComposeNavigationDelegate : NavigationDelegate<NavigationControllerAr
             LocalOnBackPressedDispatcherOwner.current!!.onBackPressedDispatcher
 
         return remember(args.internalNavController) {
-            DefaultNavigationController(
+            NibelNavigationController(
                 fragmentManager = activity.supportFragmentManager,
                 onBackPressedDispatcher = onBackPressedDispatcher,
                 internalNavController = args.internalNavController,

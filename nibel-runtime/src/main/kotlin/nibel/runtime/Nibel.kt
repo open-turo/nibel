@@ -27,7 +27,7 @@ import nibel.annotations.LegacyEntry
  * navigation from compose screens to fragments.
  */
 object Nibel {
-    internal val serializer = Serializer()
+    val serializer = Serializer()
 
     private val _destinations = mutableMapOf<Class<out ExternalDestination>, EntryFactory<*, *>>()
     private var _argsKey: String? = null
