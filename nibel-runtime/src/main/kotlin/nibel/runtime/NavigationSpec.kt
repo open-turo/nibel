@@ -1,5 +1,6 @@
 package nibel.runtime
 
+import android.os.Parcelable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavArgument
@@ -89,7 +90,8 @@ open class ComposeNavigationSpec : ComposeSpec<ComposeNavigationContext> {
             val destination = ComposeNavigator.Destination(
                 navigator = navigator,
                 content = {
-                    CompositionLocalProvider(LocalArgs provides entry.args) {
+                    val args = it.arguments?.getParcelable<Parcelable?>(Nibel.argsKey)
+                    CompositionLocalProvider(LocalArgs provides args) {
                         entry.ComposableEntry()
                     }
                 }
