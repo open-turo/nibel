@@ -35,7 +35,7 @@ open class ComposeNavigationSpec : ComposeSpec<ComposeNavigationContext> {
             val destination = ComposeNavigator.Destination(
                 navigator = navigator,
                 content = {
-                    val args = it.arguments?.getParcelable<Parcelable?>(Nibel.argsKey)
+                    val args = it.arguments?.getNibelArgs<Parcelable>()
                     CompositionLocalProvider(LocalArgs provides args) {
                         entry.ComposableEntry()
                     }

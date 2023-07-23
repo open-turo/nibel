@@ -41,7 +41,6 @@ open class ComposeNavigationDelegate : NavigationDelegate<NavigationControllerAr
         }
     }
 
-    @Suppress("DEPRECATION")
     @Composable
     override fun Content(rootArgs: Parcelable?, content: @Composable () -> Unit) {
         val internalNavController = rememberNavController()
@@ -64,7 +63,7 @@ open class ComposeNavigationDelegate : NavigationDelegate<NavigationControllerAr
                     argsType = rootArgs?.javaClass,
                     defaultArgs = rootArgs,
                 ) {
-                    val args = it.arguments?.getParcelable<Parcelable?>(Nibel.argsKey)
+                    val args = it.arguments?.getNibelArgs<Parcelable>()
                     CompositionLocalProvider(LocalArgs provides args) {
                         content()
                     }
@@ -75,7 +74,7 @@ open class ComposeNavigationDelegate : NavigationDelegate<NavigationControllerAr
                         argsType = entry.args?.javaClass,
                         defaultArgs = null
                     ) {
-                        val args = it.arguments?.getParcelable<Parcelable?>(Nibel.argsKey)
+                        val args = it.arguments?.getNibelArgs<Parcelable>()
                         CompositionLocalProvider(LocalArgs provides args) {
                             entry.ComposableEntry()
                         }

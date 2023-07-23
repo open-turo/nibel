@@ -18,6 +18,9 @@ abstract class ComposableEntry<A : Parcelable>(
     open val name: String,
 ) : Entry, Parcelable {
 
+    /**
+     * [Composable] content of the screen.
+     */
     @Composable
     abstract fun ComposableContent()
 
