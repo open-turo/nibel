@@ -9,9 +9,11 @@ data class ZeroState(
 
     val nextButtons = listOf(
         DearbornNextButton.FirstScreen,
+        DearbornNextButton.ThirdScreen,
     )
 }
 
 sealed class DearbornNextButton(override val title: String) : NextButton {
     object FirstScreen : DearbornNextButton("First Screen (type.fragment, internal)")
+    object ThirdScreen : DearbornNextButton("Third Screen (type.fragment, external)")
 }

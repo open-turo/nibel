@@ -2,6 +2,8 @@ package com.turo.nibel.sample.featureA.zeroscreen
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -10,8 +12,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.turo.nibel.sample.common.CommonScreenFragment
 import com.turo.nibel.sample.common.NextButtonsAdapter
 import com.turo.nibel.sample.featureA.firstscreen.FirstScreenEntry
+import com.turo.nibel.sample.navigation.ThirdArgs
+import com.turo.nibel.sample.navigation.ThirdScreenDestination
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import nibel.annotations.ExternalDestination
+import nibel.runtime.Nibel
 
 @AndroidEntryPoint
 class ZeroFragment : CommonScreenFragment() {
@@ -44,13 +50,33 @@ class ZeroFragment : CommonScreenFragment() {
     }
 
     private fun handleSideEffect(sideEffect: ZeroSideEffect) {
+        val fragmentManager = requireActivity().supportFragmentManager
+
         when (sideEffect) {
-            is ZeroSideEffect.NavigateToFirstScreen ->
-                requireActivity().supportFragmentManager.commit {
-                    val fragment = FirstScreenEntry.newInstance().fragment
-                    replace(android.R.id.content, fragment)
-                    addToBackStack(fragment::class.qualifiedName)
+            is ZeroSideEffect.NavigateToFirstScreen -> fragmentManager.commit {
+                val fragment = FirstScreenEntry.newInstance().fragment
+                replace(android.R.id.content, fragment)
+                addToBackStack(fragment::class.qualifiedName)
+            }
+
+            is ZeroSideEffect.NavigateToThirdScreen -> fragmentManager.commit {
+                val destination = ThirdScreenDestination(ThirdArgs(inputText = ""))
+                val fragment = Nibel.newFragmentEntry(destination)?.fragment
+                if (fragment == null) {
+                    showErrorMessage(destination)
+                    return
                 }
+                replace(android.R.id.content, fragment)
+                addToBackStack(fragment::class.qualifiedName)
+            }
         }
+    }
+
+    private fun showErrorMessage(destination: ExternalDestination) {
+        Toast.makeText(
+            requireContext(),
+            "${destination::class.simpleName} should be ImplementationType.Fragment",
+            LENGTH_SHORT
+        ).show()
     }
 }

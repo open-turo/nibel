@@ -21,6 +21,9 @@ class ZeroViewModel @Inject constructor() : ViewModel() {
         when (nextButton) {
             DearbornNextButton.FirstScreen ->
                 _sideEffects.tryEmit(ZeroSideEffect.NavigateToFirstScreen)
+
+            DearbornNextButton.ThirdScreen ->
+                _sideEffects.tryEmit(ZeroSideEffect.NavigateToThirdScreen)
         }
     }
 }
