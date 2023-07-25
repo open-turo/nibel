@@ -3,7 +3,7 @@ package com.turo.nibel.sample
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
-import com.turo.nibel.sample.featureA.dearborn.DearbornFragment
+import com.turo.nibel.sample.featureA.zeroscreen.ZeroFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
-                replace(android.R.id.content, DearbornFragment())
+                replace(android.R.id.content, ZeroFragment())
             }
         }
     }

@@ -1,5 +1,10 @@
 package com.turo.nibel.sample.navigation
 
-import nibel.annotations.DestinationWithNoArgs
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import nibel.annotations.DestinationWithArgs
 
-object GaydonDestination : DestinationWithNoArgs
+@Parcelize
+data class FourthArgs(val inputText: String) : Parcelable
+
+data class FourthScreenDestination(override val args: FourthArgs) : DestinationWithArgs<FourthArgs>
