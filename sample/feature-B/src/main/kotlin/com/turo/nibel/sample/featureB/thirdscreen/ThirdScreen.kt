@@ -16,7 +16,7 @@ import nibel.annotations.UiExternalEntry
 import nibel.runtime.LocalImplementationType
 
 @UiExternalEntry(
-    type = ImplementationType.Composable,
+    type = ImplementationType.Fragment,
     destination = ThirdScreenDestination::class
 )
 @Composable
