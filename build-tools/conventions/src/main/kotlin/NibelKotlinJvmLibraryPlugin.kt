@@ -1,11 +1,12 @@
 import com.turo.nibel.buildtools.NibelConventionPlugin
+import com.turo.nibel.buildtools.libs
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 class NibelKotlinJvmLibraryPlugin : NibelConventionPlugin({
     with(pluginManager) {
-        apply("org.jetbrains.kotlin.jvm")
+        apply(libs.plugins.kotlin.jvm.get().pluginId)
     }
 
     tasks.withType<KotlinCompile>().configureEach {
