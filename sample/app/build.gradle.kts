@@ -1,9 +1,9 @@
 plugins {
-    id("sample.android.application")
-    id("sample.android.compose")
-    id("kotlin-parcelize")
-    kotlin("kapt")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.sample.android.application)
+    alias(libs.plugins.sample.android.compose)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.dagger.hilt.android)
 }
 
 android {

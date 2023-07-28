@@ -1,4 +1,4 @@
 plugins {
-    id("nibel.kotlin.jvm.library")
-    id("nibel.maven.publish")
+    alias(libs.plugins.nibel.kotlin.jvm.library)
+    alias(libs.plugins.nibel.maven.publish)
 }

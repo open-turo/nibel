@@ -6,7 +6,7 @@ import org.gradle.kotlin.dsl.dependencies
 
 class SampleAndroidComposePlugin : NibelConventionPlugin({
     with(pluginManager) {
-        apply("nibel.android.compose")
+        apply(libs.plugins.nibel.android.compose.get().pluginId)
     }
 
     dependencies {
