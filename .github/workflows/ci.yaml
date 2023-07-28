@@ -15,3 +15,23 @@ jobs:
       - uses: open-turo/actions-jvm/lint@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  test:
+    name: Test
+    needs: [lint]
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Unit tests
+        run: ./gradlew nibel-tests:test

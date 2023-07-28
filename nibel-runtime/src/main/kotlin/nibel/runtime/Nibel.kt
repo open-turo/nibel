@@ -110,9 +110,11 @@ object Nibel {
 
     private fun <D : ExternalDestination> registerEntryFactory(destination: D) {
         val destinationClass = destination.javaClass
-        val providerClass = Class.forName(
-            entryFactoryProviderClassName(destinationClass)
-        )
+        val providerClass = try {
+            Class.forName(entryFactoryProviderClassName(destinationClass))
+        } catch (e: ClassNotFoundException) {
+            error("${destination::class.qualifiedName} is not associated with any @UiExternalEntry.")
+        }
         val provideMethod = providerClass.getMethod("provide")
         val entryFactory = provideMethod.invoke(null) as EntryFactory<*, *>
         _destinations[destinationClass] = entryFactory
