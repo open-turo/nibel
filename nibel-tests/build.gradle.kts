@@ -10,7 +10,7 @@ android {
 }
 
 dependencies {
-    ksp(projects.nibelRuntime)
+    ksp(projects.nibelCompiler)
     implementation(libs.androidx.fragment)
     implementation(libs.nibel.runtime)
     implementation(libs.junit)
