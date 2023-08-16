@@ -27,6 +27,9 @@ class NibelAndroidCommonPlugin : NibelConventionPlugin({
         }
         kotlinOptions {
             jvmTarget = NibelMetadata.JAVA_VERSION.toString()
+            freeCompilerArgs = listOf(
+                "-Xstring-concat=inline"
+            )
         }
     }
 
