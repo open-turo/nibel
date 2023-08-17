@@ -9,6 +9,8 @@ import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
+import org.jetbrains.kotlin.gradle.dsl.KotlinSingleTargetExtension
+import org.jetbrains.kotlin.gradle.plugin.mpp.AbstractKotlinTarget
 
 typealias CommonExtension = com.android.build.api.dsl.CommonExtension<*, *, *, *>
 
@@ -21,6 +23,9 @@ fun <T : CommonExtension> Project.android(body: T.() -> Unit) {
     (extensions.getByName("android") as T).apply(body)
 }
 
+fun Project.kotlin(body: KotlinSingleTargetExtension<AbstractKotlinTarget>.() -> Unit): Unit =
+    (this as ExtensionAware).extensions.configure("kotlin", body)
+
 fun CommonExtension.kotlinOptions(body: KotlinJvmOptions.() -> Unit) {
     (this as ExtensionAware).extensions.configure("kotlinOptions", body)
 }
@@ -29,8 +34,9 @@ fun <T> NamedDomainObjectContainer<T>.release(body: T.() -> Unit) {
     getByName("release", body)
 }
 
-val Project.sourceSets: SourceSetContainer get() =
-    (this as ExtensionAware).extensions.getByName("sourceSets") as SourceSetContainer
+val Project.sourceSets: SourceSetContainer
+    get() = (this as ExtensionAware).extensions
+        .getByName("sourceSets") as SourceSetContainer
 
 fun Project.mavenPublishing(configure: MavenPublishBaseExtension.() -> Unit) {
     (this as ExtensionAware).extensions.configure("mavenPublishing", configure)
