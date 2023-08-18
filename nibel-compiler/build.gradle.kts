@@ -1,7 +1,6 @@
 plugins {
-    alias(libs.plugins.nibel.metadata)
+    alias(libs.plugins.nibel.kotlin.jvm.library)
     alias(libs.plugins.nibel.maven.publish)
-    alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.ksp)
     alias(libs.plugins.dokka)
 }
