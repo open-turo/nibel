@@ -21,6 +21,8 @@ Nibel supports both **single-module** and **multi-module** navigation out-of-the
 
 - Blog post [Designing Jetpack Compose architecture for a gradual transition from fragments on Android](https://medium.com/turo-engineering/designing-jetpack-compose-architecture-for-a-gradual-transition-from-fragments-on-android-b11ee5f19ba8).
 - Blog post [Introducing Nibel - a navigation library for seamless adoption of Jetpack Compose in fragment-based Android apps](https://medium.com/@morfly/introducing-nibel-a-navigation-library-for-adopting-jetpack-compose-in-fragment-based-apps-541c7b2f3f84).
+- Talk [Migrating Android apps from Fragments to Jetpack Compose at Turo with Pavlo Stavytskyi
+  ](https://youtu.be/SO0qjys_d08?si=xLtdbyp5ZRXXAp9j).
 
 ## Installation
 
