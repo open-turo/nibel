@@ -27,7 +27,7 @@ include(
     ":nibel-stub",
 )
 include(
-    ":nibel-tests"
+    ":tests"
 )
 include(
     ":sample",
