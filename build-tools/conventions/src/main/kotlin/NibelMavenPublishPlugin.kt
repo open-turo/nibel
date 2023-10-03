@@ -1,9 +1,7 @@
 import com.turo.nibel.buildtools.NibelConventionPlugin
 import com.turo.nibel.buildtools.libs
 import com.turo.nibel.buildtools.mavenPublishing
-import com.turo.nibel.buildtools.sourceSets
 import com.vanniktech.maven.publish.SonatypeHost
-import org.gradle.jvm.tasks.Jar
 
 class NibelMavenPublishPlugin : NibelConventionPlugin({
     with(pluginManager) {
