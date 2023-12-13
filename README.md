@@ -19,10 +19,10 @@ Nibel supports both **single-module** and **multi-module** navigation out-of-the
 
 ## Materials
 
-- [Designing Jetpack Compose architecture for a gradual transition from fragments on Android](https://medium.com/turo-engineering/designing-jetpack-compose-architecture-for-a-gradual-transition-from-fragments-on-android-b11ee5f19ba8) - Blog post at **Turo Engineering**.
-- [Introducing Nibel - a navigation library for seamless adoption of Jetpack Compose in fragment-based Android apps](https://medium.com/@morfly/introducing-nibel-a-navigation-library-for-adopting-jetpack-compose-in-fragment-based-apps-541c7b2f3f84) - Blog post at **Turo Engineering**.
-- [Migrating Android apps from Fragments to Jetpack Compose at Turo](https://youtu.be/SO0qjys_d08?si=xLtdbyp5ZRXXAp9j) - Talk at **Android Worldwide**.
-- [Migrating Android apps from Fragments to Jetpack Compose with Nibel](https://www.droidcon.com/2023/10/06/migrating-android-apps-from-fragments-to-jetpack-compose-with-nibel/) - Talk at **droidcon New York 2023**
+- [Designing Jetpack Compose architecture for a gradual transition from fragments on Android](https://medium.com/turo-engineering/designing-jetpack-compose-architecture-for-a-gradual-transition-from-fragments-on-android-b11ee5f19ba8) - blog post at Turo Engineering.
+- [Introducing Nibel - a navigation library for seamless adoption of Jetpack Compose in fragment-based Android apps](https://medium.com/@morfly/introducing-nibel-a-navigation-library-for-adopting-jetpack-compose-in-fragment-based-apps-541c7b2f3f84) - blog post at Turo Engineering.
+- [Migrating Android apps from Fragments to Jetpack Compose at Turo](https://youtu.be/SO0qjys_d08?si=xLtdbyp5ZRXXAp9j) - talk at Android Worldwide.
+- [Migrating Android apps from Fragments to Jetpack Compose with Nibel](https://www.droidcon.com/2023/10/06/migrating-android-apps-from-fragments-to-jetpack-compose-with-nibel/) - talk at droidcon New York 2023.
 
 ## Installation
 
