@@ -4,7 +4,7 @@ Nibel — is a type-safe navigation library for seamless integration of Jetpack 
 
 When we built it at Turo, our goal was to ensure a proper Jetpack Compose experience for the team when creating new features while keeping them compatible with the rest of the codebase automatically.
 
-By leveraging the power of annotation processing Nibel provides a unified and type-safe way of navigating between screens in the following navigation scenarios:
+By leveraging the power of annotation processing, Nibel provides a unified and type-safe way of navigating between screens in the following navigation scenarios:
 
 - **fragment → compose**
 - **compose → compose**
@@ -277,3 +277,4 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
