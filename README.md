@@ -4,7 +4,7 @@ Nibel — is a type-safe navigation library for seamless integration of Jetpack 
 
 When we built it at Turo, our goal was to ensure a proper Jetpack Compose experience for the team when creating new features while keeping them compatible with the rest of the codebase automatically.
 
-By leveraging the power of annotation processing Nibel provides a unified and type-safe way of navigating between screens in the following navigation scenarios:
+By leveraging the power of annotation processing, Nibel provides a unified and type-safe way of navigating between screens in the following navigation scenarios:
 
 - **fragment → compose**
 - **compose → compose**
@@ -19,10 +19,10 @@ Nibel supports both **single-module** and **multi-module** navigation out-of-the
 
 ## Materials
 
-- Blog post [Designing Jetpack Compose architecture for a gradual transition from fragments on Android](https://medium.com/turo-engineering/designing-jetpack-compose-architecture-for-a-gradual-transition-from-fragments-on-android-b11ee5f19ba8).
-- Blog post [Introducing Nibel - a navigation library for seamless adoption of Jetpack Compose in fragment-based Android apps](https://medium.com/@morfly/introducing-nibel-a-navigation-library-for-adopting-jetpack-compose-in-fragment-based-apps-541c7b2f3f84).
-- Talk [Migrating Android apps from Fragments to Jetpack Compose at Turo with Pavlo Stavytskyi
-  ](https://youtu.be/SO0qjys_d08?si=xLtdbyp5ZRXXAp9j).
+- [Designing Jetpack Compose architecture for a gradual transition from fragments on Android](https://medium.com/turo-engineering/designing-jetpack-compose-architecture-for-a-gradual-transition-from-fragments-on-android-b11ee5f19ba8) - blog post at Turo Engineering.
+- [Introducing Nibel - a navigation library for seamless adoption of Jetpack Compose in fragment-based Android apps](https://medium.com/@morfly/introducing-nibel-a-navigation-library-for-adopting-jetpack-compose-in-fragment-based-apps-541c7b2f3f84) - blog post at Turo Engineering.
+- [Migrating Android apps from Fragments to Jetpack Compose at Turo](https://youtu.be/SO0qjys_d08?si=xLtdbyp5ZRXXAp9j) - talk at Android Worldwide.
+- [Migrating Android apps from Fragments to Jetpack Compose with Nibel](https://www.droidcon.com/2023/10/06/migrating-android-apps-from-fragments-to-jetpack-compose-with-nibel/) - talk at droidcon New York 2023.
 
 ## Installation
 
@@ -277,3 +277,4 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
