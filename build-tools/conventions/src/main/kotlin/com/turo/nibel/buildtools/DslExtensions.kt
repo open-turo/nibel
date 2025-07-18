@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 import org.jetbrains.kotlin.gradle.dsl.KotlinSingleTargetExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.AbstractKotlinTarget
 
-typealias CommonExtension = com.android.build.api.dsl.CommonExtension<*, *, *, *>
+typealias CommonExtension = com.android.build.api.dsl.CommonExtension<*, *, *, *, *, *>
 
 // Makes 'libs' version catalog available for precompiled plugins in a type-safe manner.
 // https://github.com/gradle/gradle/issues/15383#issuecomment-1245546796
