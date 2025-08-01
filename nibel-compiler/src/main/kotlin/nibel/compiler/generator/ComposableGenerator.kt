@@ -9,6 +9,10 @@ import nibel.compiler.template.composableEntryWithArgsTemplate
 import nibel.compiler.template.composableEntryWithNoArgsTemplate
 import nibel.compiler.template.composableExternalEntryFactoryTemplate
 import nibel.compiler.template.composableInternalEntryFactoryTemplate
+import nibel.compiler.template.composableResultInternalEntryFactoryTemplate
+import nibel.compiler.template.composableExternalResultEntryFactoryTemplate
+import nibel.compiler.template.composableResultEntryWithArgsTemplate
+import nibel.compiler.template.composableResultEntryWithNoArgsTemplate
 
 @Suppress("unused")
 class ComposableGenerator(
@@ -66,13 +70,53 @@ class ComposableGenerator(
             parameters = metadata.parameters,
         )
 
-        generateComposableEntry(
-            packageName = packageName,
-            composableHolderName = composableHolderName,
-            argsQualifiedName = metadata.argsQualifiedName,
-            composableContent = composableContent,
-            composableEntryFactory = composableEntryFactory,
-        )
+        val resultQualifiedName = metadata.resultQualifiedName
+        if (resultQualifiedName != null) {
+            // For result entries, create result-specific factory
+            val resultEntryFactory = when (metadata) {
+                is InternalEntryMetadata -> {
+                    if (metadata.argsQualifiedName != null) {
+                        composableResultInternalEntryFactoryTemplate(
+                            composableHolderName = composableHolderName,
+                            argsQualifiedName = metadata.argsQualifiedName!!,
+                            resultQualifiedName = resultQualifiedName,
+                        )
+                    } else {
+                        composableResultInternalEntryFactoryTemplate(
+                            composableHolderName = composableHolderName,
+                            resultQualifiedName = resultQualifiedName,
+                        )
+                    }
+                }
+                is ExternalEntryMetadata -> {
+                    // For external result entries, create result-specific factory
+                    composableExternalResultEntryFactoryTemplate(
+                        composableHolderName = composableHolderName,
+                        destinationQualifiedName = metadata.destinationQualifiedName,
+                        hasArgs = metadata.argsQualifiedName != null,
+                        argsQualifiedName = metadata.argsQualifiedName,
+                        resultQualifiedName = resultQualifiedName,
+                    )
+                }
+            }
+
+            generateComposableResultEntry(
+                packageName = packageName,
+                composableHolderName = composableHolderName,
+                argsQualifiedName = metadata.argsQualifiedName,
+                resultQualifiedName = resultQualifiedName,
+                composableContent = composableContent,
+                composableEntryFactory = resultEntryFactory,
+            )
+        } else {
+            generateComposableEntry(
+                packageName = packageName,
+                composableHolderName = composableHolderName,
+                argsQualifiedName = metadata.argsQualifiedName,
+                composableContent = composableContent,
+                composableEntryFactory = composableEntryFactory,
+            )
+        }
     }
 
     private fun generateComposableEntry(
@@ -104,6 +148,47 @@ class ComposableGenerator(
             composableEntryWithNoArgsTemplate(
                 packageName = packageName,
                 composableHolderName = composableHolderName,
+                composableContent = composableContent,
+                composableEntryFactory = composableEntryFactory,
+            )
+        }
+
+        file.write(content.toByteArray())
+        file.close()
+    }
+
+    private fun generateComposableResultEntry(
+        packageName: String,
+        composableHolderName: String,
+        argsQualifiedName: String?,
+        resultQualifiedName: String,
+        composableContent: String,
+        composableEntryFactory: String,
+    ) {
+        @Suppress("SpreadOperator")
+        val file = codeGenerator.createNewFile(
+            dependencies = Dependencies(
+                aggregating = false,
+                *resolver.getAllFiles().toList().toTypedArray(),
+            ),
+            packageName = packageName,
+            fileName = composableHolderName,
+        )
+
+        val content = if (argsQualifiedName != null) {
+            composableResultEntryWithArgsTemplate(
+                packageName = packageName,
+                composableHolderName = composableHolderName,
+                argsQualifiedName = argsQualifiedName,
+                resultTypeQualifiedName = resultQualifiedName,
+                composableContent = composableContent,
+                composableEntryFactory = composableEntryFactory,
+            )
+        } else {
+            composableResultEntryWithNoArgsTemplate(
+                packageName = packageName,
+                composableHolderName = composableHolderName,
+                resultTypeQualifiedName = resultQualifiedName,
                 composableContent = composableContent,
                 composableEntryFactory = composableEntryFactory,
             )

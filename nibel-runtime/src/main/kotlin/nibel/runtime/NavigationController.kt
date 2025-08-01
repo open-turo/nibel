@@ -23,6 +23,7 @@ abstract class NavigationController(
     val fragmentSpec: FragmentSpec<*> = Nibel.fragmentSpec,
     val composeSpec: ComposeSpec<*> = Nibel.composeSpec,
 ) {
+    protected val resultCallbackRegistry = ResultCallbackRegistry()
 
     /**
      * Perform back navigation.
@@ -46,4 +47,47 @@ abstract class NavigationController(
         fragmentSpec: FragmentSpec<*> = this.fragmentSpec,
         composeSpec: ComposeSpec<*> = this.composeSpec,
     )
+
+    /**
+     * Navigate to a result-based screen and receive a callback with the result.
+     *
+     * @param entry The result entry to navigate to
+     * @param callback The callback to be invoked when the result is available
+     * @param fragmentSpec Fragment navigation specification (optional)
+     * @param composeSpec Compose navigation specification (optional)
+     */
+    abstract fun <R : Any> navigateForResult(
+        entry: ResultEntry<R>,
+        callback: ResultCallback<R>,
+        fragmentSpec: FragmentSpec<*> = this.fragmentSpec,
+        composeSpec: ComposeSpec<*> = this.composeSpec,
+    )
+
+    /**
+     * Navigate to a result-based external destination and receive a callback with the result.
+     *
+     * @param destination The external destination to navigate to
+     * @param callback The callback to be invoked when the result is available
+     * @param fragmentSpec Fragment navigation specification (optional)
+     * @param composeSpec Compose navigation specification (optional)
+     */
+    abstract fun <R : Any> navigateForResult(
+        destination: ExternalDestination,
+        callback: ResultCallback<R>,
+        fragmentSpec: FragmentSpec<*> = this.fragmentSpec,
+        composeSpec: ComposeSpec<*> = this.composeSpec,
+    )
+
+    /**
+     * Sets the result for a result-based screen and navigates back.
+     * This should be called from screens that were launched with [navigateForResult].
+     *
+     * @param result The result to return to the calling screen
+     */
+    abstract fun <R : Any> setResultAndNavigateBack(result: R)
+
+    /**
+     * Cancels a result-based navigation and navigates back without providing a result.
+     */
+    abstract fun cancelResultAndNavigateBack()
 }

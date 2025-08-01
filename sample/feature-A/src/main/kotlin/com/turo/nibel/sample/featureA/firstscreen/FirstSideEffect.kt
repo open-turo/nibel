@@ -5,4 +5,6 @@ sealed interface FirstSideEffect {
     object NavigateBack : FirstSideEffect
 
     data class NavigateToSecondScreen(val inputText: String) : FirstSideEffect
+
+    object NavigateToPhotoPicker : FirstSideEffect
 }

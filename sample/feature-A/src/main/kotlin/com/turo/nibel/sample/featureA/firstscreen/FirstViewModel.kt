@@ -1,5 +1,7 @@
 package com.turo.nibel.sample.featureA.firstscreen
 
+import com.turo.nibel.sample.featureA.photopicker.PhotoPickerResult
+
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -24,10 +26,16 @@ class FirstViewModel @Inject constructor() : ViewModel() {
         when (nextButton) {
             FirstNextButton.SecondScreen ->
                 _sideEffects.tryEmit(FirstSideEffect.NavigateToSecondScreen(state.value.inputText))
+            FirstNextButton.PhotoPicker ->
+                _sideEffects.tryEmit(FirstSideEffect.NavigateToPhotoPicker)
         }
     }
 
     fun onInputTextChanged(inputText: String) {
         _state.value = _state.value.copy(inputText = inputText)
+    }
+
+    fun onPhotoSelected(photo: PhotoPickerResult?) {
+        _state.value = _state.value.copy(selectedPhoto = photo)
     }
 }

@@ -11,8 +11,12 @@ android {
 
 dependencies {
     ksp(projects.nibelCompiler)
+    kspTest(projects.nibelCompiler)
+    implementation(projects.nibelAnnotations)
+    testImplementation(projects.nibelAnnotations)
     implementation(libs.androidx.fragment)
-    implementation(libs.nibel.runtime)
+    implementation(projects.nibelRuntime)
+    testImplementation(projects.nibelRuntime)
     implementation(libs.junit)
     implementation(libs.kotest.assertions)
 }

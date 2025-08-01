@@ -34,6 +34,7 @@ fun <NB : NextButton> CommonScreen(
     modifier: Modifier = Modifier,
     inputTextEditable: Boolean = true,
     inputTextVisible: Boolean = true,
+    additionalContent: @Composable (() -> Unit)? = null,
 ) {
     Scaffold(
         modifier,
@@ -53,6 +54,7 @@ fun <NB : NextButton> CommonScreen(
                     inputTextVisible = inputTextVisible,
                     onContinue = onContinue,
                     onInputTextChanged = onInputTextChanged,
+                    additionalContent = additionalContent,
                 )
             }
         },
@@ -70,6 +72,7 @@ private fun <NB : NextButton> CommonScreenContent(
     onContinue: (NB) -> Unit,
     onInputTextChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
+    additionalContent: @Composable (() -> Unit)? = null,
 ) {
     val supportingText =
         if (inputTextEditable) {
@@ -110,6 +113,9 @@ private fun <NB : NextButton> CommonScreenContent(
 
                 Spacer(modifier = Modifier.height(24.dp))
             }
+
+            // Display additional content if provided
+            additionalContent?.invoke()
         }
         items(nextButtons.size) {
             Button(

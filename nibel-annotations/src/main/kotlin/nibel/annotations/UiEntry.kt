@@ -4,6 +4,7 @@ import android.os.Parcelable
 import nibel.annotations.ImplementationType.Composable
 import nibel.annotations.ImplementationType.Fragment
 import nibel.runtime.NoArgs
+import nibel.annotations.NoResult
 import kotlin.annotation.AnnotationTarget.FUNCTION
 import kotlin.reflect.KClass
 
@@ -31,7 +32,24 @@ import kotlin.reflect.KClass
  * @Composable
  * fun BarScreen(args: BarArgs) { ... }
  * ```
- * If the args types in the annotation and the composable params don't match, a compile time error
+ * For screens that return a result, specify the result type:
+ * ```
+ * @UiEntry(
+ *   type = ImplementationType.Composable,
+ *   args = PhotoPickerArgs::class,
+ *   result = PhotoResult::class
+ * )
+ * @Composable
+ * fun PhotoPickerScreen(
+ *   args: PhotoPickerArgs,
+ *   navigator: NavigationController
+ * ) {
+ *   // ... screen content
+ *   // To return result:
+ *   navigator.setResultAndNavigateBack(PhotoResult(selectedPhoto))
+ * }
+ * ```
+ * If the args or result types in the annotation and the composable params don't match, a compile time error
  * will be thrown.
  *
  * ### Composable function params
@@ -69,9 +87,25 @@ import kotlin.reflect.KClass
  * }
  * ```
  *
+ * ### Result-based navigation
+ *
+ * When `result` parameter is specified (not [NoResult]), the screen can be navigated to
+ * for receiving a result:
+ * ```
+ * // Navigate to result screen:
+ * navigator.navigateForResult(
+ *   PhotoPickerScreenEntry.newInstance(args)
+ * ) { result: PhotoResult? ->
+ *   // Handle the result here
+ *   result?.let { photo ->
+ *     // Use the returned photo
+ *   }
+ * }
+ * ```
+ *
  * ### Generated code
  * Depending on the `ImplementationType` in [UiEntry] a different class is generated as a screen
- * entry.
+ * entry. When `result` is specified, the generated class also implements [ResultEntry] interface.
  *
  * #### [ImplementationType.Fragment]
  *
@@ -136,4 +170,13 @@ annotation class UiEntry(
      * See [UiEntry].
      */
     val args: KClass<out Parcelable> = NoArgs::class,
+    /**
+     * Optional `Parcelable` result type that this screen returns.
+     * If specified (not [NoResult]), the screen becomes a result-returning screen that can be
+     * navigated to using [NavigationController.navigateForResult] and can return data using
+     * [NavigationController.setResultAndNavigateBack].
+     *
+     * When specified, the generated entry class will also implement [ResultEntry] interface.
+     */
+    val result: KClass<out Parcelable> = NoResult::class
 )

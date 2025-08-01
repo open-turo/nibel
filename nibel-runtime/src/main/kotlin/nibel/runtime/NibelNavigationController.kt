@@ -49,6 +49,7 @@ open class NibelNavigationController(
         when (entry) {
             is ComposableEntry<*> -> navigateTo(entry, composeSpec)
             is FragmentEntry -> navigateTo(entry, fragmentSpec)
+            else -> error("Unknown entry type: ${entry.javaClass}")
         }
     }
 
@@ -70,5 +71,63 @@ open class NibelNavigationController(
 
             else -> error("Unknown compose navigation spec '${composeSpec.javaClass}'")
         }
+    }
+
+    // Result navigation support
+    private var currentResultKey: String? = null
+    private var currentResultCallback: ResultCallback<*>? = null
+
+    override fun <R : Any> navigateForResult(
+        entry: ResultEntry<R>,
+        callback: ResultCallback<R>,
+        fragmentSpec: FragmentSpec<*>,
+        composeSpec: ComposeSpec<*>
+    ) {
+        // Generate a unique key for this result navigation
+        val resultKey = "result_${System.currentTimeMillis()}_${entry.hashCode()}"
+
+        // Store the callback
+        resultCallbackRegistry.register(resultKey, callback)
+        currentResultKey = resultKey
+        currentResultCallback = callback
+
+        // Navigate normally - the result will be handled when setResultAndNavigateBack is called
+        navigateTo(entry as Entry, fragmentSpec, composeSpec)
+    }
+
+    override fun <R : Any> navigateForResult(
+        destination: ExternalDestination,
+        callback: ResultCallback<R>,
+        fragmentSpec: FragmentSpec<*>,
+        composeSpec: ComposeSpec<*>
+    ) {
+        val destinationEntry = Nibel.findEntryFactory(destination)
+            ?.newInstance(destination) as? ResultEntry<R>
+            ?: error("Unable to find result destination '${destination.javaClass}' or destination is not a ResultEntry")
+
+        navigateForResult(destinationEntry, callback, fragmentSpec, composeSpec)
+    }
+
+    override fun <R : Any> setResultAndNavigateBack(result: R) {
+        currentResultKey?.let { key ->
+            val callback = resultCallbackRegistry.consume<R>(key)
+            callback?.onResult(result)
+        }
+        clearCurrentResult()
+        navigateBack()
+    }
+
+    override fun cancelResultAndNavigateBack() {
+        currentResultKey?.let { key ->
+            val callback = resultCallbackRegistry.consume<Any>(key)
+            callback?.onResult(null)
+        }
+        clearCurrentResult()
+        navigateBack()
+    }
+
+    private fun clearCurrentResult() {
+        currentResultKey = null
+        currentResultCallback = null
     }
 }

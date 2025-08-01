@@ -2,6 +2,7 @@ package nibel.compiler.generator
 
 sealed interface EntryMetadata {
     val argsQualifiedName: String?
+    val resultQualifiedName: String?
     val parameters: Map<ParameterType, ParameterMetadata>
 }
 
@@ -10,10 +11,12 @@ data class ExternalEntryMetadata(
     val destinationPackageName: String,
     val destinationQualifiedName: String,
     override val argsQualifiedName: String?,
+    override val resultQualifiedName: String?,
     override val parameters: Map<ParameterType, ParameterMetadata>,
 ) : EntryMetadata
 
 data class InternalEntryMetadata(
     override val argsQualifiedName: String?,
-    override val parameters: Map<ParameterType, ParameterMetadata>,
+    override val resultQualifiedName: String?,
+    override val parameters: Map<ParameterType, ParameterMetadata>
 ) : EntryMetadata

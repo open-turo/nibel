@@ -12,11 +12,26 @@ import com.google.devtools.ksp.symbol.Modifier
 import nibel.annotations.DestinationWithArgs
 import nibel.annotations.DestinationWithNoArgs
 import nibel.runtime.NoArgs
+import nibel.annotations.NoResult
 
 abstract class AbstractEntryGeneratingVisitor(
     private val resolver: Resolver,
     protected val logger: KSPLogger,
 ) : KSVisitorVoid() {
+
+    protected fun Arguments.extractResultType(symbol: KSNode): String? {
+        val resultArg = this["result"] as? KSType ?: return null
+        val resultClassName = resultArg.declaration.qualifiedName!!.asString()
+        return if (resultClassName == NoResult::class.qualifiedName) {
+            null
+        } else {
+            val declaration = resultArg.declaration as KSClassDeclaration
+            if (!declaration.isCorrectResultDeclaration(symbol)) {
+                return null
+            }
+            resultClassName
+        }
+    }
 
     protected fun Arguments.parseExternalEntry(symbol: KSNode): ExternalEntryMetadata? {
         val arg = this["destination"] as KSType
@@ -52,7 +67,8 @@ abstract class AbstractEntryGeneratingVisitor(
                     destinationPackageName = destinationPackageName.asString(),
                     destinationQualifiedName = destinationClassName.asString(),
                     argsQualifiedName = argsClassName,
-                    parameters = emptyMap(),
+                    resultQualifiedName = extractResultType(symbol),
+                    parameters = emptyMap()
                 )
             }
 
@@ -62,7 +78,8 @@ abstract class AbstractEntryGeneratingVisitor(
                     destinationPackageName = destinationPackageName.asString(),
                     destinationQualifiedName = destinationClassName.asString(),
                     argsQualifiedName = null,
-                    parameters = emptyMap(),
+                    resultQualifiedName = extractResultType(symbol),
+                    parameters = emptyMap()
                 )
 
             else -> null
@@ -80,24 +97,25 @@ abstract class AbstractEntryGeneratingVisitor(
         return if (argsClassName == NoArgs::class.qualifiedName) {
             InternalEntryMetadata(
                 argsQualifiedName = null,
-                parameters = emptyMap(),
+                resultQualifiedName = extractResultType(symbol),
+                parameters = emptyMap()
             )
         } else {
             InternalEntryMetadata(
                 argsQualifiedName = argsClassName,
-                parameters = emptyMap(),
+                resultQualifiedName = extractResultType(symbol),
+                parameters = emptyMap()
             )
         }
     }
 
     private fun KSClassDeclaration.isCorrectDestinationDeclaration(symbol: KSNode): Boolean {
-        val isAllowedType = (classKind != ClassKind.CLASS && classKind != ClassKind.OBJECT) ||
+        if ((classKind != ClassKind.CLASS && classKind != ClassKind.OBJECT) ||
             Modifier.SEALED in modifiers ||
             Modifier.ABSTRACT in modifiers ||
             Modifier.OPEN in modifiers ||
             Modifier.VALUE in modifiers
-
-        if (isAllowedType) {
+        ) {
             logger.error(
                 message = "Destinations are allowed to be only 'class', 'data class' or 'object'.",
                 symbol = symbol,
@@ -132,6 +150,24 @@ abstract class AbstractEntryGeneratingVisitor(
         return true
     }
 
+    private fun KSClassDeclaration.isCorrectResultDeclaration(symbol: KSNode): Boolean {
+        if (Modifier.DATA !in modifiers && classKind != ClassKind.OBJECT) {
+            logger.error(
+                message = "Result types are allowed to be only 'data class' or 'object'.",
+                symbol = symbol,
+            )
+            return false
+        }
+        if (typeParameters.isNotEmpty()) {
+            logger.error(
+                message = "Result type declarations are not allowed to have generic type parameters.",
+                symbol = symbol,
+            )
+            return false
+        }
+        return true
+    }
+
     private fun KSClassDeclaration.findDestinationSuperType(symbol: KSNode): KSTypeReference? {
         val destinationSuperType = superTypes.toList()
             .find { it.toString().startsWith("DestinationWith") }
@@ -139,7 +175,7 @@ abstract class AbstractEntryGeneratingVisitor(
         if (destinationSuperType == null) {
             logger.error(
                 message = "Destination should directly inherit " +
-                    "${DestinationWithNoArgs::class.simpleName} or ${DestinationWithArgs::class.simpleName}.",
+                        "${DestinationWithNoArgs::class.simpleName} or ${DestinationWithArgs::class.simpleName}.",
                 symbol = symbol,
             )
             return null

@@ -1,7 +1,9 @@
 package nibel.annotations
 
+import android.os.Parcelable
 import nibel.annotations.ImplementationType.Composable
 import nibel.annotations.ImplementationType.Fragment
+import nibel.annotations.NoResult
 import kotlin.annotation.AnnotationTarget.FUNCTION
 import kotlin.reflect.KClass
 
@@ -61,7 +63,25 @@ import kotlin.reflect.KClass
  * @Composable
  * fun FooScreen(args: BarArgs) { ... }
  * ```
- * If the args types in the annotation and the composable params don't match, a compile time error
+ * For screens that return a result, specify the result type:
+ * ```
+ * // feature module
+ * @UiExternalEntry(
+ *   type = ImplementationType.Composable,
+ *   destination = PhotoPickerDestination::class,
+ *   result = PhotoResult::class
+ * )
+ * @Composable
+ * fun PhotoPickerScreen(
+ *   args: PhotoPickerArgs,
+ *   navigator: NavigationController
+ * ) {
+ *   // ... screen content
+ *   // To return result:
+ *   navigator.setResultAndNavigateBack(PhotoResult(selectedPhoto))
+ * }
+ * ```
+ * If the args or result types in the annotation and the composable params don't match, a compile time error
  * will be thrown.
  *
  * ### Composable function params
@@ -178,4 +198,13 @@ annotation class UiExternalEntry(
      * See [UiExternalEntry], [ExternalDestination].
      */
     val destination: KClass<out ExternalDestination>,
+    /**
+     * Optional `Parcelable` result type that this screen returns.
+     * If specified (not [NoResult]), the screen becomes a result-returning screen that can be
+     * navigated to using [NavigationController.navigateForResult] and can return data using
+     * [NavigationController.setResultAndNavigateBack].
+     *
+     * When specified, the generated entry class will also implement [ResultEntry] interface.
+     */
+    val result: KClass<out Parcelable> = NoResult::class
 )
