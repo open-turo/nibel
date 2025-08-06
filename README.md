@@ -15,6 +15,7 @@ Nibel supports both **single-module** and **multi-module** navigation out-of-the
 - [Installation](#installation)
 - [Basic usage](#basic-usage)
 - [Multi-module navigation](#multi-module-navigation)
+- [Result-based navigation](#result-based-navigation)
 - [Sample app](#sample-app)
 
 ## Materials
@@ -242,6 +243,177 @@ Then, use the destination for navigation.
 ```kotlin
 val args = ThirdScreenArgs(...)
 navigator.navigateTo(ThirdScreenDestination(args))
+```
+
+## Result-based navigation
+
+Nibel supports result-based navigation that allows screens to return typed data to the previous screen. This feature integrates with Android's Activity Result API pattern while maintaining Nibel's type-safe approach.
+
+### Declaring a result screen
+
+To create a screen that can return a result, specify the `result` parameter in your annotation with a `Parcelable` result type:
+
+```kotlin
+@Parcelize
+data class PhotoResult(
+    val photoUrl: String,
+    val photoName: String,
+    val timestamp: Long = System.currentTimeMillis()
+) : Parcelable
+
+@UiEntry(
+    type = ImplementationType.Composable,
+    args = PhotoArgs::class,
+    result = PhotoResult::class  // This screen can return PhotoResult
+)
+@Composable
+fun PhotoPickerScreen(
+    args: PhotoArgs,
+    navigator: NavigationController
+) {
+    // Your screen content
+    Button(onClick = {
+        val selectedPhoto = PhotoResult("url", "name")
+        navigator.setResultAndNavigateBack(selectedPhoto)
+    }) {
+        Text("Select Photo")
+    }
+
+    // Or cancel without result
+    Button(onClick = {
+        navigator.cancelResultAndNavigateBack()
+    }) {
+        Text("Cancel")
+    }
+}
+```
+
+When you build the code, the generated entry class will implement both `ComposableEntry` and `ResultEntry<PhotoResult>` interfaces.
+
+### Navigating for a result
+
+To navigate to a result-returning screen and receive the result:
+
+```kotlin
+@UiEntry(type = ImplementationType.Composable)
+@Composable
+fun HomeScreen(navigator: NavigationController) {
+    var selectedPhoto by remember { mutableStateOf<PhotoResult?>(null) }
+
+    Button(onClick = {
+        navigator.navigateForResult(
+            entry = PhotoPickerScreenEntry.newInstance(PhotoArgs()),
+            callback = { result: PhotoResult? ->
+                // Handle the result - null if cancelled
+                selectedPhoto = result
+            }
+        )
+    }) {
+        Text("Pick Photo")
+    }
+
+    // Display result
+    selectedPhoto?.let { photo ->
+        Text("Selected: ${photo.photoName}")
+    }
+}
+```
+
+### Multi-module result navigation
+
+For cross-module result navigation, use external destinations with the `result` parameter:
+
+```kotlin
+// In navigation module
+@Parcelize
+data class UserSelectionResult(
+    val userId: String,
+    val userName: String
+) : Parcelable
+
+data class UserPickerDestination(
+    override val args: UserPickerArgs
+) : DestinationWithArgs<UserPickerArgs>
+```
+
+```kotlin
+// In feature module
+@UiExternalEntry(
+    type = ImplementationType.Composable,
+    destination = UserPickerDestination::class,
+    result = UserSelectionResult::class
+)
+@Composable
+fun UserPickerScreen(
+    args: UserPickerArgs,
+    navigator: NavigationController
+) {
+    // Implementation
+    Button(onClick = {
+        navigator.setResultAndNavigateBack(
+            UserSelectionResult("123", "John Doe")
+        )
+    }) {
+        Text("Select User")
+    }
+}
+```
+
+```kotlin
+// Navigate from another module
+navigator.navigateForResult(
+    destination = UserPickerDestination(UserPickerArgs()),
+    callback = { result: UserSelectionResult? ->
+        result?.let { user ->
+            // Use the selected user
+            println("Selected user: ${user.userName}")
+        }
+    }
+)
+```
+
+### Type safety and error handling
+
+Nibel ensures compile-time type safety for result navigation:
+
+- **Result types** must be `Parcelable` data classes or objects
+- **Factory methods** return `ResultEntry<R>` instead of generic entries
+- **Callbacks** are strongly typed to the expected result type
+- **Runtime errors** occur if destinations don't implement `ResultEntry`
+
+### Edge cases handled
+
+The result navigation system handles several important scenarios:
+
+- **Configuration changes**: Results survive device rotation and process death
+- **Multiple requests**: Each navigation request gets a unique callback key
+- **Lifecycle management**: Callbacks are automatically cleaned up
+- **Cancellation**: Users can cancel without providing a result (`null` callback)
+
+### Best practices
+
+- **Keep results simple**: Use lightweight `Parcelable` data classes
+- **Handle null results**: Always check if the result is null (cancelled)
+- **Cleanup resources**: The framework handles callback lifecycle automatically
+- **Test thoroughly**: Verify both success and cancellation paths
+
+### Migration from existing patterns
+
+If you're migrating from Fragment result APIs or other patterns:
+
+```kotlin
+// Before (Fragment)
+setFragmentResultListener("photo_key") { _, bundle ->
+    val result = bundle.getParcelable<PhotoResult>("photo_data")
+    // handle result
+}
+
+// After (Nibel)
+navigator.navigateForResult(
+    entry = PhotoPickerScreenEntry.newInstance(args)
+) { result: PhotoResult? ->
+    // handle result - automatically typed and null-safe
+}
 ```
 
 ## Sample app
