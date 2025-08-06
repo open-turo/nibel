@@ -1,0 +1,25 @@
+name: Update dependencies
+concurrency: update-dependencies
+
+on:
+  schedule:
+    # Every day at midnight
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+  issue_comment:
+    types:
+      - edited
+  pull_request:
+    types:
+      - edited
+
+jobs:
+  update-dependencies:
+    runs-on: ubuntu-latest
+    name: Update dependencies
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: open-turo/action-renovate@v1
+        with:
+          github-token: ${{ secrets.OPEN_TURO_GITHUB_TOKEN }}
