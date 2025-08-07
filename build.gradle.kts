@@ -5,9 +5,27 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.dagger.hilt.android) apply false
-    alias(libs.plugins.dokka) apply false
+    alias(libs.plugins.dokka)
     alias(libs.plugins.vanniktech.maven.publish) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
     alias(libs.plugins.kotlin.kapt) apply false
     alias(libs.plugins.kotlin.jvm) apply false
+}
+
+// Configure Dokka for multi-module documentation
+tasks.dokkaHtmlMultiModule.configure {
+    moduleName.set("Nibel")
+    outputDirectory.set(layout.buildDirectory.dir("dokka/htmlMultiModule"))
+
+    // Configure documentation metadata
+    pluginsMapConfiguration.set(
+        mapOf(
+            "org.jetbrains.dokka.base.DokkaBase" to """{
+                "customAssets": [],
+                "customStyleSheets": [],
+                "separateInheritedMembers": false,
+                "footerMessage": "Generated with Dokka"
+            }"""
+        )
+    )
 }
