@@ -30,7 +30,9 @@ abstract class CommonScreenFragment : Fragment() {
         binding.inputTextLayout.helperText =
             if (editable) {
                 requireContext().getString(R.string.input_supporting_text)
-            } else requireContext().getString(R.string.input_read_only_text)
+            } else {
+                requireContext().getString(R.string.input_read_only_text)
+            }
     }
 
     fun setInputTextVisible(visible: Boolean) {

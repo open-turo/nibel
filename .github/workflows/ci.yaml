@@ -13,17 +13,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: open-turo/action-git-auth@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Set up tools
         uses: open-turo/action-setup-tools@v1
 
       - name: Setup detekt
         uses: peter-murray/setup-detekt@v2
         with:
-          detekt_version: 1.23.0
+          detekt_version: 1.23.8
 
-      - uses: open-turo/action-pre-commit@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: open-turo/action-pre-commit@v2
 
   lint:
     name: Lint
