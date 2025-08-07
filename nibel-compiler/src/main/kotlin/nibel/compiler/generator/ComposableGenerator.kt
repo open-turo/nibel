@@ -36,7 +36,7 @@ class ComposableGenerator(
                         packageName = metadata.destinationPackageName,
                         destinationName = metadata.destinationName,
                         destinationQualifiedName = metadata.destinationQualifiedName,
-                        entryFactoryQualifiedName = "${packageName}.${composableHolderName}.Companion"
+                        entryFactoryQualifiedName = "$packageName.$composableHolderName.Companion"
                     )
 
                 composableExternalEntryFactoryTemplate(

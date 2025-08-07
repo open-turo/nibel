@@ -25,5 +25,9 @@ fun <A : Parcelable> SavedStateHandle.getNibelArgs(): A? = get<A>(Nibel.argsKey)
  * Retrieve args from a [Bundle].
  */
 inline fun <reified A : Parcelable> Bundle.getNibelArgs(): A? =
-    if (SDK_INT >= TIRAMISU) getParcelable(Nibel.argsKey, A::class.java)
-    else @Suppress("DEPRECATION") getParcelable(Nibel.argsKey)
+    if (SDK_INT >= TIRAMISU) {
+        getParcelable(Nibel.argsKey, A::class.java)
+    } else {
+        @Suppress("DEPRECATION")
+        getParcelable(Nibel.argsKey)
+    }

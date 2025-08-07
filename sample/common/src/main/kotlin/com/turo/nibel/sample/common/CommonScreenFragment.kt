@@ -28,8 +28,9 @@ abstract class CommonScreenFragment : Fragment() {
     fun setInputTextEditable(editable: Boolean) {
         binding.inputTextLayout.isEnabled = editable
         binding.inputTextLayout.helperText =
-            if (editable) requireContext().getString(R.string.input_supporting_text)
-            else requireContext().getString(R.string.input_read_only_text)
+            if (editable) {
+                requireContext().getString(R.string.input_supporting_text)
+            } else requireContext().getString(R.string.input_read_only_text)
     }
 
     fun setInputTextVisible(visible: Boolean) {

@@ -2,7 +2,6 @@ package nibel.compiler.generator
 
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
-import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import nibel.compiler.template.fragmentExternalEntryFactoryTemplate
@@ -12,7 +11,6 @@ import nibel.compiler.template.legacyEntryTemplate
 class LegacyEntryGenerator(
     private val resolver: Resolver,
     private val codeGenerator: CodeGenerator,
-    private val logger: KSPLogger,
     private val entryFactoriesRegistry: EntryFactoriesRegistry
 ) {
 
@@ -30,7 +28,7 @@ class LegacyEntryGenerator(
                         packageName = metadata.destinationPackageName,
                         destinationName = metadata.destinationName,
                         destinationQualifiedName = metadata.destinationQualifiedName,
-                        entryFactoryQualifiedName = "${packageName}.${legacyEntryName}"
+                        entryFactoryQualifiedName = "$packageName.$legacyEntryName"
                     )
 
                 fragmentExternalEntryFactoryTemplate(

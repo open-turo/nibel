@@ -4,8 +4,8 @@ import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.symbol.KSClassDeclaration
-import nibel.annotations.LegacyExternalEntry
 import nibel.annotations.LegacyEntry
+import nibel.annotations.LegacyExternalEntry
 import nibel.compiler.ProcessorType
 import nibel.compiler.ProcessorType.ExternalEntry
 import nibel.compiler.ProcessorType.InternalEntry
@@ -19,7 +19,7 @@ class LegacyEntryGeneratingVisitor(
 ) : AbstractEntryGeneratingVisitor(resolver, logger) {
 
     private val legacyEntryGenerator by lazy {
-        LegacyEntryGenerator(resolver, codeGenerator, logger, entryFactoriesRegistry)
+        LegacyEntryGenerator(resolver, codeGenerator, entryFactoriesRegistry)
     }
 
     override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: Unit) {

@@ -24,5 +24,6 @@ class FourthViewModel @Inject constructor(
     )
     val state: StateFlow<FourthState> get() = _state
 
+    @Suppress("UnusedParameter")
     fun onContinue(nextButton: FourthNextButton) = Unit
 }

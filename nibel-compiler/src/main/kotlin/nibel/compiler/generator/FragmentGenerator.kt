@@ -35,7 +35,7 @@ class FragmentGenerator(
                         packageName = metadata.destinationPackageName,
                         destinationName = metadata.destinationName,
                         destinationQualifiedName = metadata.destinationQualifiedName,
-                        entryFactoryQualifiedName = "${packageName}.${fragmentName}.Companion"
+                        entryFactoryQualifiedName = "$packageName.$fragmentName.Companion"
                     )
 
                 fragmentExternalEntryFactoryTemplate(

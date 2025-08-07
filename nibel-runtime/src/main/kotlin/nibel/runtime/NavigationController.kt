@@ -1,7 +1,6 @@
 package nibel.runtime
 
 import nibel.annotations.ExternalDestination
-import nibel.annotations.ImplementationType
 import nibel.annotations.UiEntry
 import nibel.annotations.UiExternalEntry
 

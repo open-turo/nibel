@@ -35,5 +35,3 @@ abstract class ComposableEntry<A : Parcelable>(
         }
     }
 }
-
-fun buildRouteName(base: String, args: Parcelable? = null): String = base

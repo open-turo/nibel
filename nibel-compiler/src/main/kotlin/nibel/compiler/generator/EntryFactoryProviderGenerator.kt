@@ -2,14 +2,12 @@ package nibel.compiler.generator
 
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
-import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.Resolver
 import nibel.compiler.template.entryFactoryProviderTemplate
 
 class EntryFactoryProviderGenerator(
     private val resolver: Resolver,
     private val codeGenerator: CodeGenerator,
-    private val logger: KSPLogger,
     private val entryFactoriesRegistry: EntryFactoriesRegistry
 ) {
 

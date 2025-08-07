@@ -17,9 +17,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class $composableHolderName(
-    override val args: ${argsQualifiedName},
+    override val args: $argsQualifiedName,
     override val name: String,
-) : ComposableEntry<${argsQualifiedName}>(args, name) {
+) : ComposableEntry<$argsQualifiedName>(args, name) {
 
     @Composable
     override fun ComposableContent() {

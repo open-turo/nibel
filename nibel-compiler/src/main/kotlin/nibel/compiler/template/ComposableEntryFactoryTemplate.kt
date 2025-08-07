@@ -17,11 +17,11 @@ fun composableExternalEntryFactoryTemplate(
 |            return entry
 |        }
 ${
-if (hasArgs) {
-    composableInternalEntryFactoryMethodTemplate(composableHolderName, argsQualifiedName!!)
-} else {
-    composableInternalEntryFactoryMethodTemplate(composableHolderName)
-}
+    if (hasArgs) {
+        composableInternalEntryFactoryMethodTemplate(composableHolderName, argsQualifiedName!!)
+    } else {
+        composableInternalEntryFactoryMethodTemplate(composableHolderName)
+    }
 }
 |    }
 """.trimMargin("|")
@@ -32,10 +32,10 @@ fun composableInternalEntryFactoryTemplate(
 ) = """
 |    companion object {
 ${
-composableInternalEntryFactoryMethodTemplate(
-    composableHolderName,
-    argsQualifiedName,
-)
+    composableInternalEntryFactoryMethodTemplate(
+        composableHolderName,
+        argsQualifiedName,
+    )
 }
 |    }
 """.trimMargin("|")
@@ -46,7 +46,7 @@ fun composableInternalEntryFactoryMethodTemplate(
     argsQualifiedName: String,
 ) = """
 |
-|        fun newInstance(args: $argsQualifiedName): ComposableEntry<${argsQualifiedName}> {
+|        fun newInstance(args: $argsQualifiedName): ComposableEntry<$argsQualifiedName> {
 |            val entry = $composableHolderName(
 |                args = args,
 |                name = nibel.runtime.buildRouteName($composableHolderName::class.qualifiedName!!, args),

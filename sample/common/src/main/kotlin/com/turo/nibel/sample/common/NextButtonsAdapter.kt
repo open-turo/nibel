@@ -25,7 +25,9 @@ class NextButtonsAdapter<NB : NextButton>(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemNextButtonBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
+            LayoutInflater.from(parent.context),
+            parent,
+            false
         )
         return ViewHolder(binding)
     }

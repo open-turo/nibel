@@ -72,8 +72,11 @@ private fun <NB : NextButton> CommonScreenContent(
     modifier: Modifier = Modifier,
 ) {
     val supportingText =
-        if (inputTextEditable) stringResource(R.string.input_supporting_text)
-        else stringResource(R.string.input_read_only_text)
+        if (inputTextEditable) {
+            stringResource(R.string.input_supporting_text)
+        } else {
+            stringResource(R.string.input_read_only_text)
+        }
 
     LazyColumn(modifier, contentPadding = PaddingValues(16.dp)) {
         item {
@@ -109,7 +112,6 @@ private fun <NB : NextButton> CommonScreenContent(
             }
         }
         items(nextButtons.size) {
-
             Button(
                 onClick = { onContinue(nextButtons[it]) },
                 Modifier

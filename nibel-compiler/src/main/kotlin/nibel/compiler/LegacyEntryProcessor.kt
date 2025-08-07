@@ -6,8 +6,8 @@ import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
-import nibel.annotations.LegacyExternalEntry
 import nibel.annotations.LegacyEntry
+import nibel.annotations.LegacyExternalEntry
 import nibel.compiler.ProcessorType.ExternalEntry
 import nibel.compiler.ProcessorType.InternalEntry
 import nibel.compiler.generator.EntryFactoriesRegistry
@@ -16,7 +16,6 @@ import nibel.compiler.generator.LegacyEntryGeneratingVisitor
 
 class LegacyEntryProcessor(
     private val type: ProcessorType,
-    private val options: Map<String, String>,
     private val logger: KSPLogger,
     private val codeGenerator: CodeGenerator,
 ) : SymbolProcessor {
@@ -50,7 +49,6 @@ class LegacyEntryProcessor(
             EntryFactoryProviderGenerator(
                 resolver = resolver,
                 codeGenerator = codeGenerator,
-                logger = logger,
                 entryFactoriesRegistry = entryFactoriesRegistry
             ).generate()
         }

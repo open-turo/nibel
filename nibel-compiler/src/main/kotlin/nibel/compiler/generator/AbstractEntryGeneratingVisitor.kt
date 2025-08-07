@@ -91,12 +91,13 @@ abstract class AbstractEntryGeneratingVisitor(
     }
 
     private fun KSClassDeclaration.isCorrectDestinationDeclaration(symbol: KSNode): Boolean {
-        if ((classKind != ClassKind.CLASS && classKind != ClassKind.OBJECT) ||
+        val isAllowedType = (classKind != ClassKind.CLASS && classKind != ClassKind.OBJECT) ||
             Modifier.SEALED in modifiers ||
             Modifier.ABSTRACT in modifiers ||
             Modifier.OPEN in modifiers ||
             Modifier.VALUE in modifiers
-        ) {
+
+        if (isAllowedType) {
             logger.error(
                 message = "Destinations are allowed to be only 'class', 'data class' or 'object'.",
                 symbol = symbol,
@@ -138,7 +139,7 @@ abstract class AbstractEntryGeneratingVisitor(
         if (destinationSuperType == null) {
             logger.error(
                 message = "Destination should directly inherit " +
-                        "${DestinationWithNoArgs::class.simpleName} or ${DestinationWithArgs::class.simpleName}.",
+                    "${DestinationWithNoArgs::class.simpleName} or ${DestinationWithArgs::class.simpleName}.",
                 symbol = symbol,
             )
             return null
