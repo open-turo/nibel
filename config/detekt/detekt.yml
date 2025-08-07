@@ -1,0 +1,82 @@
+# Building upon default config
+# Only include rule modifications in this file
+# For default rules see:
+# https://github.com/detekt/detekt/blob/master/detekt-core/src/main/resources/default-detekt-config.yml
+
+style:
+  excludes: &excludedFiles
+    - "**/build-tools/**"
+    - "**/build/**"
+    - "**/.idea/**"
+    - "**/*Test.kt"
+    - "**/test/snapshots/**"
+    - "**/*.txt"
+
+  active: true
+  MagicNumber:
+    active: false
+  MaxLineLength:
+    excludes: &excludesGeneratedCode
+      - "**/build-tools/**"
+      - "**/build/**"
+      - "**/.idea/**"
+      - "**/*Test.kt"
+      - "**/test/snapshots/**"
+      - "**/*.txt"
+    maxLineLength: 120
+  UnusedPrivateMember:
+    ignoreAnnotated: ["Preview", "Composable"]
+
+formatting:
+  excludes: *excludedFiles
+  MaximumLineLength:
+    active: false
+    maxLineLength: 120
+
+complexity:
+  excludes: *excludedFiles
+  active: true
+  TooManyFunctions:
+    active: false
+    thresholdInFiles: 30
+    thresholdInClasses: 30
+    thresholdInInterfaces: 30
+    thresholdInObjects: 30
+    thresholdInEnums: 30
+    ignoreDeprecated: false
+    ignorePrivate: false
+    ignoreOverridden: false
+  LongMethod:
+    active: false
+  LongParameterList:
+    active: true
+    functionThreshold: 10
+    constructorThreshold: 10
+    ignoreDefaultParameters: true
+    ignoreAnnotated: ["Composable"]
+    excludes: *excludedFiles
+
+empty-blocks:
+  excludes: *excludedFiles
+  active: true
+  EmptyFunctionBlock:
+    active: true
+    ignoreOverridden: true
+
+exceptions:
+  active: true
+  excludes: *excludedFiles
+
+naming:
+  excludes: *excludedFiles
+  FunctionNaming:
+    active: true
+    functionPattern: "[a-zA-Z][a-zA-Z0-9]*"
+    ignoreAnnotated: ["Preview", "Composable"]
+
+comments:
+  active: true
+  UndocumentedPublicClass:
+    active: false
+  UndocumentedPublicFunction:
+    active: false
