@@ -20,7 +20,7 @@ class NibelDetektPlugin : NibelConventionPlugin({
         buildUponDefaultConfig = true
 
         // Configuration file
-        config.setFrom("$rootDir/config/detekt/detekt.yml")
+        config.setFrom("$rootDir/config/detekt/detekt.yaml")
 
         //Baseline file for existing issues
         baseline = file("$rootDir/config/detekt/baseline.xml")

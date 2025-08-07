@@ -26,6 +26,8 @@ style:
     maxLineLength: 120
   UnusedPrivateMember:
     ignoreAnnotated: ["Preview", "Composable"]
+  ReturnCount:
+    active: false
 
 formatting:
   excludes: *excludedFiles
