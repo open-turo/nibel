@@ -7,6 +7,7 @@ class SampleAndroidLibraryPlugin : NibelConventionPlugin({
     with(pluginManager) {
         apply(libs.plugins.android.library.get().pluginId)
         apply(libs.plugins.nibel.android.common.get().pluginId)
+        apply(libs.plugins.nibel.detekt.get().pluginId)
     }
 
     android<CommonExtension> {

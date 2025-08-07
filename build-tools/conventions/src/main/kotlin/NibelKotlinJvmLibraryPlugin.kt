@@ -7,6 +7,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 class NibelKotlinJvmLibraryPlugin : NibelConventionPlugin({
     with(pluginManager) {
         apply(libs.plugins.kotlin.jvm.get().pluginId)
+        apply(libs.plugins.nibel.detekt.get().pluginId)
     }
 
     tasks.withType<KotlinCompile>().configureEach {

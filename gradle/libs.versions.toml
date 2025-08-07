@@ -10,6 +10,7 @@ dagger = "2.46.1"
 lifecycle = "2.6.1"
 dokka = "1.8.20"
 mavenPublish = "0.25.3"
+detekt = "1.23.0"
 nibelConventionPlugin = "ignored"
 
 [libraries]
@@ -55,6 +56,9 @@ gradlePlugin-android-api = { module = "com.android.tools.build:gradle-api", vers
 gradlePlugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradlePlugin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 gradlePlugin-mavenPublish = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublish" }
+gradlePlugin-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+# ===== Detekt =====
+detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -67,6 +71,7 @@ vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = 
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 
 # ===== Convention Plugins =====
 nibel-metadata = { id = "nibel.metadata", version.ref = "nibelConventionPlugin" }
@@ -75,6 +80,7 @@ nibel-android-compose = { id = "nibel.android.compose", version.ref = "nibelConv
 nibel-android-common = { id = "nibel.android.common", version.ref = "nibelConventionPlugin" }
 nibel-kotlin-jvm-library = { id = "nibel.kotlin.jvm.library", version.ref = "nibelConventionPlugin" }
 nibel-maven-publish = { id = "nibel.maven.publish", version.ref = "nibelConventionPlugin" }
+nibel-detekt = { id = "nibel.detekt", version.ref = "nibelConventionPlugin" }
 sample-android-application = { id = "sample.android.application", version.ref = "nibelConventionPlugin" }
 sample-android-library = { id = "sample.android.library", version.ref = "nibelConventionPlugin" }
 sample-android-compose = { id = "sample.android.compose", version.ref = "nibelConventionPlugin" }

@@ -1,0 +1,9 @@
+
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>Filename:FeatureANavigation.kt$com.turo.nibel.sample.navigation.FeatureANavigation.kt</ID>
+    <ID>MatchingDeclarationName:FeatureANavigation.kt$FirstScreenDestination : DestinationWithNoArgs</ID>
+  </CurrentIssues>
+</SmellBaseline>
