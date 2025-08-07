@@ -23,6 +23,7 @@ dependencies {
     compileOnly(libs.gradlePlugin.android.api)
     compileOnly(libs.gradlePlugin.kotlin)
     compileOnly(libs.gradlePlugin.mavenPublish)
+    compileOnly(libs.gradlePlugin.detekt)
 }
 
 @Suppress("UNUSED_VARIABLE")
@@ -51,6 +52,10 @@ gradlePlugin {
         val mavenPublish by registering {
             id = "nibel.maven.publish"
             implementationClass = "NibelMavenPublishPlugin"
+        }
+        val detekt by registering {
+            id = "nibel.detekt"
+            implementationClass = "NibelDetektPlugin"
         }
         val sampleApplication by registering {
             id = "sample.android.application"
