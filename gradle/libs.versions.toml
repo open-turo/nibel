@@ -10,7 +10,7 @@ dagger = "2.46.1"
 lifecycle = "2.6.1"
 dokka = "1.8.20"
 mavenPublish = "0.25.3"
-detekt = "1.23.0"
+detekt = "1.23.8"
 nibelConventionPlugin = "ignored"
 
 [libraries]
