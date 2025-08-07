@@ -15,9 +15,6 @@ import nibel.annotations.ImplementationType
 import nibel.annotations.UiEntry
 import nibel.runtime.LocalImplementationType
 
-@Parcelize
-data class SecondArgs(val inputText: String) : Parcelable
-
 @UiEntry(
     type = ImplementationType.Composable,
     args = SecondArgs::class
@@ -51,3 +48,6 @@ private fun SideEffectHandler(sideEffects: Flow<SecondSideEffect>) {
         }
     }
 }
+
+@Parcelize
+data class SecondArgs(val inputText: String) : Parcelable

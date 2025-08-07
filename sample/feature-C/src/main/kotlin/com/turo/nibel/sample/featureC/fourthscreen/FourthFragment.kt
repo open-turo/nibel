@@ -24,7 +24,7 @@ class FourthFragment : CommonScreenFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setInputTextEditable(false)
-        binding.nextButtons.adapter = NextButtonsAdapter(viewModel::onContinue)
+        binding.nextButtons.adapter = NextButtonsAdapter(onItemClick = viewModel::onContinue)
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {

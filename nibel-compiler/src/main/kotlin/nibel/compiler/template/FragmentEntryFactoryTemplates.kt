@@ -15,11 +15,11 @@ fun fragmentExternalEntryFactoryTemplate(
 |            return FragmentEntry(fragment)
 |        }
 ${
-if (hasArgs) {
-    fragmentInternalEntryFactoryMethodTemplate(fragmentName, argsQualifiedName!!)
-} else {
-    fragmentInternalEntryFactoryMethodTemplate(fragmentName)
-}
+    if (hasArgs) {
+        fragmentInternalEntryFactoryMethodTemplate(fragmentName, argsQualifiedName!!)
+    } else {
+        fragmentInternalEntryFactoryMethodTemplate(fragmentName)
+    }
 }
 |    }
 """.trimMargin("|")

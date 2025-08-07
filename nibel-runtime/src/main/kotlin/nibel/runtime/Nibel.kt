@@ -4,10 +4,10 @@ package nibel.runtime
 
 import nibel.annotations.ExternalDestination
 import nibel.annotations.ImplementationType
+import nibel.annotations.LegacyEntry
+import nibel.annotations.LegacyExternalEntry
 import nibel.annotations.UiEntry
 import nibel.annotations.UiExternalEntry
-import nibel.annotations.LegacyExternalEntry
-import nibel.annotations.LegacyEntry
 
 /**
  * Nibel - is a type-safe navigation library for seamless adoption of Jetpack Compose in
@@ -112,7 +112,7 @@ object Nibel {
         val destinationClass = destination.javaClass
         val providerClass = try {
             Class.forName(entryFactoryProviderClassName(destinationClass))
-        } catch (e: ClassNotFoundException) {
+        } catch (_: ClassNotFoundException) {
             error("${destination::class.qualifiedName} is not associated with any @UiExternalEntry.")
         }
         val provideMethod = providerClass.getMethod("provide")
@@ -126,9 +126,9 @@ object Nibel {
         val packageName = destinationClass.`package`?.name.orEmpty()
         val className = destinationClass.canonicalName!!.replace(".", "_")
         return if (packageName.isNotEmpty()) {
-            "$packageName._${className}"
+            "$packageName._$className"
         } else {
-            "_${className}"
+            "_$className"
         }
     }
 

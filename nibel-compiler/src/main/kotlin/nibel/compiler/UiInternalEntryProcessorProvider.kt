@@ -11,7 +11,6 @@ class UiInternalEntryProcessorProvider : SymbolProcessorProvider {
     override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
         return UiEntryProcessor(
             type = ProcessorType.InternalEntry,
-            options = environment.options,
             logger = environment.logger,
             codeGenerator = environment.codeGenerator,
         )

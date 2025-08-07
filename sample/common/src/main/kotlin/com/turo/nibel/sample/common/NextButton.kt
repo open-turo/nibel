@@ -4,4 +4,4 @@ interface NextButton {
     val title: String
 }
 
-data class GenericNextButton(override val title: String): NextButton
+data class GenericNextButton(override val title: String) : NextButton

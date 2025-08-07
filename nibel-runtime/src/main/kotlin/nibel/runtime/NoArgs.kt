@@ -1,8 +1,6 @@
 package nibel.runtime
 
 import android.os.Parcelable
-import nibel.annotations.LegacyEntry
-import nibel.annotations.UiEntry
 import kotlinx.parcelize.Parcelize
 
 /**

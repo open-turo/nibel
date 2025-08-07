@@ -7,8 +7,8 @@ import com.google.devtools.ksp.symbol.KSFunctionDeclaration
 import com.google.devtools.ksp.symbol.KSType
 import nibel.annotations.ImplementationType.Composable
 import nibel.annotations.ImplementationType.Fragment
-import nibel.annotations.UiExternalEntry
 import nibel.annotations.UiEntry
+import nibel.annotations.UiExternalEntry
 import nibel.compiler.ProcessorType
 import nibel.compiler.ProcessorType.ExternalEntry
 import nibel.compiler.ProcessorType.InternalEntry
@@ -59,7 +59,7 @@ class EntryGeneratingVisitor(
         if (!isComposable()) {
             logger.error(
                 message = "Only @Composable function can be annotated with " +
-                        "@${UiExternalEntry::class.simpleName} or @${UiEntry::class.simpleName}.",
+                    "@${UiExternalEntry::class.simpleName} or @${UiEntry::class.simpleName}.",
                 symbol = this,
             )
             return false
@@ -70,7 +70,7 @@ class EntryGeneratingVisitor(
             annotationCount == 0 -> {
                 logger.error(
                     message = "Must be annotated with " +
-                            "@${UiExternalEntry::class.simpleName} or @${UiEntry::class.simpleName}.",
+                        "@${UiExternalEntry::class.simpleName} or @${UiEntry::class.simpleName}.",
                     symbol = this,
                 )
                 return false
@@ -79,7 +79,7 @@ class EntryGeneratingVisitor(
             annotationCount > 1 -> {
                 logger.error(
                     message = "@Composable function can't be annotated with more than one " +
-                            "@${UiExternalEntry::class.simpleName} or @${UiEntry::class.simpleName}.",
+                        "@${UiExternalEntry::class.simpleName} or @${UiEntry::class.simpleName}.",
                     symbol = this,
                 )
                 return false

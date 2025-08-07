@@ -2,10 +2,10 @@ package com.turo.nibel.sample.common
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import nibel.runtime.LocalNavigationController
-import nibel.runtime.NavigationController
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
+import nibel.runtime.LocalNavigationController
+import nibel.runtime.NavigationController
 
 @Composable
 fun <SE> SideEffectHandler(

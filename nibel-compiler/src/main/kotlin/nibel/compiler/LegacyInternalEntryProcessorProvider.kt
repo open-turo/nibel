@@ -12,7 +12,6 @@ class LegacyInternalEntryProcessorProvider : SymbolProcessorProvider {
     override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
         return LegacyEntryProcessor(
             type = InternalEntry,
-            options = environment.options,
             logger = environment.logger,
             codeGenerator = environment.codeGenerator,
         )

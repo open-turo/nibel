@@ -96,9 +96,9 @@ open class ComposeNavigationDelegate : NavigationDelegate<NavigationControllerAr
             }
         } else {
             val route = if (defaultArgs == null) {
-                "${name}/{${Nibel.argsKey}}"
+                "$name/{${Nibel.argsKey}}"
             } else {
-                "${name}?${Nibel.argsKey}={${Nibel.argsKey}}"
+                "$name?${Nibel.argsKey}={${Nibel.argsKey}}"
             }
             composable(
                 route = route,

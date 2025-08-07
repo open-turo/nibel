@@ -22,11 +22,11 @@ class NibelDetektPlugin : NibelConventionPlugin({
         // Configuration file
         config.setFrom("$rootDir/config/detekt/detekt.yml")
 
-        // Baseline file for existing issues (commented out for now)
-        // baseline = file("$rootDir/detekt-baseline.xml")
+        //Baseline file for existing issues
+        baseline = file("$rootDir/config/detekt/baseline.xml")
 
         // Enable auto correction where possible
-        autoCorrect = false
+        autoCorrect = true
 
         // Exclude generated code and build directories
         ignoredBuildTypes = listOf("release")
@@ -60,7 +60,7 @@ class NibelDetektPlugin : NibelConventionPlugin({
             html.required.set(true)
             txt.required.set(false)
             sarif.required.set(false)
-            md.required.set(false)
+            md.required.set(true)
         }
     }
 
