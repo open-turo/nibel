@@ -5,8 +5,8 @@ class NibelMetadataPlugin : NibelConventionPlugin({})
 
 object NibelMetadata {
     const val MIN_SDK = 24
-    const val TARGET_SDK = 33
-    const val COMPILE_SDK = 33
+    const val TARGET_SDK = 35
+    const val COMPILE_SDK = 35
 
     val JAVA_VERSION = JavaVersion.VERSION_11
 
