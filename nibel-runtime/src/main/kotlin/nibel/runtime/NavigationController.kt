@@ -21,7 +21,7 @@ import nibel.annotations.UiExternalEntry
  */
 abstract class NavigationController(
     val fragmentSpec: FragmentSpec<*> = Nibel.fragmentSpec,
-    val composeSpec: ComposeSpec<*> = Nibel.composeSpec
+    val composeSpec: ComposeSpec<*> = Nibel.composeSpec,
 ) {
 
     /**

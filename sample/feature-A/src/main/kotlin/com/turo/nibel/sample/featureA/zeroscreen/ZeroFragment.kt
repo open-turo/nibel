@@ -76,7 +76,7 @@ class ZeroFragment : CommonScreenFragment() {
         Toast.makeText(
             requireContext(),
             "${destination::class.simpleName} should be ImplementationType.Fragment",
-            LENGTH_SHORT
+            LENGTH_SHORT,
         ).show()
     }
 }

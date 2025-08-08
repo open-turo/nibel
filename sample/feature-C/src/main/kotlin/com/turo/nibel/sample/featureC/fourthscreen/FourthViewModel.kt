@@ -13,14 +13,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FourthViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val _sideEffects = MutableSharedFlow<FourthSideEffect>(extraBufferCapacity = 1)
     val sideEffects: Flow<FourthSideEffect> get() = _sideEffects
 
     private val _state = MutableStateFlow(
-        FourthState(inputText = savedStateHandle.getNibelArgs<FourthArgs>()!!.inputText)
+        FourthState(inputText = savedStateHandle.getNibelArgs<FourthArgs>()!!.inputText),
     )
     val state: StateFlow<FourthState> get() = _state
 

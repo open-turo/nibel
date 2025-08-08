@@ -15,7 +15,7 @@ class ComposableGenerator(
     private val resolver: Resolver,
     private val codeGenerator: CodeGenerator,
     private val logger: KSPLogger,
-    private val entryFactoriesRegistry: EntryFactoriesRegistry
+    private val entryFactoriesRegistry: EntryFactoriesRegistry,
 ) {
     private val composableContentGenerator by lazy {
         ComposableContentGenerator()
@@ -36,7 +36,7 @@ class ComposableGenerator(
                         packageName = metadata.destinationPackageName,
                         destinationName = metadata.destinationName,
                         destinationQualifiedName = metadata.destinationQualifiedName,
-                        entryFactoryQualifiedName = "$packageName.$composableHolderName.Companion"
+                        entryFactoryQualifiedName = "$packageName.$composableHolderName.Companion",
                     )
 
                 composableExternalEntryFactoryTemplate(
@@ -63,7 +63,7 @@ class ComposableGenerator(
 
         val composableContent = composableContentGenerator.generate(
             composableQualifiedName = composableQualifiedName,
-            parameters = metadata.parameters
+            parameters = metadata.parameters,
         )
 
         generateComposableEntry(

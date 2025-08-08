@@ -15,7 +15,7 @@ abstract class CommonScreenFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentCommonScreenBinding.inflate(inflater, container, false)
         binding.topAppBar.setNavigationOnClickListener {

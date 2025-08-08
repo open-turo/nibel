@@ -14,7 +14,7 @@ class FragmentGenerator(
     private val resolver: Resolver,
     private val codeGenerator: CodeGenerator,
     private val logger: KSPLogger,
-    private val entryFactoriesRegistry: EntryFactoriesRegistry
+    private val entryFactoriesRegistry: EntryFactoriesRegistry,
 ) {
     private val composableContentGenerator by lazy {
         ComposableContentGenerator()
@@ -35,7 +35,7 @@ class FragmentGenerator(
                         packageName = metadata.destinationPackageName,
                         destinationName = metadata.destinationName,
                         destinationQualifiedName = metadata.destinationQualifiedName,
-                        entryFactoryQualifiedName = "$packageName.$fragmentName.Companion"
+                        entryFactoryQualifiedName = "$packageName.$fragmentName.Companion",
                     )
 
                 fragmentExternalEntryFactoryTemplate(
@@ -65,7 +65,7 @@ class FragmentGenerator(
 
         val composableContent = composableContentGenerator.generate(
             composableQualifiedName = composableQualifiedName,
-            parameters = metadata.parameters
+            parameters = metadata.parameters,
         )
 
         generateFragmentFile(

@@ -11,7 +11,7 @@ import androidx.navigation.compose.ComposeNavigator
  */
 class ComposeNavigationContext(
     val internalNavController: NavController,
-    val exploredEntries: ExploredEntriesRegistry
+    val exploredEntries: ExploredEntriesRegistry,
 )
 
 /**
@@ -39,7 +39,7 @@ open class ComposeNavigationSpec : ComposeSpec<ComposeNavigationContext> {
                     CompositionLocalProvider(LocalArgs provides args) {
                         entry.ComposableEntry()
                     }
-                }
+                },
             )
 
             if (entry.args != null) {
@@ -48,7 +48,7 @@ open class ComposeNavigationSpec : ComposeSpec<ComposeNavigationContext> {
                     argumentName = Nibel.argsKey,
                     argument = NavArgument.Builder()
                         .setType(type = ParcelableType(entry.args!!.javaClass))
-                        .build()
+                        .build(),
                 )
             } else {
                 destination.route = entry.name

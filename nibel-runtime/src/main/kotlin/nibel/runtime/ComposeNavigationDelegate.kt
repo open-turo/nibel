@@ -36,7 +36,7 @@ open class ComposeNavigationDelegate : NavigationDelegate<NavigationControllerAr
                 fragmentManager = activity.supportFragmentManager,
                 onBackPressedDispatcher = onBackPressedDispatcher,
                 internalNavController = args.internalNavController,
-                exploredEntries = args.exploredEntries
+                exploredEntries = args.exploredEntries,
             )
         }
     }
@@ -52,8 +52,8 @@ open class ComposeNavigationDelegate : NavigationDelegate<NavigationControllerAr
         val navController = rememberNavigationController(
             NavigationControllerArgs(
                 internalNavController = internalNavController,
-                exploredEntries = exploredEntries
-            )
+                exploredEntries = exploredEntries,
+            ),
         )
 
         CompositionLocalProvider(LocalNavigationController provides navController) {
@@ -72,7 +72,7 @@ open class ComposeNavigationDelegate : NavigationDelegate<NavigationControllerAr
                     registerComposable(
                         name = entry.name,
                         argsType = entry.args?.javaClass,
-                        defaultArgs = null
+                        defaultArgs = null,
                     ) {
                         val args = it.arguments?.getNibelArgs<Parcelable>()
                         CompositionLocalProvider(LocalArgs provides args) {
@@ -88,7 +88,7 @@ open class ComposeNavigationDelegate : NavigationDelegate<NavigationControllerAr
         name: String,
         argsType: Class<A>?,
         defaultArgs: A?,
-        content: @Composable (NavBackStackEntry) -> Unit
+        content: @Composable (NavBackStackEntry) -> Unit,
     ) {
         if (argsType == null) {
             composable(route = name) {
@@ -108,8 +108,8 @@ open class ComposeNavigationDelegate : NavigationDelegate<NavigationControllerAr
                         if (defaultArgs != null) {
                             defaultValue = defaultArgs
                         }
-                    }
-                )
+                    },
+                ),
             ) {
                 content(it)
             }

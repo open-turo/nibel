@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.turo.nibel.sample.common.databinding.ItemNextButtonBinding
 
 class NextButtonsAdapter<NB : NextButton>(
-    private val onItemClick: (NB) -> Unit
+    private val onItemClick: (NB) -> Unit,
 ) : RecyclerView.Adapter<NextButtonsAdapter.ViewHolder>() {
 
     private val nextButtons = mutableListOf<NB>()
 
     class ViewHolder(
-        val binding: ItemNextButtonBinding
+        val binding: ItemNextButtonBinding,
     ) : RecyclerView.ViewHolder(binding.root)
 
     @SuppressLint("NotifyDataSetChanged")
@@ -27,7 +27,7 @@ class NextButtonsAdapter<NB : NextButton>(
         val binding = ItemNextButtonBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
-            false
+            false,
         )
         return ViewHolder(binding)
     }

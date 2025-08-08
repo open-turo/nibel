@@ -135,5 +135,5 @@ annotation class UiEntry(
      *
      * See [UiEntry].
      */
-    val args: KClass<out Parcelable> = NoArgs::class
+    val args: KClass<out Parcelable> = NoArgs::class,
 )

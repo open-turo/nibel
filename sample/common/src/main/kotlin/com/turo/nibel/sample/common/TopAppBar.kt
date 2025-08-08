@@ -24,6 +24,6 @@ fun TopAppBar(title: String, onBack: () -> Unit) {
             IconButton(onClick = onBack) {
                 Icon(Icons.Default.ArrowBack, contentDescription = null)
             }
-        }
+        },
     )
 }

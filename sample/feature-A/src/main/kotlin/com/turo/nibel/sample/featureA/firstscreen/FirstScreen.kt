@@ -16,7 +16,7 @@ import nibel.runtime.LocalImplementationType
 
 @UiExternalEntry(
     type = ImplementationType.Fragment,
-    destination = FirstScreenDestination::class
+    destination = FirstScreenDestination::class,
 )
 @Composable
 fun FirstScreen(viewModel: FirstViewModel = hiltViewModel()) {

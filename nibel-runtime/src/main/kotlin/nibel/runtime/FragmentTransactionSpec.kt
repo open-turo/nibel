@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager
  * A holder for classes required to perform fragment transactions.
  */
 class FragmentTransactionContext(
-    val fragmentManager: FragmentManager
+    val fragmentManager: FragmentManager,
 )
 
 /**

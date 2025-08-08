@@ -3,7 +3,7 @@ package com.turo.nibel.sample.featureB.thirdscreen
 import com.turo.nibel.sample.common.NextButton
 
 data class ThirdState(
-    val inputText: String
+    val inputText: String,
 ) {
     val title: String = "Feature B | Third Screen"
 

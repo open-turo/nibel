@@ -17,7 +17,7 @@ import nibel.runtime.LocalImplementationType
 
 @UiExternalEntry(
     type = ImplementationType.Fragment,
-    destination = ThirdScreenDestination::class
+    destination = ThirdScreenDestination::class,
 )
 @Composable
 fun ThirdScreen(viewModel: ThirdViewModel = hiltViewModel()) {

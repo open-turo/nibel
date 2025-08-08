@@ -121,7 +121,7 @@ object Nibel {
     }
 
     private fun <D : ExternalDestination> entryFactoryProviderClassName(
-        destinationClass: Class<D>
+        destinationClass: Class<D>,
     ): String {
         val packageName = destinationClass.`package`?.name.orEmpty()
         val className = destinationClass.canonicalName!!.replace(".", "_")
@@ -133,6 +133,6 @@ object Nibel {
     }
 
     private fun notConfiguredError(): Nothing = error(
-        "Nibel is not configured. Use Nibel.configure() function before navigation."
+        "Nibel is not configured. Use Nibel.configure() function before navigation.",
     )
 }

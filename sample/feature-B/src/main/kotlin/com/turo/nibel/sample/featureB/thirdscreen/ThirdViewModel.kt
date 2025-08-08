@@ -13,13 +13,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ThirdViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val _sideEffects = MutableSharedFlow<ThirdSideEffect>(extraBufferCapacity = 1)
     val sideEffects: Flow<ThirdSideEffect> get() = _sideEffects
 
     private val _state = MutableStateFlow(
-        ThirdState(inputText = savedStateHandle.getNibelArgs<ThirdArgs>()!!.inputText)
+        ThirdState(inputText = savedStateHandle.getNibelArgs<ThirdArgs>()!!.inputText),
     )
     val state: StateFlow<ThirdState> get() = _state
 

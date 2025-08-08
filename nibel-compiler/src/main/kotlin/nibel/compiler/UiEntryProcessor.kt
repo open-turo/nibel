@@ -40,7 +40,7 @@ class UiEntryProcessor(
                 codeGenerator = codeGenerator,
                 resolver = resolver,
                 logger = logger,
-                entryFactoriesRegistry = entryFactoriesRegistry
+                entryFactoriesRegistry = entryFactoriesRegistry,
             )
             function.accept(visitor, Unit)
         }
@@ -49,7 +49,7 @@ class UiEntryProcessor(
             EntryFactoryProviderGenerator(
                 resolver = resolver,
                 codeGenerator = codeGenerator,
-                entryFactoriesRegistry = entryFactoriesRegistry
+                entryFactoriesRegistry = entryFactoriesRegistry,
             ).generate()
         }
 
