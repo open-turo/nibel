@@ -12,10 +12,8 @@ jobs:
     runs-on: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v4
-
-      - uses: open-turo/action-git-auth@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Set up tools
         uses: open-turo/action-setup-tools@v1
