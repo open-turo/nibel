@@ -47,7 +47,7 @@ complexity:
   excludes: *excludedFiles
   active: true
   TooManyFunctions:
-    active: false
+    active: true
     thresholdInFiles: 30
     thresholdInClasses: 30
     thresholdInInterfaces: 30
@@ -57,7 +57,7 @@ complexity:
     ignorePrivate: false
     ignoreOverridden: false
   LongMethod:
-    active: false
+    active: true
   LongParameterList:
     active: true
     functionThreshold: 10
