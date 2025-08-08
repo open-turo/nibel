@@ -55,7 +55,7 @@ fun <NB : NextButton> CommonScreen(
                     onInputTextChanged = onInputTextChanged,
                 )
             }
-        }
+        },
     )
 }
 
@@ -105,7 +105,7 @@ private fun <NB : NextButton> CommonScreenContent(
                     supportingText = {
                         Text(text = supportingText)
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -117,7 +117,7 @@ private fun <NB : NextButton> CommonScreenContent(
                 Modifier
                     .height(55.dp)
                     .fillMaxWidth(),
-                shape = TextFieldDefaults.outlinedShape
+                shape = TextFieldDefaults.outlinedShape,
             ) {
                 Text(text = nextButtons[it].title)
             }
@@ -141,6 +141,6 @@ fun Preview_CommonScreen() {
         onBack = {},
         onContinue = {},
         onInputTextChanged = {},
-        modifier = Modifier
+        modifier = Modifier,
     )
 }

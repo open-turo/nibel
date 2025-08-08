@@ -3,7 +3,7 @@ package com.turo.nibel.sample.featureA.zeroscreen
 import com.turo.nibel.sample.common.NextButton
 
 data class ZeroState(
-    val inputText: String
+    val inputText: String,
 ) {
     val title: String = "Feature A | Zero Screen"
 

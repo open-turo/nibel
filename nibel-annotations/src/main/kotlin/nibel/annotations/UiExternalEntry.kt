@@ -177,5 +177,5 @@ annotation class UiExternalEntry(
      *
      * See [UiExternalEntry], [ExternalDestination].
      */
-    val destination: KClass<out ExternalDestination>
+    val destination: KClass<out ExternalDestination>,
 )

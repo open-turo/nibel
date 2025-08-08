@@ -15,5 +15,5 @@ data class ExternalEntryMetadata(
 
 data class InternalEntryMetadata(
     override val argsQualifiedName: String?,
-    override val parameters: Map<ParameterType, ParameterMetadata>
+    override val parameters: Map<ParameterType, ParameterMetadata>,
 ) : EntryMetadata

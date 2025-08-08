@@ -18,7 +18,7 @@ class EntryGeneratingVisitor(
     codeGenerator: CodeGenerator,
     resolver: Resolver,
     logger: KSPLogger,
-    entryFactoriesRegistry: EntryFactoriesRegistry
+    entryFactoriesRegistry: EntryFactoriesRegistry,
 ) : AbstractEntryGeneratingVisitor(resolver, logger) {
 
     private val fragmentGenerator by lazy {
@@ -94,7 +94,7 @@ class EntryGeneratingVisitor(
         }
 
     private fun KSFunctionDeclaration.parseParameters(
-        argsQualifiedName: String?
+        argsQualifiedName: String?,
     ): Map<ParameterType, ParameterMetadata> {
         val allowedParamTypes = mutableMapOf(
             "nibel.runtime.NavigationController" to ParameterType.NAVIGATION_CONTROLLER,
@@ -113,7 +113,7 @@ class EntryGeneratingVisitor(
                 composableParams[paramType] = ParameterMetadata(
                     type = paramType,
                     name = param.name!!.asString(),
-                    qualifiedClassName = qualifiedName
+                    qualifiedClassName = qualifiedName,
                 )
             } else if (!param.hasDefault) {
                 logger.error(

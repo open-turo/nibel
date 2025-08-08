@@ -17,7 +17,7 @@ import nibel.runtime.LocalImplementationType
 
 @UiEntry(
     type = ImplementationType.Composable,
-    args = SecondArgs::class
+    args = SecondArgs::class,
 )
 @Composable
 fun SecondScreen(viewModel: SecondViewModel = hiltViewModel()) {

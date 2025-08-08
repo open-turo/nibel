@@ -9,5 +9,5 @@ data class ParameterMetadata(
 enum class ParameterType {
     ARGS,
     NAVIGATION_CONTROLLER,
-    IMPLEMENTATION_TYPE
+    IMPLEMENTATION_TYPE,
 }

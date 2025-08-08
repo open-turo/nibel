@@ -40,7 +40,7 @@ class LegacyEntryProcessor(
                 codeGenerator = codeGenerator,
                 resolver = resolver,
                 logger = logger,
-                entryFactoriesRegistry = entryFactoriesRegistry
+                entryFactoriesRegistry = entryFactoriesRegistry,
             )
             classDeclaration.accept(visitor, Unit)
         }
@@ -49,7 +49,7 @@ class LegacyEntryProcessor(
             EntryFactoryProviderGenerator(
                 resolver = resolver,
                 codeGenerator = codeGenerator,
-                entryFactoriesRegistry = entryFactoriesRegistry
+                entryFactoriesRegistry = entryFactoriesRegistry,
             ).generate()
         }
 

@@ -11,7 +11,7 @@ import nibel.compiler.template.legacyEntryTemplate
 class LegacyEntryGenerator(
     private val resolver: Resolver,
     private val codeGenerator: CodeGenerator,
-    private val entryFactoriesRegistry: EntryFactoriesRegistry
+    private val entryFactoriesRegistry: EntryFactoriesRegistry,
 ) {
 
     fun generate(classDeclaration: KSClassDeclaration, metadata: EntryMetadata) {
@@ -28,7 +28,7 @@ class LegacyEntryGenerator(
                         packageName = metadata.destinationPackageName,
                         destinationName = metadata.destinationName,
                         destinationQualifiedName = metadata.destinationQualifiedName,
-                        entryFactoryQualifiedName = "$packageName.$legacyEntryName"
+                        entryFactoryQualifiedName = "$packageName.$legacyEntryName",
                     )
 
                 fragmentExternalEntryFactoryTemplate(

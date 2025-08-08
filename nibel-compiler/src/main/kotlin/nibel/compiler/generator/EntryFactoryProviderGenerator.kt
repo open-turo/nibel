@@ -8,7 +8,7 @@ import nibel.compiler.template.entryFactoryProviderTemplate
 class EntryFactoryProviderGenerator(
     private val resolver: Resolver,
     private val codeGenerator: CodeGenerator,
-    private val entryFactoriesRegistry: EntryFactoriesRegistry
+    private val entryFactoriesRegistry: EntryFactoriesRegistry,
 ) {
 
     fun generate() {
@@ -17,14 +17,14 @@ class EntryFactoryProviderGenerator(
 
             generateFile(
                 packageName = packageName,
-                entryFactoryProviders = entryFactoryProviders
+                entryFactoryProviders = entryFactoryProviders,
             )
         }
     }
 
     private fun generateFile(
         packageName: String,
-        entryFactoryProviders: List<EntryFactoryProviderMetadata>
+        entryFactoryProviders: List<EntryFactoryProviderMetadata>,
     ) {
         for (provider in entryFactoryProviders) {
             val fileName = "_" + provider.destinationQualifiedName.replace(".", "_")
@@ -45,7 +45,7 @@ class EntryFactoryProviderGenerator(
 
                 val code = entryFactoryProviderTemplate(
                     destinationName = fileName,
-                    entryFactoryQualifiedName = provider.entryFactoryQualifiedName
+                    entryFactoryQualifiedName = provider.entryFactoryQualifiedName,
                 )
                 append(code)
             }

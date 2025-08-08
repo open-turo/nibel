@@ -8,7 +8,7 @@ class ComposableContentGenerator {
 
     fun generate(
         composableQualifiedName: String,
-        parameters: Map<ParameterType, ParameterMetadata>
+        parameters: Map<ParameterType, ParameterMetadata>,
     ) = buildString {
         append("$composableQualifiedName(")
         if (parameters.isEmpty()) {

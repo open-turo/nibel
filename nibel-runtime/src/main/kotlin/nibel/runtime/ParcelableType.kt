@@ -9,7 +9,7 @@ import androidx.navigation.NavType
  * [Parcelable] as argument type in compose navigation library.
  */
 class ParcelableType<P : Parcelable>(
-    private val type: Class<P>
+    private val type: Class<P>,
 ) : NavType<P>(isNullableAllowed = false) {
 
     override val name: String

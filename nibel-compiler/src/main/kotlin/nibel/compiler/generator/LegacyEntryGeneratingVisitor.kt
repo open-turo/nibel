@@ -15,7 +15,7 @@ class LegacyEntryGeneratingVisitor(
     codeGenerator: CodeGenerator,
     resolver: Resolver,
     logger: KSPLogger,
-    entryFactoriesRegistry: EntryFactoriesRegistry
+    entryFactoriesRegistry: EntryFactoriesRegistry,
 ) : AbstractEntryGeneratingVisitor(resolver, logger) {
 
     private val legacyEntryGenerator by lazy {

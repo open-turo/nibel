@@ -3,7 +3,7 @@ package com.turo.nibel.sample.featureA.firstscreen
 import com.turo.nibel.sample.common.NextButton
 
 data class FirstState(
-    val inputText: String
+    val inputText: String,
 ) {
     val title: String = "Feature A | First Screen"
 

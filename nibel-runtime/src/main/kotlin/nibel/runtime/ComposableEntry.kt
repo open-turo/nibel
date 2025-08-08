@@ -29,7 +29,7 @@ abstract class ComposableEntry<A : Parcelable>(
     @Composable
     fun ComposableEntry() {
         CompositionLocalProvider(
-            LocalImplementationType provides ImplementationType.Composable
+            LocalImplementationType provides ImplementationType.Composable,
         ) {
             ComposableContent()
         }

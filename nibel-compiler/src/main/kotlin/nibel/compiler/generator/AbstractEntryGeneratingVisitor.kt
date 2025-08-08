@@ -52,7 +52,7 @@ abstract class AbstractEntryGeneratingVisitor(
                     destinationPackageName = destinationPackageName.asString(),
                     destinationQualifiedName = destinationClassName.asString(),
                     argsQualifiedName = argsClassName,
-                    parameters = emptyMap()
+                    parameters = emptyMap(),
                 )
             }
 
@@ -62,7 +62,7 @@ abstract class AbstractEntryGeneratingVisitor(
                     destinationPackageName = destinationPackageName.asString(),
                     destinationQualifiedName = destinationClassName.asString(),
                     argsQualifiedName = null,
-                    parameters = emptyMap()
+                    parameters = emptyMap(),
                 )
 
             else -> null
@@ -80,12 +80,12 @@ abstract class AbstractEntryGeneratingVisitor(
         return if (argsClassName == NoArgs::class.qualifiedName) {
             InternalEntryMetadata(
                 argsQualifiedName = null,
-                parameters = emptyMap()
+                parameters = emptyMap(),
             )
         } else {
             InternalEntryMetadata(
                 argsQualifiedName = argsClassName,
-                parameters = emptyMap()
+                parameters = emptyMap(),
             )
         }
     }

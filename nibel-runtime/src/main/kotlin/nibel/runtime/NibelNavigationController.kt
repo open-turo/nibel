@@ -17,7 +17,7 @@ open class NibelNavigationController(
     val onBackPressedDispatcher: OnBackPressedDispatcher,
     val exploredEntries: ExploredEntriesRegistry,
     fragmentSpec: FragmentSpec<*> = Nibel.fragmentSpec,
-    composeSpec: ComposeSpec<*> = Nibel.composeSpec
+    composeSpec: ComposeSpec<*> = Nibel.composeSpec,
 ) : NavigationController(fragmentSpec, composeSpec) {
 
     protected val fragmentTransactionContext =
@@ -33,7 +33,7 @@ open class NibelNavigationController(
     override fun navigateTo(
         externalDestination: ExternalDestination,
         fragmentSpec: FragmentSpec<*>,
-        composeSpec: ComposeSpec<*>
+        composeSpec: ComposeSpec<*>,
     ) {
         val destinationEntry = Nibel.findEntryFactory(externalDestination)
             ?.newInstance(externalDestination)
@@ -44,7 +44,7 @@ open class NibelNavigationController(
     override fun navigateTo(
         entry: Entry,
         fragmentSpec: FragmentSpec<*>,
-        composeSpec: ComposeSpec<*>
+        composeSpec: ComposeSpec<*>,
     ) {
         when (entry) {
             is ComposableEntry<*> -> navigateTo(entry, composeSpec)

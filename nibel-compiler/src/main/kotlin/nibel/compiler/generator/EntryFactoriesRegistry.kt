@@ -1,7 +1,7 @@
 package nibel.compiler.generator
 
 class EntryFactoriesRegistry(
-    val values: MutableMap<String, MutableList<EntryFactoryProviderMetadata>> = mutableMapOf()
+    val values: MutableMap<String, MutableList<EntryFactoryProviderMetadata>> = mutableMapOf(),
 ) {
 
     operator fun set(packageName: String, provider: EntryFactoryProviderMetadata) {
