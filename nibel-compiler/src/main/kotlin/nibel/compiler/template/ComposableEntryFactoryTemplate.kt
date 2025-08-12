@@ -85,11 +85,11 @@ fun composableResultInternalEntryFactoryTemplate(
 ) = """
 |    companion object {
 ${
-composableResultInternalEntryFactoryMethodTemplate(
-    composableHolderName,
-    argsQualifiedName,
-    resultQualifiedName,
-)
+    composableResultInternalEntryFactoryMethodTemplate(
+        composableHolderName,
+        argsQualifiedName,
+        resultQualifiedName,
+    )
 }
 |    }
 """.trimMargin("|")
@@ -153,11 +153,15 @@ fun composableExternalResultEntryFactoryTemplate(
 |            return entry
 |        }
 ${
-if (hasArgs) {
-    composableResultInternalEntryFactoryMethodTemplate(composableHolderName, argsQualifiedName!!, resultQualifiedName)
-} else {
-    composableResultInternalEntryFactoryMethodTemplate(composableHolderName, resultQualifiedName)
-}
+    if (hasArgs) {
+        composableResultInternalEntryFactoryMethodTemplate(
+            composableHolderName,
+            argsQualifiedName!!,
+            resultQualifiedName,
+        )
+    } else {
+        composableResultInternalEntryFactoryMethodTemplate(composableHolderName, resultQualifiedName)
+    }
 }
 |    }
 """.trimMargin("|")

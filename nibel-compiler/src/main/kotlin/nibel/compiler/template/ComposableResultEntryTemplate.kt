@@ -19,11 +19,11 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class $composableHolderName(
-    override val args: ${argsQualifiedName},
+    override val args: $argsQualifiedName,
     override val name: String,
-) : ComposableEntry<${argsQualifiedName}>(args, name), ResultEntry<${resultTypeQualifiedName}> {
+) : ComposableEntry<$argsQualifiedName>(args, name), ResultEntry<$resultTypeQualifiedName> {
 
-    override val resultType: Class<${resultTypeQualifiedName}> = ${resultTypeQualifiedName}::class.java
+    override val resultType: Class<$resultTypeQualifiedName> = $resultTypeQualifiedName::class.java
 
     @Composable
     override fun ComposableContent() {
@@ -54,9 +54,9 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 class $composableHolderName(
     override val name: String,
-) : ComposableEntry<Parcelable>(null, name), ResultEntry<${resultTypeQualifiedName}> {
+) : ComposableEntry<Parcelable>(null, name), ResultEntry<$resultTypeQualifiedName> {
 
-    override val resultType: Class<${resultTypeQualifiedName}> = ${resultTypeQualifiedName}::class.java
+    override val resultType: Class<$resultTypeQualifiedName> = $resultTypeQualifiedName::class.java
 
     @Composable
     override fun ComposableContent() {

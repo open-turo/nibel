@@ -1,8 +1,7 @@
 package com.turo.nibel.sample.featureA.firstscreen
 
-import com.turo.nibel.sample.featureA.photopicker.PhotoPickerResult
-
 import androidx.lifecycle.ViewModel
+import com.turo.nibel.sample.featureA.photopicker.PhotoPickerResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow

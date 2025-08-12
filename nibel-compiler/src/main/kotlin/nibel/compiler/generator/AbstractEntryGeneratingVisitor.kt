@@ -11,8 +11,8 @@ import com.google.devtools.ksp.symbol.KSVisitorVoid
 import com.google.devtools.ksp.symbol.Modifier
 import nibel.annotations.DestinationWithArgs
 import nibel.annotations.DestinationWithNoArgs
-import nibel.runtime.NoArgs
 import nibel.annotations.NoResult
+import nibel.runtime.NoArgs
 
 abstract class AbstractEntryGeneratingVisitor(
     private val resolver: Resolver,
@@ -68,7 +68,7 @@ abstract class AbstractEntryGeneratingVisitor(
                     destinationQualifiedName = destinationClassName.asString(),
                     argsQualifiedName = argsClassName,
                     resultQualifiedName = extractResultType(symbol),
-                    parameters = emptyMap()
+                    parameters = emptyMap(),
                 )
             }
 
@@ -79,7 +79,7 @@ abstract class AbstractEntryGeneratingVisitor(
                     destinationQualifiedName = destinationClassName.asString(),
                     argsQualifiedName = null,
                     resultQualifiedName = extractResultType(symbol),
-                    parameters = emptyMap()
+                    parameters = emptyMap(),
                 )
 
             else -> null
@@ -98,17 +98,18 @@ abstract class AbstractEntryGeneratingVisitor(
             InternalEntryMetadata(
                 argsQualifiedName = null,
                 resultQualifiedName = extractResultType(symbol),
-                parameters = emptyMap()
+                parameters = emptyMap(),
             )
         } else {
             InternalEntryMetadata(
                 argsQualifiedName = argsClassName,
                 resultQualifiedName = extractResultType(symbol),
-                parameters = emptyMap()
+                parameters = emptyMap(),
             )
         }
     }
 
+    @Suppress("ComplexCondition")
     private fun KSClassDeclaration.isCorrectDestinationDeclaration(symbol: KSNode): Boolean {
         if ((classKind != ClassKind.CLASS && classKind != ClassKind.OBJECT) ||
             Modifier.SEALED in modifiers ||
@@ -175,7 +176,7 @@ abstract class AbstractEntryGeneratingVisitor(
         if (destinationSuperType == null) {
             logger.error(
                 message = "Destination should directly inherit " +
-                        "${DestinationWithNoArgs::class.simpleName} or ${DestinationWithArgs::class.simpleName}.",
+                    "${DestinationWithNoArgs::class.simpleName} or ${DestinationWithArgs::class.simpleName}.",
                 symbol = symbol,
             )
             return null

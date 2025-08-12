@@ -49,10 +49,11 @@ private val samplePhotos = listOf(
  * This screen simulates a photo picker that allows users to select a photo
  * and return it to the calling screen.
  */
+@Suppress("LongMethod")
 @UiEntry(
     type = ImplementationType.Composable,
     result = PhotoPickerResult::class,
-    args = PhotoPickerArgs::class
+    args = PhotoPickerArgs::class,
 )
 @Composable
 fun PhotoPickerScreen() {
@@ -61,48 +62,48 @@ fun PhotoPickerScreen() {
     var selectedPhoto by remember { mutableStateOf<PhotoPickerResult?>(null) }
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         TopAppBar(
             title = "Pick a Photo",
             onBack = {
                 // Cancel and go back without result
                 navigator.cancelResultAndNavigateBack()
-            }
+            },
         )
 
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
         ) {
             Text(
                 text = "Choose a photo to return to the previous screen:",
                 style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 16.dp),
             )
 
             Text(
                 text = "Max photos allowed: ${args.maxPhotos}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 8.dp),
             )
 
             Text(
                 text = "Multiple selection: ${if (args.allowMultiple) "Yes" else "No"}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 16.dp),
             )
 
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 items(samplePhotos) { photo ->
                     PhotoItem(
                         photo = photo,
                         isSelected = selectedPhoto == photo,
-                        onPhotoClick = { selectedPhoto = photo }
+                        onPhotoClick = { selectedPhoto = photo },
                     )
                 }
             }
@@ -111,13 +112,13 @@ fun PhotoPickerScreen() {
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 OutlinedButton(
                     onClick = {
                         navigator.cancelResultAndNavigateBack()
                     },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 ) {
                     Text("Cancel")
                 }
@@ -129,7 +130,7 @@ fun PhotoPickerScreen() {
                         }
                     },
                     enabled = selectedPhoto != null,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 ) {
                     Text("Select Photo")
                 }
@@ -143,42 +144,45 @@ fun PhotoPickerScreen() {
 private fun PhotoItem(
     photo: PhotoPickerResult,
     isSelected: Boolean,
-    onPhotoClick: () -> Unit
+    onPhotoClick: () -> Unit,
 ) {
     Card(
         onClick = onPhotoClick,
         colors = CardDefaults.cardColors(
-            containerColor = if (isSelected)
+            containerColor = if (isSelected) {
                 MaterialTheme.colorScheme.primaryContainer
-            else
+            } else {
                 MaterialTheme.colorScheme.surface
+            },
         ),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = photo.photoName,
                         style = MaterialTheme.typography.titleMedium,
-                        color = if (isSelected)
+                        color = if (isSelected) {
                             MaterialTheme.colorScheme.onPrimaryContainer
-                        else
+                        } else {
                             MaterialTheme.colorScheme.onSurface
+                        },
                     )
                     Text(
                         text = photo.photoUrl,
                         style = MaterialTheme.typography.bodySmall,
-                        color = if (isSelected)
+                        color = if (isSelected) {
                             MaterialTheme.colorScheme.onPrimaryContainer
-                        else
+                        } else {
                             MaterialTheme.colorScheme.onSurfaceVariant
+                        },
                     )
                 }
 
@@ -186,7 +190,7 @@ private fun PhotoItem(
                     Icon(
                         imageVector = Icons.Default.Check,
                         contentDescription = "Selected",
-                        tint = MaterialTheme.colorScheme.primary
+                        tint = MaterialTheme.colorScheme.primary,
                     )
                 }
             }

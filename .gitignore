@@ -15,7 +15,3 @@ build
 .cxx
 local.properties
 */bin/*
-
-# Serena cache and logs
-.serena/*
-.claude/settings.local.json

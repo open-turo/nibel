@@ -4,7 +4,6 @@ import android.os.Parcelable
 import nibel.annotations.ImplementationType.Composable
 import nibel.annotations.ImplementationType.Fragment
 import nibel.runtime.NoArgs
-import nibel.annotations.NoResult
 import kotlin.annotation.AnnotationTarget.FUNCTION
 import kotlin.reflect.KClass
 
@@ -178,5 +177,5 @@ annotation class UiEntry(
      *
      * When specified, the generated entry class will also implement [ResultEntry] interface.
      */
-    val result: KClass<out Parcelable> = NoResult::class
+    val result: KClass<out Parcelable> = NoResult::class,
 )

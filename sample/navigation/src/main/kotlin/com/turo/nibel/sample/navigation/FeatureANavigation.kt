@@ -3,7 +3,6 @@ package com.turo.nibel.sample.navigation
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import nibel.annotations.DestinationWithNoArgs
-import nibel.annotations.DestinationWithArgs
 
 object FirstScreenDestination : DestinationWithNoArgs
 
@@ -13,5 +12,5 @@ object FirstScreenDestination : DestinationWithNoArgs
 @Parcelize
 data class PhotoPickerArgs(
     val allowMultiple: Boolean = false,
-    val maxPhotos: Int = 1
+    val maxPhotos: Int = 1,
 ) : Parcelable

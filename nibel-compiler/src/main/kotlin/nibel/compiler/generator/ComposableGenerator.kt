@@ -8,13 +8,13 @@ import com.google.devtools.ksp.symbol.KSFunctionDeclaration
 import nibel.compiler.template.composableEntryWithArgsTemplate
 import nibel.compiler.template.composableEntryWithNoArgsTemplate
 import nibel.compiler.template.composableExternalEntryFactoryTemplate
-import nibel.compiler.template.composableInternalEntryFactoryTemplate
-import nibel.compiler.template.composableResultInternalEntryFactoryTemplate
 import nibel.compiler.template.composableExternalResultEntryFactoryTemplate
+import nibel.compiler.template.composableInternalEntryFactoryTemplate
 import nibel.compiler.template.composableResultEntryWithArgsTemplate
 import nibel.compiler.template.composableResultEntryWithNoArgsTemplate
+import nibel.compiler.template.composableResultInternalEntryFactoryTemplate
 
-@Suppress("unused")
+@Suppress("unused", "LongMethod")
 class ComposableGenerator(
     private val resolver: Resolver,
     private val codeGenerator: CodeGenerator,

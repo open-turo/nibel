@@ -53,7 +53,7 @@ fun FirstScreen(viewModel: FirstViewModel = hiltViewModel()) {
             state.selectedPhoto?.let { photo ->
                 PhotoResultDisplay(photo)
             }
-        }
+        },
     )
 }
 
@@ -72,7 +72,7 @@ private fun SideEffectHandler(sideEffects: Flow<FirstSideEffect>, viewModel: Fir
                     entry = PhotoPickerScreenEntry.newInstance(args),
                     callback = { result: PhotoPickerResult? ->
                         viewModel.onPhotoSelected(result)
-                    }
+                    },
                 )
             }
         }
@@ -88,32 +88,32 @@ private fun PhotoResultDisplay(photo: PhotoPickerResult) {
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        )
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+        ),
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
         ) {
             Text(
                 text = "Selected Photo Result:",
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Name: ${photo.photoName}",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
             Text(
                 text = "URL: ${photo.photoUrl}",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
             Text(
                 text = "Selected: ${dateFormatter.format(Date(photo.timestamp))}",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
         }
     }

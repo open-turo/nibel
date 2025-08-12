@@ -1,12 +1,11 @@
 package com.turo.nibel.sample.featureA.firstscreen
 
-import com.turo.nibel.sample.featureA.photopicker.PhotoPickerResult
-
 import com.turo.nibel.sample.common.NextButton
+import com.turo.nibel.sample.featureA.photopicker.PhotoPickerResult
 
 data class FirstState(
     val inputText: String,
-    val selectedPhoto: PhotoPickerResult? = null
+    val selectedPhoto: PhotoPickerResult? = null,
 ) {
     val title: String = "Feature A | First Screen"
 

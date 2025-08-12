@@ -81,7 +81,7 @@ open class NibelNavigationController(
         entry: ResultEntry<R>,
         callback: ResultCallback<R>,
         fragmentSpec: FragmentSpec<*>,
-        composeSpec: ComposeSpec<*>
+        composeSpec: ComposeSpec<*>,
     ) {
         // Generate a unique key for this result navigation
         val resultKey = "result_${System.currentTimeMillis()}_${entry.hashCode()}"
@@ -99,7 +99,7 @@ open class NibelNavigationController(
         destination: ExternalDestination,
         callback: ResultCallback<R>,
         fragmentSpec: FragmentSpec<*>,
-        composeSpec: ComposeSpec<*>
+        composeSpec: ComposeSpec<*>,
     ) {
         val destinationEntry = Nibel.findEntryFactory(destination)
             ?.newInstance(destination) as? ResultEntry<R>

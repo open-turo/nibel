@@ -11,5 +11,5 @@ import kotlinx.parcelize.Parcelize
 data class PhotoPickerResult(
     val photoUrl: String,
     val photoName: String,
-    val timestamp: Long = System.currentTimeMillis()
+    val timestamp: Long = System.currentTimeMillis(),
 ) : Parcelable

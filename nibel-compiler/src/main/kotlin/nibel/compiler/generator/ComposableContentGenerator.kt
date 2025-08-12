@@ -6,6 +6,7 @@ import nibel.compiler.generator.ParameterType.NAVIGATION_CONTROLLER
 
 class ComposableContentGenerator {
 
+    @Suppress("LongMethod")
     fun generate(
         composableQualifiedName: String,
         parameters: Map<ParameterType, ParameterMetadata>,
