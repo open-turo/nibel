@@ -2,6 +2,7 @@ package com.turo.nibel.sample.featureA.secondscreen
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.turo.nibel.sample.navigation.ThirdResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -30,7 +31,14 @@ class SecondViewModel @Inject constructor(
         when (nextButton) {
             SecondNextButton.SecondScreen ->
                 _sideEffects.tryEmit(SecondSideEffect.NavigateToThirdScreen(state.value.inputText))
+
+            SecondNextButton.SecondScreenForResult ->
+                _sideEffects.tryEmit(SecondSideEffect.NavigateForResultToThirdScreen(state.value.inputText))
         }
+    }
+
+    fun handleThirdScreenResult(result: ThirdResult?) {
+        _sideEffects.tryEmit(SecondSideEffect.HandleThirdScreenResult(result))
     }
 
     fun onInputTextChanged(inputText: String) {

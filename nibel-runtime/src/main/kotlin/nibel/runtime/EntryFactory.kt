@@ -23,3 +23,11 @@ interface FragmentEntryFactory<D : ExternalDestination> : EntryFactory<D, Fragme
  * See [ImplementationType.Composable].
  */
 interface ComposableEntryFactory<D : ExternalDestination> : EntryFactory<D, ComposableEntry<*>>
+
+/**
+ * Creates instance of a fragment result entry.
+ *
+ * This is used for fragment entries that support result-based navigation.
+ * Unlike [FragmentEntryFactory], this returns [FragmentResultEntryWrapper].
+ */
+interface FragmentResultEntryFactory<D : ExternalDestination, R : Any> : EntryFactory<D, FragmentResultEntryWrapper<R>>

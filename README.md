@@ -16,7 +16,9 @@ Nibel supports both **single-module** and **multi-module** navigation out-of-the
 - [Basic usage](#basic-usage)
 - [Multi-module navigation](#multi-module-navigation)
 - [Result-based navigation](#result-based-navigation)
+- [Advanced features](#advanced-features)
 - [Sample app](#sample-app)
+- [Migration guide](#migration-guide)
 
 ## Materials
 
@@ -247,7 +249,15 @@ navigator.navigateTo(ThirdScreenDestination(args))
 
 ## Result-based navigation
 
-Nibel supports result-based navigation that allows screens to return typed data to the previous screen. This feature integrates with Android's Activity Result API pattern while maintaining Nibel's type-safe approach.
+Nibel supports result-based navigation that allows screens to return typed data to the previous screen. This feature integrates seamlessly with Android's Activity Result API pattern while maintaining Nibel's type-safe approach and works across both single-module and multi-module architectures.
+
+Result navigation is perfect for scenarios like:
+
+- **Photo/file pickers** returning selected media
+- **User selection screens** returning chosen users/items
+- **Form/settings screens** returning configuration data
+- **Authentication flows** returning user credentials
+- **Any modal workflow** that needs to return data
 
 ### Declaring a result screen
 
@@ -261,6 +271,12 @@ data class PhotoResult(
     val timestamp: Long = System.currentTimeMillis()
 ) : Parcelable
 
+@Parcelize
+data class PhotoArgs(
+    val maxPhotos: Int,
+    val allowMultiple: Boolean = false
+) : Parcelable
+
 @UiEntry(
     type = ImplementationType.Composable,
     args = PhotoArgs::class,
@@ -271,19 +287,49 @@ fun PhotoPickerScreen(
     args: PhotoArgs,
     navigator: NavigationController
 ) {
-    // Your screen content
-    Button(onClick = {
-        val selectedPhoto = PhotoResult("url", "name")
-        navigator.setResultAndNavigateBack(selectedPhoto)
-    }) {
-        Text("Select Photo")
-    }
+    var selectedPhotos by remember { mutableStateOf(emptyList<String>()) }
 
-    // Or cancel without result
-    Button(onClick = {
-        navigator.cancelResultAndNavigateBack()
-    }) {
-        Text("Cancel")
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text("Select up to ${args.maxPhotos} photos")
+
+        // Photo selection UI
+        LazyVerticalGrid(columns = GridCells.Fixed(3)) {
+            items(availablePhotos) { photo ->
+                PhotoItem(
+                    photo = photo,
+                    isSelected = selectedPhotos.contains(photo),
+                    onToggle = {
+                        selectedPhotos = if (selectedPhotos.contains(photo)) {
+                            selectedPhotos - photo
+                        } else {
+                            (selectedPhotos + photo).take(args.maxPhotos)
+                        }
+                    }
+                )
+            }
+        }
+
+        Row {
+            Button(onClick = {
+                // Return result with selected photo
+                if (selectedPhotos.isNotEmpty()) {
+                    val result = PhotoResult(
+                        photoUrl = selectedPhotos.first(),
+                        photoName = "selected_photo.jpg"
+                    )
+                    navigator.setResultAndNavigateBack(result)
+                }
+            }) {
+                Text("Select")
+            }
+
+            Button(onClick = {
+                // Cancel without returning a result
+                navigator.cancelResultAndNavigateBack()
+            }) {
+                Text("Cancel")
+            }
+        }
     }
 }
 ```
@@ -299,22 +345,48 @@ To navigate to a result-returning screen and receive the result:
 @Composable
 fun HomeScreen(navigator: NavigationController) {
     var selectedPhoto by remember { mutableStateOf<PhotoResult?>(null) }
+    var isLoading by remember { mutableStateOf(false) }
 
-    Button(onClick = {
-        navigator.navigateForResult(
-            entry = PhotoPickerScreenEntry.newInstance(PhotoArgs()),
-            callback = { result: PhotoResult? ->
-                // Handle the result - null if cancelled
-                selectedPhoto = result
+    Column(modifier = Modifier.padding(16.dp)) {
+        Button(
+            onClick = {
+                isLoading = true
+                navigator.navigateForResult(
+                    entry = PhotoPickerScreenEntry.newInstance(
+                        PhotoArgs(maxPhotos = 5, allowMultiple = true)
+                    ),
+                    callback = { result: PhotoResult? ->
+                        isLoading = false
+                        // Handle the result - null if cancelled
+                        if (result != null) {
+                            selectedPhoto = result
+                        } else {
+                            // User cancelled the photo selection
+                            println("Photo selection was cancelled")
+                        }
+                    }
+                )
+            },
+            enabled = !isLoading
+        ) {
+            if (isLoading) {
+                CircularProgressIndicator(modifier = Modifier.size(16.dp))
+            } else {
+                Text("Pick Photo")
             }
-        )
-    }) {
-        Text("Pick Photo")
-    }
+        }
 
-    // Display result
-    selectedPhoto?.let { photo ->
-        Text("Selected: ${photo.photoName}")
+        // Display result
+        selectedPhoto?.let { photo ->
+            Card(modifier = Modifier.padding(top = 16.dp)) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Selected Photo:", style = MaterialTheme.typography.titleMedium)
+                    Text("Name: ${photo.photoName}")
+                    Text("URL: ${photo.photoUrl}")
+                    Text("Selected at: ${Date(photo.timestamp)}")
+                }
+            }
+        }
     }
 }
 ```
@@ -416,9 +488,188 @@ navigator.navigateForResult(
 }
 ```
 
+## Advanced features
+
+### Fragment result navigation
+
+Nibel also supports result navigation with fragments using the same type-safe approach:
+
+```kotlin
+@LegacyExternalEntry(
+    destination = LegacyPickerDestination::class,
+    result = LegacyPickerResult::class
+)
+class LegacyPickerFragment : Fragment() {
+
+    private fun returnResult() {
+        val result = LegacyPickerResult("selected_value")
+        // Use Nibel's result API in fragments
+        requireActivity().supportFragmentManager.setNibelResult(result)
+        findNavController().popBackStack()
+    }
+
+    private fun cancelResult() {
+        requireActivity().supportFragmentManager.cancelNibelResult<LegacyPickerResult>()
+        findNavController().popBackStack()
+    }
+}
+```
+
+### Generated code structure
+
+Understanding what Nibel generates helps with debugging and advanced usage:
+
+```kotlin
+// For a result-enabled screen, Nibel generates:
+class PhotoPickerScreenEntry private constructor() :
+    ComposableEntry, ResultEntry<PhotoResult> {
+
+    companion object : EntryFactory<PhotoPickerScreenDestination, PhotoPickerScreenEntry> {
+        fun newInstance(args: PhotoArgs): PhotoPickerScreenEntry =
+            PhotoPickerScreenEntry().apply {
+                this.args = args
+            }
+    }
+
+    // Type-safe result handling
+    override fun unwrapResult(): PhotoResult? = /* implementation */
+    override fun setResult(result: PhotoResult) { /* implementation */ }
+}
+```
+
+### Performance considerations
+
+- **Use `ImplementationType.Composable`** when possible to avoid Fragment overhead
+- **Result entries** have minimal performance impact beyond regular navigation
+- **Generated classes** are optimized for fast instantiation and memory efficiency
+- **Multi-module resolution** caches destination factories after first lookup
+
+### Debugging navigation issues
+
+Common issues and solutions:
+
+```kotlin
+// Issue: "Nibel not configured"
+// Solution: Ensure Nibel.configure() is called in Application.onCreate()
+
+// Issue: "Destination not found"
+// Solution: Verify @UiExternalEntry has correct destination class
+
+// Issue: "Result callback never called"
+// Solution: Check that result screen calls setResultAndNavigateBack()
+
+// Issue: "ClassCastException in result"
+// Solution: Ensure result types match between annotation and callback
+```
+
+### Integration with existing navigation
+
+Nibel can coexist with other navigation solutions:
+
+```kotlin
+@Composable
+fun HybridScreen(navigator: NavigationController) {
+    // Mix Nibel navigation with other approaches
+    Button(onClick = {
+        // Use Nibel for type-safe navigation
+        navigator.navigateTo(TypedScreenDestination(args))
+    }) {
+        Text("Navigate with Nibel")
+    }
+
+    Button(onClick = {
+        // Use traditional Fragment transactions when needed
+        requireActivity().supportFragmentManager.commit {
+            replace(R.id.container, LegacyFragment())
+        }
+    }) {
+        Text("Navigate with Fragments")
+    }
+}
+```
+
 ## Sample app
 
 Check out a [sample app](sample) for demonstration of various scenarios of using Nibel in practice.
+
+## Migration guide
+
+### From Fragment-based navigation
+
+When migrating existing Fragment-based apps to use Nibel:
+
+1. **Start with new screens**: Use `@UiEntry` for new Compose screens
+2. **Gradual adoption**: Keep existing fragments, add Nibel navigation incrementally
+3. **Legacy integration**: Use `@LegacyEntry` to make existing fragments accessible from Compose
+
+```kotlin
+// Step 1: Existing fragment
+class ProfileFragment : Fragment() { /* existing code */ }
+
+// Step 2: Make it accessible from Compose
+@LegacyEntry
+class ProfileFragment : Fragment() { /* existing code */ }
+
+// Step 3: Create new Compose screens with Nibel
+@UiEntry(type = ImplementationType.Composable)
+@Composable
+fun NewFeatureScreen(navigator: NavigationController) {
+    // Can navigate to existing fragments
+    navigator.navigateTo(FragmentEntry(ProfileFragment()))
+}
+```
+
+### From Navigation Component
+
+Nibel can complement or replace Navigation Component:
+
+```kotlin
+// Before (Navigation Component)
+navController.navigate(
+    ProfileFragmentDirections.actionToSettings(userId = "123")
+)
+
+// After (Nibel)
+navigator.navigateTo(
+    SettingsScreenDestination(SettingsArgs(userId = "123"))
+)
+```
+
+### From manual result handling
+
+Replace manual result handling with type-safe result navigation:
+
+```kotlin
+// Before (Fragment Result API)
+childFragmentManager.setFragmentResultListener("picker_key", this) { _, bundle ->
+    val photoUrl = bundle.getString("photo_url")
+    val photoName = bundle.getString("photo_name")
+    if (photoUrl != null && photoName != null) {
+        handlePhotoResult(PhotoData(photoUrl, photoName))
+    }
+}
+
+// After (Nibel)
+navigator.navigateForResult(
+    entry = PhotoPickerScreenEntry.newInstance(args)
+) { result: PhotoResult? ->
+    result?.let { photo ->
+        handlePhotoResult(photo) // Automatically typed and null-safe
+    }
+}
+```
+
+### Migration checklist
+
+- [ ] **Add Nibel dependencies** to feature modules
+- [ ] **Configure Nibel** in `Application.onCreate()`
+- [ ] **Identify navigation patterns** in existing code
+- [ ] **Create destination classes** for multi-module navigation
+- [ ] **Annotate new Compose screens** with `@UiEntry` or `@UiExternalEntry`
+- [ ] **Add `@LegacyEntry`** to existing fragments as needed
+- [ ] **Replace manual result handling** with `navigateForResult()`
+- [ ] **Test navigation flows** thoroughly in both directions
+- [ ] **Verify type safety** at compile time
 
 ## Contributing
 

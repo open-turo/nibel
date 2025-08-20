@@ -9,19 +9,25 @@ import com.turo.nibel.sample.common.SideEffectHandler
 import com.turo.nibel.sample.navigation.FirstScreenDestination
 import com.turo.nibel.sample.navigation.FourthArgs
 import com.turo.nibel.sample.navigation.FourthScreenDestination
+import com.turo.nibel.sample.navigation.ThirdResult
 import com.turo.nibel.sample.navigation.ThirdScreenDestination
 import kotlinx.coroutines.flow.Flow
 import nibel.annotations.ImplementationType
 import nibel.annotations.UiExternalEntry
 import nibel.runtime.LocalImplementationType
+import nibel.runtime.NavigationController
 
 @UiExternalEntry(
     type = ImplementationType.Fragment,
     destination = ThirdScreenDestination::class,
+    result = ThirdResult::class,
 )
 @Composable
-fun ThirdScreen(viewModel: ThirdViewModel = hiltViewModel()) {
-    SideEffectHandler(viewModel.sideEffects)
+fun ThirdScreen(
+    viewModel: ThirdViewModel = hiltViewModel(),
+    navigator: NavigationController,
+) {
+    SideEffectHandler(viewModel.sideEffects, navigator)
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -37,17 +43,24 @@ fun ThirdScreen(viewModel: ThirdViewModel = hiltViewModel()) {
 }
 
 @Composable
-private fun SideEffectHandler(sideEffects: Flow<ThirdSideEffect>) {
+private fun SideEffectHandler(
+    sideEffects: Flow<ThirdSideEffect>,
+    navigator: NavigationController,
+) {
     SideEffectHandler(sideEffects) {
         when (it) {
-            is ThirdSideEffect.NavigateBack -> navigateBack()
+            is ThirdSideEffect.NavigateBack -> navigator.navigateBack()
             is ThirdSideEffect.NavigateToFourthScreen -> {
                 val args = FourthArgs(it.inputText)
-                navigateTo(FourthScreenDestination(args))
+                navigator.navigateTo(FourthScreenDestination(args))
             }
 
             is ThirdSideEffect.NavigateToFirstScreen ->
-                navigateTo(FirstScreenDestination)
+                navigator.navigateTo(FirstScreenDestination)
+
+            is ThirdSideEffect.ReturnResult -> {
+                navigator.setResultAndNavigateBack(it.result)
+            }
         }
     }
 }

@@ -108,28 +108,28 @@ fun ComposableExternalResultEntryWithArgs() = Unit
 /**
  * Destination for Fragment external result entry without arguments
  */
-object FragmentResultDestination1 : DestinationWithNoArgs
+object FragmentResultDestination1UniqueResult : DestinationWithNoArgs
 
 /**
  * Tests Fragment-based external result entry without arguments.
  * Should generate: FragmentExternalResultEntryWithNoArgsEntry extending FragmentEntry
  * and implementing ResultEntry<TestResult> with proper factory companion
  */
-@UiExternalEntry(type = ImplementationType.Fragment, destination = FragmentResultDestination1::class, result = TestResult::class)
+@UiExternalEntry(type = ImplementationType.Fragment, destination = FragmentResultDestination1UniqueResult::class, result = TestResult::class)
 @Composable
 fun FragmentExternalResultEntryWithNoArgs() = Unit
 
 /**
  * Destination for Fragment external result entry with arguments
  */
-data class FragmentResultDestination2(override val args: TestArgs) : DestinationWithArgs<TestArgs>
+data class FragmentResultDestination2UniqueResult(override val args: TestArgs) : DestinationWithArgs<TestArgs>
 
 /**
  * Tests Fragment-based external result entry with arguments.
  * Should generate: FragmentExternalResultEntryWithArgsEntry extending FragmentEntry
  * with TestArgs parameter and implementing ResultEntry<TestResult> with proper factory companion
  */
-@UiExternalEntry(type = ImplementationType.Fragment, destination = FragmentResultDestination2::class, result = TestResult::class)
+@UiExternalEntry(type = ImplementationType.Fragment, destination = FragmentResultDestination2UniqueResult::class, result = TestResult::class)
 @Composable
 fun FragmentExternalResultEntryWithArgs() = Unit
 

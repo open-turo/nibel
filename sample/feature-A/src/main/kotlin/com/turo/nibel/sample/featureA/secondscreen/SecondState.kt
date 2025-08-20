@@ -9,9 +9,12 @@ data class SecondState(
 
     val nextButtons = listOf(
         SecondNextButton.SecondScreen,
+        SecondNextButton.SecondScreenForResult,
     )
 }
 
 sealed class SecondNextButton(override val title: String) : NextButton {
     object SecondScreen : SecondNextButton("Third Screen (type.composable, external)")
+
+    object SecondScreenForResult : SecondNextButton("Third Screen for Result")
 }

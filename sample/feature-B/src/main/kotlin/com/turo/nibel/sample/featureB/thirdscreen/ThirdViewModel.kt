@@ -3,6 +3,7 @@ package com.turo.nibel.sample.featureB.thirdscreen
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.turo.nibel.sample.navigation.ThirdArgs
+import com.turo.nibel.sample.navigation.ThirdResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -34,6 +35,11 @@ class ThirdViewModel @Inject constructor(
 
             ThirdNextButton.FirstScreen ->
                 _sideEffects.tryEmit(ThirdSideEffect.NavigateToFirstScreen)
+
+            ThirdNextButton.ReturnResult -> {
+                val result = ThirdResult(inputText = state.value.inputText)
+                _sideEffects.tryEmit(ThirdSideEffect.ReturnResult(result))
+            }
         }
     }
 

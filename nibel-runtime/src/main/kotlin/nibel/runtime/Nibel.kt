@@ -104,8 +104,16 @@ object Nibel {
      * Creates an instance of a [FragmentEntry] from its associated [destination].
      */
     fun <D : ExternalDestination> newFragmentEntry(destination: D): FragmentEntry? {
-        val factory = findEntryFactory(destination) as? FragmentEntryFactory
-        return factory?.newInstance(destination)
+        val factory = findEntryFactory(destination)
+        return when (factory) {
+            is FragmentEntryFactory -> factory.newInstance(destination)
+            is FragmentResultEntryFactory<*, *> -> {
+                @Suppress("UNCHECKED_CAST")
+                val resultFactory = factory as FragmentResultEntryFactory<D, *>
+                resultFactory.newInstance(destination).fragmentEntry
+            }
+            else -> null
+        }
     }
 
     private fun <D : ExternalDestination> registerEntryFactory(destination: D) {

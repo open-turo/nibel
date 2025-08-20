@@ -14,4 +14,35 @@ build
 .externalNativeBuild
 .cxx
 local.properties
-*/bin/*
+
+# Kotlin compiled classes and modules
+*/bin/
+bin/
+*.kotlin_module
+*.kotlin-session*
+*kotlin*session*
+
+# Node.js/npm (if present)
+node_modules/
+package-lock.json
+package.json
+
+# Gradle Kotlin DSL
+.kotlin/
+
+# Android Studio cache
+*.hprof
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

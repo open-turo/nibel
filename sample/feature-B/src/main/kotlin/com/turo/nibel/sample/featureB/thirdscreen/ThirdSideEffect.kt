@@ -1,5 +1,7 @@
 package com.turo.nibel.sample.featureB.thirdscreen
 
+import com.turo.nibel.sample.navigation.ThirdResult
+
 sealed interface ThirdSideEffect {
 
     object NavigateBack : ThirdSideEffect
@@ -7,4 +9,6 @@ sealed interface ThirdSideEffect {
     data class NavigateToFourthScreen(val inputText: String) : ThirdSideEffect
 
     object NavigateToFirstScreen : ThirdSideEffect
+
+    data class ReturnResult(val result: ThirdResult) : ThirdSideEffect
 }

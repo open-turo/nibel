@@ -10,6 +10,7 @@ data class ThirdState(
     val nextButtons = listOf(
         ThirdNextButton.FourthScreen,
         ThirdNextButton.FirstScreen,
+        ThirdNextButton.ReturnResult,
     )
 }
 
@@ -17,4 +18,6 @@ sealed class ThirdNextButton(override val title: String) : NextButton {
     object FourthScreen : ThirdNextButton("Fourth Screen (legacy fragment, external)")
 
     object FirstScreen : ThirdNextButton("First Screen (type.fragment, external, no args)")
+
+    object ReturnResult : ThirdNextButton("Return Result")
 }

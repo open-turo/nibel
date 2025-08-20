@@ -20,3 +20,15 @@ interface ResultEntry<R : Any> : Entry {
      */
     val resultType: Class<R>
 }
+
+/**
+ * Internal wrapper for FragmentEntry + ResultEntry support.
+ * Since FragmentEntry is a value class, it cannot implement multiple interfaces.
+ * This wrapper allows FragmentEntry-based screens to support result navigation.
+ *
+ * @param R The type of result that this entry returns
+ */
+class FragmentResultEntryWrapper<R : Any>(
+    val fragmentEntry: FragmentEntry,
+    override val resultType: Class<R>,
+) : Entry, ResultEntry<R>

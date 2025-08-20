@@ -37,7 +37,7 @@ open class NibelNavigationController(
     ) {
         val destinationEntry = Nibel.findEntryFactory(externalDestination)
             ?.newInstance(externalDestination)
-            ?: error("Unable to find destination '${externalDestination.javaClass}'")
+            ?: error("Unable to find destination '${externalDestination::class.qualifiedName}'")
         navigateTo(entry = destinationEntry, fragmentSpec, composeSpec)
     }
 
@@ -46,10 +46,25 @@ open class NibelNavigationController(
         fragmentSpec: FragmentSpec<*>,
         composeSpec: ComposeSpec<*>,
     ) {
-        when (entry) {
-            is ComposableEntry<*> -> navigateTo(entry, composeSpec)
-            is FragmentEntry -> navigateTo(entry, fragmentSpec)
-            else -> error("Unknown entry type: ${entry.javaClass}")
+        // Unwrap result entries to their underlying entry type
+        val actualEntry = unwrapResultEntry(entry)
+
+        when (actualEntry) {
+            is ComposableEntry<*> -> navigateTo(actualEntry, composeSpec)
+            is FragmentEntry -> navigateTo(actualEntry, fragmentSpec)
+            else -> error("Unknown entry type: ${actualEntry.javaClass}")
+        }
+    }
+
+    /**
+     * Unwraps result entries to their underlying entry implementation.
+     * For FragmentResultEntryWrapper, extracts the underlying FragmentEntry.
+     * For ComposableEntry + ResultEntry dual interfaces, returns as-is.
+     */
+    private fun unwrapResultEntry(entry: Entry): Entry {
+        return when (entry) {
+            is FragmentResultEntryWrapper<*> -> entry.fragmentEntry
+            else -> entry
         }
     }
 
@@ -103,7 +118,10 @@ open class NibelNavigationController(
     ) {
         val destinationEntry = Nibel.findEntryFactory(destination)
             ?.newInstance(destination) as? ResultEntry<R>
-            ?: error("Unable to find result destination '${destination.javaClass}' or destination is not a ResultEntry")
+            ?: error(
+                "Unable to find result destination '${destination::class.qualifiedName}' " +
+                    "or destination is not a ResultEntry",
+            )
 
         navigateForResult(destinationEntry, callback, fragmentSpec, composeSpec)
     }
