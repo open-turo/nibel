@@ -71,6 +71,8 @@ class FragmentGenerator(
         generateFragmentFile(
             packageName = packageName,
             fragmentName = fragmentName,
+            argsQualifiedName = metadata.argsQualifiedName,
+            resultQualifiedName = metadata.resultQualifiedName,
             composableContent = composableContent,
             fragmentEntryFactory = fragmentEntryFactory,
         )
@@ -79,6 +81,8 @@ class FragmentGenerator(
     private fun generateFragmentFile(
         packageName: String,
         fragmentName: String,
+        argsQualifiedName: String?,
+        resultQualifiedName: String?,
         composableContent: String,
         fragmentEntryFactory: String,
     ) {
@@ -95,6 +99,8 @@ class FragmentGenerator(
         val content = fragmentEntryTemplate(
             packageName = packageName,
             fragmentName = fragmentName,
+            argsQualifiedName = argsQualifiedName,
+            resultQualifiedName = resultQualifiedName,
             composableContent = composableContent,
             fragmentEntryFactory = fragmentEntryFactory,
         )
