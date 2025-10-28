@@ -4,6 +4,7 @@ import android.os.Parcelable
 import nibel.annotations.ImplementationType.Composable
 import nibel.annotations.ImplementationType.Fragment
 import nibel.runtime.NoArgs
+import nibel.runtime.NoResult
 import kotlin.annotation.AnnotationTarget.FUNCTION
 import kotlin.reflect.KClass
 
@@ -136,4 +137,38 @@ annotation class UiEntry(
      * See [UiEntry].
      */
     val args: KClass<out Parcelable> = NoArgs::class,
+    /**
+     * Optional `Parcelable` result that the screen returns to its caller.
+     * If not specified, the screen is considered to not return a result.
+     *
+     * When specified, the generated entry class will implement `ResultEntry<TArgs, TResult>` interface,
+     * and callers can use `NavigationController.navigateForResult()` to receive the result.
+     *
+     * The screen can return a result using `NavigationController.setResultAndNavigateBack(result)`
+     * or cancel without result using `NavigationController.cancelResultAndNavigateBack()`.
+     *
+     * Example:
+     * ```
+     * @Parcelize
+     * data class PhotoResult(val uri: String) : Parcelable
+     *
+     * @UiEntry(
+     *   type = ImplementationType.Composable,
+     *   result = PhotoResult::class
+     * )
+     * @Composable
+     * fun PhotoPickerScreen(navigator: NavigationController) {
+     *   // ... photo selection UI
+     *   navigator.setResultAndNavigateBack(PhotoResult(selectedUri))
+     * }
+     *
+     * // Caller
+     * navigator.navigateForResult(PhotoPickerScreenEntry.newInstance()) { result: PhotoResult? ->
+     *   result?.let { /* handle photo selection */ }
+     * }
+     * ```
+     *
+     * See [UiEntry], NavigationController.
+     */
+    val result: KClass<out Parcelable> = NoResult::class,
 )
