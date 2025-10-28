@@ -70,6 +70,7 @@ class ComposableGenerator(
             packageName = packageName,
             composableHolderName = composableHolderName,
             argsQualifiedName = metadata.argsQualifiedName,
+            resultQualifiedName = metadata.resultQualifiedName,
             composableContent = composableContent,
             composableEntryFactory = composableEntryFactory,
         )
@@ -79,6 +80,7 @@ class ComposableGenerator(
         packageName: String,
         composableHolderName: String,
         argsQualifiedName: String?,
+        resultQualifiedName: String?,
         composableContent: String,
         composableEntryFactory: String,
     ) {
@@ -98,6 +100,7 @@ class ComposableGenerator(
                 composableHolderName = composableHolderName,
                 composableContent = composableContent,
                 argsQualifiedName = argsQualifiedName,
+                resultQualifiedName = resultQualifiedName,
                 composableEntryFactory = composableEntryFactory,
             )
         } else {
@@ -105,6 +108,7 @@ class ComposableGenerator(
                 packageName = packageName,
                 composableHolderName = composableHolderName,
                 composableContent = composableContent,
+                resultQualifiedName = resultQualifiedName,
                 composableEntryFactory = composableEntryFactory,
             )
         }
