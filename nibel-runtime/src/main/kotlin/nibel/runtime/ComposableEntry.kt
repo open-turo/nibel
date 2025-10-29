@@ -35,3 +35,6 @@ abstract class ComposableEntry<A : Parcelable>(
         }
     }
 }
+
+@Suppress("UnusedParameter")
+fun buildRouteName(base: String, args: Parcelable? = null): String = base
