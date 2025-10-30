@@ -28,17 +28,22 @@ open class NibelNavigationController(
     protected val composeNavigationContext =
         ComposeNavigationContext(internalNavController, exploredEntries)
 
-    /**
-     * Storage for result callbacks, keyed by unique request ID.
-     * Callbacks are invoked when a screen returns a result or cancels.
-     */
-    private val resultCallbacks = mutableMapOf<String, (Any?) -> Unit>()
+    // Note: Result callbacks are now stored in ResultCallbackRegistry singleton
+    // to persist across Fragment/NavigationController instance recreation
 
     /**
      * Storage for the current screen's request key (if navigated via navigateForResult).
      * Used to deliver results back to the caller.
      */
     private var currentRequestKey: String? = null
+
+    /**
+     * Sets the request key for this navigation controller instance.
+     * Used when a Fragment is navigated to via navigateForResult.
+     */
+    fun setRequestKeyFromFragment(key: String?) {
+        currentRequestKey = key
+    }
 
     override fun navigateBack() {
         onBackPressedDispatcher.onBackPressed()
@@ -97,25 +102,32 @@ open class NibelNavigationController(
 
         // Store the callback with type erasure (we trust compile-time type safety)
         @Suppress("UNCHECKED_CAST")
-        resultCallbacks[requestKey] = callback as (Any?) -> Unit
+        ResultCallbackRegistry.storeCallback(requestKey, callback as (Any?) -> Unit)
 
         // Store request key so the callee can use it to return results
-        // Note: This will be passed through SavedStateHandle for Fragment entries
-        // and through the entry itself for Composable entries
+        // For Fragment entries, pass it through Bundle arguments
+        // For Composable entries, store it in currentRequestKey
         val previousRequestKey = currentRequestKey
         currentRequestKey = requestKey
+
+        // Inject request key into Fragment arguments for result-based navigation
+        if (entry is FragmentEntry) {
+            val args = entry.fragment.arguments ?: android.os.Bundle()
+            args.putRequestKey(requestKey)
+            entry.fragment.arguments = args
+        }
 
         try {
             // Perform the navigation
             navigateTo(entry, fragmentSpec, composeSpec)
         } catch (e: IllegalStateException) {
             // If navigation fails, clean up and restore state
-            resultCallbacks.remove(requestKey)
+            ResultCallbackRegistry.removeCallback(requestKey)
             currentRequestKey = previousRequestKey
             throw e
         } catch (e: IllegalArgumentException) {
             // If navigation fails, clean up and restore state
-            resultCallbacks.remove(requestKey)
+            ResultCallbackRegistry.removeCallback(requestKey)
             currentRequestKey = previousRequestKey
             throw e
         }
@@ -167,10 +179,9 @@ open class NibelNavigationController(
      * Cleans up the callback after delivery.
      */
     private fun deliverResult(requestKey: String, result: Any?) {
-        val callback = resultCallbacks.remove(requestKey)
-        if (callback != null) {
-            callback(result)
-        }
+        val callback = ResultCallbackRegistry.removeCallback(requestKey)
+        callback?.invoke(result)
+
         // Clear current request key if it matches
         if (currentRequestKey == requestKey) {
             currentRequestKey = null
