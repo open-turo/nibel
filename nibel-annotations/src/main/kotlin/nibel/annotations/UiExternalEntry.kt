@@ -1,7 +1,9 @@
 package nibel.annotations
 
+import android.os.Parcelable
 import nibel.annotations.ImplementationType.Composable
 import nibel.annotations.ImplementationType.Fragment
+import nibel.runtime.NoResult
 import kotlin.annotation.AnnotationTarget.FUNCTION
 import kotlin.reflect.KClass
 
@@ -178,4 +180,46 @@ annotation class UiExternalEntry(
      * See [UiExternalEntry], [ExternalDestination].
      */
     val destination: KClass<out ExternalDestination>,
+    /**
+     * Optional `Parcelable` result that the screen returns to its caller.
+     * If not specified, the screen is considered to not return a result.
+     *
+     * When specified, the generated entry class will implement `ResultEntry<TArgs, TResult>` interface,
+     * and callers can use `NavigationController.navigateForResult()` with the destination to receive the result.
+     *
+     * The destination should also implement `DestinationWithResult<TResult>` to enable type-safe
+     * multi-module result navigation.
+     *
+     * The screen can return a result using `NavigationController.setResultAndNavigateBack(result)`
+     * or cancel without result using `NavigationController.cancelResultAndNavigateBack()`.
+     *
+     * Example:
+     * ```
+     * // navigation module
+     * @Parcelize
+     * data class PhotoResult(val uri: String) : Parcelable
+     *
+     * object PhotoPickerDestination : DestinationWithNoArgs, DestinationWithResult<PhotoResult>
+     *
+     * // feature module
+     * @UiExternalEntry(
+     *   type = ImplementationType.Composable,
+     *   destination = PhotoPickerDestination::class,
+     *   result = PhotoResult::class
+     * )
+     * @Composable
+     * fun PhotoPickerScreen(navigator: NavigationController) {
+     *   // ... photo selection UI
+     *   navigator.setResultAndNavigateBack(PhotoResult(selectedUri))
+     * }
+     *
+     * // Caller (from another feature module)
+     * navigator.navigateForResult(PhotoPickerDestination) { result: PhotoResult? ->
+     *   result?.let { /* handle photo selection */ }
+     * }
+     * ```
+     *
+     * See [UiExternalEntry], [DestinationWithResult], NavigationController.
+     */
+    val result: KClass<out Parcelable> = NoResult::class,
 )
