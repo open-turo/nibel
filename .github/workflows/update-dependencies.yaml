@@ -19,7 +19,7 @@ jobs:
     name: Update dependencies
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - uses: open-turo/action-renovate@v1
         with:
           github-token: ${{ secrets.OPEN_TURO_GITHUB_TOKEN }}
