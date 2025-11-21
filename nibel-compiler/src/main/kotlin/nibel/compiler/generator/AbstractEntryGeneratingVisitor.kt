@@ -115,9 +115,12 @@ abstract class AbstractEntryGeneratingVisitor(
     }
 
     private fun KSClassDeclaration.isCorrectArgsDeclaration(symbol: KSNode): Boolean {
-        if (Modifier.DATA !in modifiers && classKind != ClassKind.OBJECT) {
+        val isInvalidArgsType =
+            (classKind != ClassKind.CLASS && classKind != ClassKind.OBJECT && Modifier.SEALED !in modifiers)
+
+        if (isInvalidArgsType) {
             logger.error(
-                message = "Args are allowed to be only 'data class' or 'object'.",
+                message = "Args are allowed to be only 'data class', 'object', 'sealed class' or 'sealed interface'.",
                 symbol = symbol,
             )
             return false
