@@ -37,7 +37,7 @@ class FourthFragment : CommonScreenFragment() {
     private fun setState(state: FourthState) {
         binding.topAppBar.title = state.title
 
-        val inputText = arguments?.getNibelArgs<FourthArgs>()!!.inputText
+        val inputText = (arguments?.getNibelArgs<FourthArgs>() as? FourthArgs.WithText)?.inputText ?: ""
         binding.inputText.setText(inputText)
 
         val adapter = binding.nextButtons.adapter as NextButtonsAdapter<FourthNextButton>

@@ -42,7 +42,10 @@ private fun SideEffectHandler(sideEffects: Flow<ThirdSideEffect>) {
         when (it) {
             is ThirdSideEffect.NavigateBack -> navigateBack()
             is ThirdSideEffect.NavigateToFourthScreen -> {
-                val args = FourthArgs(it.inputText)
+                val args = when {
+                    it.inputText.isEmpty() -> FourthArgs.Empty
+                    else -> FourthArgs.WithText(it.inputText)
+                }
                 navigateTo(FourthScreenDestination(args))
             }
 
