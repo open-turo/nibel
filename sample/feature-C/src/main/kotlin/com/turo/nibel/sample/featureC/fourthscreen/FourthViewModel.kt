@@ -20,7 +20,9 @@ class FourthViewModel @Inject constructor(
     val sideEffects: Flow<FourthSideEffect> get() = _sideEffects
 
     private val _state = MutableStateFlow(
-        FourthState(inputText = savedStateHandle.getNibelArgs<FourthArgs>()!!.inputText),
+        FourthState(
+            inputText = (savedStateHandle.getNibelArgs<FourthArgs>() as? FourthArgs.WithText)?.inputText.orEmpty(),
+        ),
     )
     val state: StateFlow<FourthState> get() = _state
 
