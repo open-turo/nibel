@@ -28,12 +28,28 @@ class SecondViewModel @Inject constructor(
 
     fun onContinue(nextButton: SecondNextButton) {
         when (nextButton) {
-            SecondNextButton.SecondScreen ->
-                _sideEffects.tryEmit(SecondSideEffect.NavigateToThirdScreen(state.value.inputText))
+            SecondNextButton.SecondScreen -> {
+                _sideEffects.tryEmit(
+                    SecondSideEffect.NavigateToThirdScreen(
+                        inputText = state.value.inputText,
+                        callback = { result ->
+                            // Handle result from ThirdScreen
+                            result?.let {
+                                onResultFromThirdScreen(it.inputText)
+                            }
+                        },
+                    ),
+                )
+            }
         }
     }
 
     fun onInputTextChanged(inputText: String) {
+        _state.value = _state.value.copy(inputText = inputText)
+    }
+
+    private fun onResultFromThirdScreen(inputText: String) {
+        // Update state with the result from ThirdScreen
         _state.value = _state.value.copy(inputText = inputText)
     }
 }

@@ -12,6 +12,7 @@ import com.google.devtools.ksp.symbol.Modifier
 import nibel.annotations.DestinationWithArgs
 import nibel.annotations.DestinationWithNoArgs
 import nibel.runtime.NoArgs
+import nibel.runtime.NoResult
 
 abstract class AbstractEntryGeneratingVisitor(
     private val resolver: Resolver,
@@ -30,6 +31,8 @@ abstract class AbstractEntryGeneratingVisitor(
         }
 
         val reference = declaration.findDestinationSuperType(symbol) ?: return null
+
+        val resultQualifiedName = parseResultQualifiedName(symbol)
 
         val ref = reference.toString()
         return when {
@@ -52,6 +55,7 @@ abstract class AbstractEntryGeneratingVisitor(
                     destinationPackageName = destinationPackageName.asString(),
                     destinationQualifiedName = destinationClassName.asString(),
                     argsQualifiedName = argsClassName,
+                    resultQualifiedName = resultQualifiedName,
                     parameters = emptyMap(),
                 )
             }
@@ -62,6 +66,7 @@ abstract class AbstractEntryGeneratingVisitor(
                     destinationPackageName = destinationPackageName.asString(),
                     destinationQualifiedName = destinationClassName.asString(),
                     argsQualifiedName = null,
+                    resultQualifiedName = resultQualifiedName,
                     parameters = emptyMap(),
                 )
 
@@ -76,15 +81,19 @@ abstract class AbstractEntryGeneratingVisitor(
             return null
         }
 
+        val resultQualifiedName = parseResultQualifiedName(symbol)
+
         val argsClassName = arg.declaration.qualifiedName!!.asString()
         return if (argsClassName == NoArgs::class.qualifiedName) {
             InternalEntryMetadata(
                 argsQualifiedName = null,
+                resultQualifiedName = resultQualifiedName,
                 parameters = emptyMap(),
             )
         } else {
             InternalEntryMetadata(
                 argsQualifiedName = argsClassName,
+                resultQualifiedName = resultQualifiedName,
                 parameters = emptyMap(),
             )
         }
@@ -135,6 +144,24 @@ abstract class AbstractEntryGeneratingVisitor(
         return true
     }
 
+    private fun KSClassDeclaration.isCorrectResultDeclaration(symbol: KSNode): Boolean {
+        if (Modifier.DATA !in modifiers && classKind != ClassKind.OBJECT) {
+            logger.error(
+                message = "Result are allowed to be only 'data class' or 'object'.",
+                symbol = symbol,
+            )
+            return false
+        }
+        if (typeParameters.isNotEmpty()) {
+            logger.error(
+                message = "Result declarations are not allowed to have generic type parameters.",
+                symbol = symbol,
+            )
+            return false
+        }
+        return true
+    }
+
     private fun KSClassDeclaration.findDestinationSuperType(symbol: KSNode): KSTypeReference? {
         val destinationSuperType = superTypes.toList()
             .find { it.toString().startsWith("DestinationWith") }
@@ -148,5 +175,19 @@ abstract class AbstractEntryGeneratingVisitor(
             return null
         }
         return destinationSuperType
+    }
+
+    private fun Arguments.parseResultQualifiedName(symbol: KSNode): String? {
+        val resultArg = this["result"] as? KSType ?: return null
+        val resultDeclaration = resultArg.declaration as? KSClassDeclaration ?: return null
+        if (!resultDeclaration.isCorrectResultDeclaration(symbol)) {
+            return null
+        }
+        val resultClassName = resultArg.declaration.qualifiedName!!.asString()
+        return if (resultClassName == NoResult::class.qualifiedName) {
+            null
+        } else {
+            resultClassName
+        }
     }
 }

@@ -56,6 +56,12 @@ open class ComposeNavigationDelegate : NavigationDelegate<NavigationControllerAr
             ),
         )
 
+        // Set request key from composition local if available (for Fragment-based navigation)
+        val requestKey = LocalRequestKey.current
+        if (navController is NibelNavigationController) {
+            navController.setRequestKeyFromFragment(requestKey)
+        }
+
         CompositionLocalProvider(LocalNavigationController provides navController) {
             NavHost(internalNavController, startDestination = ROOT_ROUTE) {
                 registerComposable(

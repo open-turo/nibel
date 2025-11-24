@@ -43,7 +43,10 @@ private fun SideEffectHandler(sideEffects: Flow<SecondSideEffect>) {
             is SecondSideEffect.NavigateBack -> navigateBack()
             is SecondSideEffect.NavigateToThirdScreen -> {
                 val args = ThirdArgs(it.inputText)
-                navigateTo(ThirdScreenDestination(args))
+                navigateForResult(
+                    externalDestination = ThirdScreenDestination(args),
+                    callback = it.callback,
+                )
             }
         }
     }
