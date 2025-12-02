@@ -28,7 +28,7 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: Test
-        uses: open-turo/actions-jvm/test@v1
+        uses: open-turo/actions-jvm/test@v2
         with:
           checkout-repo: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
