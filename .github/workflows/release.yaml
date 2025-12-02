@@ -32,6 +32,7 @@ jobs:
         with:
           checkout-repo: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          gradle-task: tests:test
 
   release:
     name: Release
