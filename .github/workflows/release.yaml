@@ -30,8 +30,11 @@ jobs:
           gradle-version: "8.11.1"
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-      - name: Unit tests
-        run: ./gradlew tests:test
+      - name: Test
+        uses: open-turo/actions-jvm/test@v1
+        with:
+          checkout-repo: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
   release:
     name: Release
