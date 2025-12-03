@@ -9,7 +9,7 @@ jobs:
     name: Lint
     runs-on: [ubuntu-latest]
     steps:
-      - uses: open-turo/actions-jvm/lint@v1
+      - uses: open-turo/actions-jvm/lint@v2
         with:
           checkout-repo: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -39,7 +39,7 @@ jobs:
     runs-on: [ubuntu-latest]
     needs: [lint, test]
     steps:
-      - uses: open-turo/actions-jvm/release@v1
+      - uses: open-turo/actions-jvm/release@v2
         with:
           checkout-repo: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
