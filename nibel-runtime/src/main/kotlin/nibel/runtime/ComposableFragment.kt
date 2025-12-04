@@ -34,11 +34,13 @@ abstract class ComposableFragment : Fragment() {
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         @Suppress("DEPRECATION")
         val args = arguments?.get(Nibel.argsKey) as? Parcelable?
+        val requestKey = arguments?.getRequestKey()
 
         setContent {
             Nibel.RootDelegate.Content {
                 CompositionLocalProvider(
                     LocalImplementationType provides ImplementationType.Fragment,
+                    LocalRequestKey provides requestKey,
                 ) {
                     Nibel.NavigationDelegate.Content(rootArgs = args) {
                         ComposableContent()

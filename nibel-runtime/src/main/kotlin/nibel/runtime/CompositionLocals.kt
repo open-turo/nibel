@@ -25,3 +25,10 @@ val LocalImplementationType = compositionLocalOf<ImplementationType?> {
 val LocalArgs = compositionLocalOf<Parcelable?> {
     null
 }
+
+/**
+ * Provides request key for result-based navigation or `null` if not navigated via navigateForResult.
+ */
+val LocalRequestKey = compositionLocalOf<String?> {
+    null
+}

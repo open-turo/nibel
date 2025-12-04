@@ -10,6 +10,7 @@ import com.turo.nibel.sample.navigation.FirstScreenDestination
 import com.turo.nibel.sample.navigation.FourthArgs
 import com.turo.nibel.sample.navigation.FourthScreenDestination
 import com.turo.nibel.sample.navigation.ThirdScreenDestination
+import com.turo.nibel.sample.navigation.ThirdScreenResult
 import kotlinx.coroutines.flow.Flow
 import nibel.annotations.ImplementationType
 import nibel.annotations.UiExternalEntry
@@ -18,6 +19,7 @@ import nibel.runtime.LocalImplementationType
 @UiExternalEntry(
     type = ImplementationType.Fragment,
     destination = ThirdScreenDestination::class,
+    result = ThirdScreenResult::class,
 )
 @Composable
 fun ThirdScreen(viewModel: ThirdViewModel = hiltViewModel()) {
@@ -40,7 +42,10 @@ fun ThirdScreen(viewModel: ThirdViewModel = hiltViewModel()) {
 private fun SideEffectHandler(sideEffects: Flow<ThirdSideEffect>) {
     SideEffectHandler(sideEffects) {
         when (it) {
-            is ThirdSideEffect.NavigateBack -> navigateBack()
+            is ThirdSideEffect.NavigateBack -> {
+                cancelResultAndNavigateBack()
+            }
+
             is ThirdSideEffect.NavigateToFourthScreen -> {
                 val args = when {
                     it.inputText.isEmpty() -> FourthArgs.Empty
@@ -51,6 +56,12 @@ private fun SideEffectHandler(sideEffects: Flow<ThirdSideEffect>) {
 
             is ThirdSideEffect.NavigateToFirstScreen ->
                 navigateTo(FirstScreenDestination)
+
+            is ThirdSideEffect.SetResultAndNavigateBack ->
+                setResultAndNavigateBack(it.result)
+
+            is ThirdSideEffect.CancelResultAndNavigateBack ->
+                cancelResultAndNavigateBack()
         }
     }
 }
