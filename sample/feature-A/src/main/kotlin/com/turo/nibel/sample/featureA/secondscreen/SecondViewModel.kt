@@ -28,8 +28,10 @@ class SecondViewModel @Inject constructor(
 
     fun onContinue(nextButton: SecondNextButton) {
         when (nextButton) {
-            SecondNextButton.SecondScreen ->
+            SecondNextButton.ThirdScreen ->
                 _sideEffects.tryEmit(SecondSideEffect.NavigateToThirdScreen(state.value.inputText))
+            SecondNextButton.ExternalContentDemo ->
+                _sideEffects.tryEmit(SecondSideEffect.NavigateToExternalContentDemo)
         }
     }
 

@@ -7,6 +7,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.turo.nibel.sample.common.CommonScreen
 import com.turo.nibel.sample.common.SideEffectHandler
+import com.turo.nibel.sample.featureA.externalcontent.ExternalContentDemoScreenEntry
 import com.turo.nibel.sample.navigation.ThirdArgs
 import com.turo.nibel.sample.navigation.ThirdScreenDestination
 import kotlinx.coroutines.flow.Flow
@@ -44,6 +45,9 @@ private fun SideEffectHandler(sideEffects: Flow<SecondSideEffect>) {
             is SecondSideEffect.NavigateToThirdScreen -> {
                 val args = ThirdArgs(it.inputText)
                 navigateTo(ThirdScreenDestination(args))
+            }
+            is SecondSideEffect.NavigateToExternalContentDemo -> {
+                navigateTo(ExternalContentDemoScreenEntry.newInstance())
             }
         }
     }
