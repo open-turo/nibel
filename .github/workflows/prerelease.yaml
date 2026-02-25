@@ -80,11 +80,11 @@ jobs:
           artifactory-auth-token: ${{ secrets.ARTIFACTORY_AUTH_TOKEN }}
           create-prerelease: true # actually create the prerelease
         env:
-          ORG_GRADLE_PROJECT_artifactoryAuthToken: ${{ secrets.ARTIFACTORY_AUTH_TOKEN }}
           ORG_GRADLE_PROJECT_artifactoryUsername: ${{ secrets.ARTIFACTORY_USERNAME }}
+          ORG_GRADLE_PROJECT_artifactoryAuthToken: ${{ secrets.ARTIFACTORY_AUTH_TOKEN }}
           # Maven Central publishing credentials
-          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.ARTIFACTORY_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.ARTIFACTORY_AUTH_TOKEN }}
           # Disable configuration cache for Maven Central publishing (gradle/gradle#22779)
           ORG_GRADLE_PROJECT_org.gradle.unsafe.configuration-cache: false
 
