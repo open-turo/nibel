@@ -2,6 +2,8 @@
 
 package nibel.runtime
 
+import androidx.compose.runtime.Composable
+import nibel.annotations.DestinationWithArgs
 import nibel.annotations.ExternalDestination
 import nibel.annotations.ImplementationType
 import nibel.annotations.LegacyEntry
@@ -106,6 +108,38 @@ object Nibel {
     fun <D : ExternalDestination> newFragmentEntry(destination: D): FragmentEntry? {
         val factory = findEntryFactory(destination) as? FragmentEntryFactory
         return factory?.newInstance(destination)
+    }
+
+    /**
+     * Creates an instance of a [ComposableEntry] from its associated [destination].
+     */
+    internal fun <D : ExternalDestination> newComposableEntry(destination: D): ComposableEntry<*>? {
+        val factory = findEntryFactory(destination) as? ComposableEntryFactory
+        return factory?.newInstance(destination)
+    }
+
+    /**
+     * Renders the composable screen associated with a [destination], setting up
+     * the required navigation context. Use this to embed a cross-module composable
+     * screen directly without wrapping it in a Fragment.
+     *
+     * The embedded screen runs in its own isolated navigation scope — back presses
+     * and navigation calls inside it do not propagate to the enclosing navigation stack.
+     *
+     * The [destination] is consumed once at initial composition. Recomposing with a
+     * different [destination] instance has no effect on the already-rendered screen.
+     */
+    @Composable
+    fun <D : ExternalDestination> ExternalContent(destination: D) {
+        val entry = newComposableEntry(destination)
+            ?: error(
+                "${destination::class.qualifiedName} is not associated with " +
+                    "@UiExternalEntry(ImplementationType.Composable).",
+            )
+        val rootArgs = (destination as? DestinationWithArgs<*>)?.args
+        NavigationDelegate.Content(rootArgs = rootArgs) {
+            entry.ComposableContent()
+        }
     }
 
     private fun <D : ExternalDestination> registerEntryFactory(destination: D) {
