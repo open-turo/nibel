@@ -85,8 +85,6 @@ jobs:
           # Maven Central publishing credentials
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.ARTIFACTORY_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.ARTIFACTORY_AUTH_TOKEN }}
-          # Disable configuration cache for Maven Central publishing (gradle/gradle#22779)
-          ORG_GRADLE_PROJECT_org.gradle.unsafe.configuration-cache: false
 
       - name: Prerelease output
         run: |
