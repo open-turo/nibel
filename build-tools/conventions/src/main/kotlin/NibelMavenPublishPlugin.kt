@@ -42,7 +42,10 @@ class NibelMavenPublishPlugin : NibelConventionPlugin({
             }
         }
 
-        publishToMavenCentral(SonatypeHost.S01)
-        signAllPublications()
+        publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+        val signingKey = project.findProperty("signingInMemoryKey") as String?
+        if (!signingKey.isNullOrBlank()) {
+            signAllPublications()
+        }
     }
 })
