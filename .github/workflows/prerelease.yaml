@@ -28,10 +28,10 @@ jobs:
           checkout-repo: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
           artifactory-username: ${{ secrets.ARTIFACTORY_USERNAME }}
-          artifactory-auth-token: ${{ secrets.ARTIFACTORY_AUTH_TOKEN }}
+          artifactory-auth-token: ${{ secrets.ARTIFACTORY_PASSWORD }}
           create-prerelease: false # dry run
         env:
-          ORG_GRADLE_PROJECT_artifactoryAuthToken: ${{ secrets.ARTIFACTORY_AUTH_TOKEN }}
+          ORG_GRADLE_PROJECT_artifactoryAuthToken: ${{ secrets.ARTIFACTORY_PASSWORD }}
           ORG_GRADLE_PROJECT_artifactoryUsername: ${{ secrets.ARTIFACTORY_USERNAME }}
       - name: Outputs
         run: |
@@ -50,7 +50,7 @@ jobs:
         with:
           checkout-repo: true
           artifactory-username: ${{ secrets.ARTIFACTORY_USERNAME }}
-          artifactory-auth-token: ${{ secrets.ARTIFACTORY_AUTH_TOKEN }}
+          artifactory-auth-token: ${{ secrets.ARTIFACTORY_PASSWORD }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
   prerelease:
@@ -77,14 +77,14 @@ jobs:
           checkout-repo: false
           github-token: ${{ secrets.GITHUB_TOKEN }}
           artifactory-username: ${{ secrets.ARTIFACTORY_USERNAME }}
-          artifactory-auth-token: ${{ secrets.ARTIFACTORY_AUTH_TOKEN }}
+          artifactory-auth-token: ${{ secrets.ARTIFACTORY_PASSWORD }}
           create-prerelease: true # actually create the prerelease
         env:
           ORG_GRADLE_PROJECT_artifactoryUsername: ${{ secrets.ARTIFACTORY_USERNAME }}
-          ORG_GRADLE_PROJECT_artifactoryAuthToken: ${{ secrets.ARTIFACTORY_AUTH_TOKEN }}
+          ORG_GRADLE_PROJECT_artifactoryAuthToken: ${{ secrets.ARTIFACTORY_PASSWORD }}
           # Maven Central publishing credentials
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.ARTIFACTORY_USERNAME }}
-          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.ARTIFACTORY_AUTH_TOKEN }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.ARTIFACTORY_PASSWORD }}
 
       - name: Prerelease output
         run: |
