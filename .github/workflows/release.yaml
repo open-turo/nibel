@@ -14,6 +14,8 @@ jobs:
         with:
           checkout-repo: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          artifactory-username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          artifactory-auth-token: ${{ secrets.ARTIFACTORY_PASSWORD }}
 
   test:
     name: Test
@@ -45,10 +47,12 @@ jobs:
           checkout-repo: true
           github-token: ${{ secrets.OPEN_TURO_GITHUB_TOKEN }}
         env:
+          ORG_GRADLE_PROJECT_artifactoryUsername: ${{ secrets.ARTIFACTORY_USERNAME }}
+          ORG_GRADLE_PROJECT_artifactoryAuthToken: ${{ secrets.ARTIFACTORY_PASSWORD }}
           # Maven Central publishing credentials
-          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-          # GPG signing key for artifacts
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.ARTIFACTORY_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.ARTIFACTORY_PASSWORD }}
+          # GPG signing
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.GPG_SIGNING_KEY_ID }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
