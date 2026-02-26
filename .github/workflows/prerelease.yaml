@@ -85,6 +85,10 @@ jobs:
           # Maven Central publishing credentials
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.ARTIFACTORY_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.ARTIFACTORY_PASSWORD }}
+          # GPG signing
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.GPG_SIGNING_KEY_ID }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
 
       - name: Prerelease output
         run: |
