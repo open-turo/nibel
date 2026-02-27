@@ -1,6 +1,6 @@
 [versions]
 nibel = "1.0.4"
-androidGradlePlugin = "8.11.1"
+androidGradlePlugin = "9.0.1"
 composeCompiler = "1.4.7"
 kotlin = "2.1.20"
 ksp = "2.1.20-1.0.32"
