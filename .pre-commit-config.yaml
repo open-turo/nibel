@@ -3,7 +3,7 @@ exclude: "^\
   "
 repos:
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
-    rev: v9.23.0
+    rev: v9.24.0
     hooks:
       - id: commitlint
         verbose: false
@@ -28,7 +28,7 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.9
+    rev: v1.7.11
     hooks:
       - id: actionlint
   - repo: local
