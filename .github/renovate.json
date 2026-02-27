@@ -1,7 +1,7 @@
 {
   "extends": [
-    "github>open-turo/renovate-config#v1.14.0",
-    "github>open-turo/renovate-config:jvm#v1.14.0"
+    "github>open-turo/renovate-config#v1.17.0",
+    "github>open-turo/renovate-config:jvm#v1.17.0"
   ],
   "labels": ["dependencies"],
   "prConcurrentLimit": 10,
