@@ -18,7 +18,7 @@ nibelConventionPlugin = "ignored"
 nibel-runtime = { module = "com.openturo.nibel:nibel-runtime", version.ref = "nibel" }
 nibel-compiler = { module = "com.openturo.nibel:nibel-compiler", version.ref = "nibel" }
 # ===== BOM =====
-bom-androidx-compose = "androidx.compose:compose-bom:2025.07.00"
+bom-androidx-compose = "androidx.compose:compose-bom:2026.02.01"
 bom-kotlin = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
 # ===== Android X =====
 androidx-core = "androidx.core:core-ktx:1.16.0"
