@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 import nibel.annotations.DestinationWithArgs
 
 @Parcelize
-data class ThirdArgs(val inputText: String) : Parcelable
+data class ThirdArgs(val input: Input) : Parcelable
 
 data class ThirdScreenDestination(override val args: ThirdArgs) : DestinationWithArgs<ThirdArgs>
 
@@ -13,3 +13,14 @@ data class ThirdScreenDestination(override val args: ThirdArgs) : DestinationWit
 data class FifthArgs(val label: String) : Parcelable
 
 data class FifthScreenDestination(override val args: FifthArgs) : DestinationWithArgs<FifthArgs>
+
+@Parcelize
+sealed class Input : Parcelable {
+    data class Text(val inputText: String) : Input() {
+        override fun toString(): String = inputText
+    }
+
+    data object Nothing : Input() {
+        override fun toString(): String = ""
+    }
+}

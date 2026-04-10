@@ -8,6 +8,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.turo.nibel.sample.common.CommonScreen
 import com.turo.nibel.sample.common.SideEffectHandler
 import com.turo.nibel.sample.featureA.externalcontent.ExternalContentDemoScreenEntry
+import com.turo.nibel.sample.navigation.Input
 import com.turo.nibel.sample.navigation.ThirdArgs
 import com.turo.nibel.sample.navigation.ThirdScreenDestination
 import kotlinx.coroutines.flow.Flow
@@ -43,9 +44,10 @@ private fun SideEffectHandler(sideEffects: Flow<SecondSideEffect>) {
         when (it) {
             is SecondSideEffect.NavigateBack -> navigateBack()
             is SecondSideEffect.NavigateToThirdScreen -> {
-                val args = ThirdArgs(it.inputText)
+                val args = ThirdArgs(input = Input.Text(inputText = it.inputText))
                 navigateTo(ThirdScreenDestination(args))
             }
+
             is SecondSideEffect.NavigateToExternalContentDemo -> {
                 navigateTo(ExternalContentDemoScreenEntry.newInstance())
             }
@@ -54,4 +56,4 @@ private fun SideEffectHandler(sideEffects: Flow<SecondSideEffect>) {
 }
 
 @Parcelize
-data class SecondArgs(val inputText: String) : Parcelable
+data class SecondArgs(val input: Input) : Parcelable

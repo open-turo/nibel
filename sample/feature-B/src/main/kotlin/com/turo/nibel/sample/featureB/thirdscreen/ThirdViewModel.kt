@@ -19,7 +19,7 @@ class ThirdViewModel @Inject constructor(
     val sideEffects: Flow<ThirdSideEffect> get() = _sideEffects
 
     private val _state = MutableStateFlow(
-        ThirdState(inputText = savedStateHandle.getNibelArgs<ThirdArgs>()!!.inputText),
+        ThirdState(inputText = savedStateHandle.getNibelArgs<ThirdArgs>()!!.input.toString()),
     )
     val state: StateFlow<ThirdState> get() = _state
 
