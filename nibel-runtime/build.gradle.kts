@@ -14,5 +14,5 @@ dependencies {
     api(projects.nibelAnnotations)
     implementation(libs.androidx.compose.navigation)
     implementation(libs.androidx.fragment)
-    implementation(libs.gson)
+
 }
