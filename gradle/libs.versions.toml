@@ -45,8 +45,7 @@ hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", ve
 ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 autoService-ksp = { group = "dev.zacsweers.autoservice", name = "auto-service-ksp", version.ref = "autoServiceKsp" }
 autoService-annotations = { group = "com.google.auto.service", name = "auto-service-annotations", version.ref = "autoService" }
-# ===== Serialization =====
-gson = "com.google.code.gson:gson:2.13.1"
+
 # ===== Tests =====
 junit = "junit:junit:4.12"
 kotest-assertions = "io.kotest:kotest-assertions-core:6.0.4"
