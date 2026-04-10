@@ -69,7 +69,8 @@ class ZeroFragment : CommonScreenFragment() {
             }
 
             is ZeroSideEffect.NavigateToThirdScreen -> fragmentManager.commit {
-                val destination = ThirdScreenDestination(ThirdArgs(inputText = ""))
+                val destination =
+                    ThirdScreenDestination(ThirdArgs(input = com.turo.nibel.sample.navigation.Input.Nothing))
                 val fragment = Nibel.newFragmentEntry(destination)?.fragment
                 if (fragment == null) {
                     showErrorMessage(destination)

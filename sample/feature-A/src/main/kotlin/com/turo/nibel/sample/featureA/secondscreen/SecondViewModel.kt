@@ -18,7 +18,7 @@ class SecondViewModel @Inject constructor(
     val sideEffects: Flow<SecondSideEffect> get() = _sideEffects
 
     private val _state = MutableStateFlow(
-        SecondState(inputText = savedStateHandle.getNibelArgs<SecondArgs>()!!.inputText),
+        SecondState(inputText = savedStateHandle.getNibelArgs<SecondArgs>()!!.input.toString()),
     )
     val state: StateFlow<SecondState> get() = _state
 

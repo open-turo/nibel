@@ -9,6 +9,7 @@ import com.turo.nibel.sample.common.SideEffectHandler
 import com.turo.nibel.sample.featureA.secondscreen.SecondArgs
 import com.turo.nibel.sample.featureA.secondscreen.SecondScreenEntry
 import com.turo.nibel.sample.navigation.FirstScreenDestination
+import com.turo.nibel.sample.navigation.Input
 import kotlinx.coroutines.flow.Flow
 import nibel.annotations.ImplementationType
 import nibel.annotations.UiExternalEntry
@@ -41,7 +42,7 @@ private fun SideEffectHandler(sideEffects: Flow<FirstSideEffect>) {
         when (it) {
             is FirstSideEffect.NavigateBack -> navigateBack()
             is FirstSideEffect.NavigateToSecondScreen -> {
-                val args = SecondArgs(it.inputText)
+                val args = SecondArgs(Input.Text(it.inputText))
                 navigateTo(SecondScreenEntry.newInstance(args))
             }
         }
