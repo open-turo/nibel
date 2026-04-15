@@ -5,7 +5,6 @@ import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSNode
-import com.google.devtools.ksp.symbol.KSType
 import com.google.devtools.ksp.symbol.KSTypeReference
 import com.google.devtools.ksp.symbol.KSVisitorVoid
 import com.google.devtools.ksp.symbol.Modifier
@@ -19,7 +18,8 @@ abstract class AbstractEntryGeneratingVisitor(
 ) : KSVisitorVoid() {
 
     protected fun Arguments.parseExternalEntry(symbol: KSNode): ExternalEntryMetadata? {
-        val arg = this["destination"] as KSType
+        // KSP 2: Class literal arguments may be KSClassDeclaration, not KSType.
+        val arg = this["destination"].asKSType()
         val destinationSimpleName = arg.declaration.simpleName
         val destinationPackageName = arg.declaration.packageName
         val destinationClassName = arg.declaration.qualifiedName!!
@@ -70,7 +70,8 @@ abstract class AbstractEntryGeneratingVisitor(
     }
 
     protected fun Arguments.parseInternalEntry(symbol: KSNode): InternalEntryMetadata? {
-        val arg = this["args"] as KSType
+        // KSP 2: Class literal arguments may be KSClassDeclaration, not KSType.
+        val arg = this["args"].asKSType()
         val declaration = arg.declaration as KSClassDeclaration
         if (!declaration.isCorrectArgsDeclaration(symbol)) {
             return null
