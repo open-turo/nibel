@@ -1,7 +1,6 @@
 import com.turo.nibel.buildtools.NibelConventionPlugin
 import com.turo.nibel.buildtools.libs
 import com.turo.nibel.buildtools.mavenPublishing
-import com.vanniktech.maven.publish.SonatypeHost
 
 class NibelMavenPublishPlugin : NibelConventionPlugin({
     with(pluginManager) {
@@ -42,7 +41,12 @@ class NibelMavenPublishPlugin : NibelConventionPlugin({
             }
         }
 
-        publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+        // SonatypeHost was removed in vanniktech 0.34.0; Central Portal is now the
+        // only supported host. Read mavenCentralAutomaticPublishing from gradle.properties
+        // to preserve the existing behaviour (currently true = auto-release after upload).
+        val automaticRelease = (project.findProperty("mavenCentralAutomaticPublishing") as String?)
+            ?.toBoolean() ?: false
+        publishToMavenCentral(automaticRelease = automaticRelease)
         val signingKey = project.findProperty("signingInMemoryKey") as String?
         if (!signingKey.isNullOrBlank()) {
             signAllPublications()
