@@ -25,6 +25,7 @@ androidx-core = "androidx.core:core-ktx:1.16.0"
 androidx-lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx-fragment = "androidx.fragment:fragment-ktx:1.8.8"
 androidx-material3 = "com.google.android.material:material:1.12.0"
+material-icons-core = { group = "androidx.compose.material", name = "material-icons-core" }
 androidx-appcompat = "androidx.appcompat:appcompat:1.7.1"
 androidx-recyclerview = "androidx.recyclerview:recyclerview:1.4.0"
 # ===== Jetpack Compose =====
