@@ -28,7 +28,7 @@ jobs:
         uses: open-turo/action-setup-tools@v3
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
 
       - name: Test
         uses: open-turo/actions-jvm/test@v2
@@ -82,7 +82,7 @@ jobs:
         uses: open-turo/action-setup-tools@v3
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
 
       - name: Publish to Maven Central
         run: ./gradlew publishToMavenCentral --no-configuration-cache
