@@ -23,7 +23,7 @@ jobs:
         uses: open-turo/action-setup-tools@v3
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
 
       - name: Android lint
         run: ./gradlew lintDebug
@@ -39,7 +39,7 @@ jobs:
         uses: open-turo/action-setup-tools@v3
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
 
       - name: Build debug
         run: ./gradlew assembleDebug
@@ -55,7 +55,7 @@ jobs:
         uses: open-turo/action-setup-tools@v3
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
 
       - name: Test
         uses: open-turo/actions-jvm/test@v2

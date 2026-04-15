@@ -68,7 +68,7 @@ jobs:
         uses: open-turo/action-setup-tools@v3
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
 
       - uses: open-turo/actions-jvm/prerelease@v2
         name: Create prerelease
