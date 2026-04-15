@@ -21,7 +21,7 @@ nibel-compiler = { module = "com.openturo.nibel:nibel-compiler", version.ref = "
 bom-androidx-compose = "androidx.compose:compose-bom:2026.03.01"
 bom-kotlin = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
 # ===== Android X =====
-androidx-core = "androidx.core:core-ktx:1.16.0"
+androidx-core = "androidx.core:core-ktx:1.18.0"
 androidx-lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx-fragment = "androidx.fragment:fragment-ktx:1.8.8"
 androidx-material3 = "com.google.android.material:material:1.12.0"
