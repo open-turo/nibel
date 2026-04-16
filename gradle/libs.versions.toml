@@ -49,7 +49,7 @@ autoService-annotations = { group = "com.google.auto.service", name = "auto-serv
 
 # ===== Tests =====
 junit = "junit:junit:4.12"
-kotest-assertions = "io.kotest:kotest-assertions-core:6.0.4"
+kotest-assertions = "io.kotest:kotest-assertions-core:6.1.11"
 # ===== Gradle plugins =====
 gradlePlugin-android = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
 gradlePlugin-android-api = { module = "com.android.tools.build:gradle-api", version.ref = "androidGradlePlugin" }
