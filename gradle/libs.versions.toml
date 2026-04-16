@@ -38,7 +38,7 @@ androidx-compose-activity = "androidx.activity:activity-compose:1.10.1"
 androidx-compose-lifecycle-viewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 androidx-compose-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 androidx-compose-navigation = "androidx.navigation:navigation-compose:2.9.2"
-androidx-compose-navigation-hilt = "androidx.hilt:hilt-navigation-compose:1.2.0"
+androidx-compose-navigation-hilt = "androidx.hilt:hilt-navigation-compose:1.3.0"
 # ===== Dagger =====
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "dagger" }
