@@ -4,7 +4,6 @@ import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.symbol.KSFunctionDeclaration
-import com.google.devtools.ksp.symbol.KSType
 import nibel.annotations.ImplementationType.Composable
 import nibel.annotations.ImplementationType.Fragment
 import nibel.annotations.UiEntry
@@ -37,7 +36,9 @@ class EntryGeneratingVisitor(
         }!!
 
         val arguments = annotation.arguments.toMap()
-        val implementationType = (arguments["type"] as KSType).asImplementationType()
+        // KSP 2: Enum entry arguments are KSClassDeclaration, not KSType.
+        // Use asImplementationType() which handles both.
+        val implementationType = arguments["type"].asImplementationType()
 
         val metadata = when (type) {
             ExternalEntry -> arguments.parseExternalEntry(function)?.run {
