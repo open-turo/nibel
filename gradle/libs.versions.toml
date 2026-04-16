@@ -48,7 +48,7 @@ autoService-ksp = { group = "dev.zacsweers.autoservice", name = "auto-service-ks
 autoService-annotations = { group = "com.google.auto.service", name = "auto-service-annotations", version.ref = "autoService" }
 
 # ===== Tests =====
-junit = "junit:junit:4.12"
+junit = "junit:junit:4.13.2"
 kotest-assertions = "io.kotest:kotest-assertions-core:6.0.4"
 # ===== Gradle plugins =====
 gradlePlugin-android = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
