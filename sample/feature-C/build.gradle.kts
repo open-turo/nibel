@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.sample.android.compose)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.dagger.hilt.android)
 }
 
@@ -27,7 +26,7 @@ dependencies {
     implementation(libs.nibel.runtime)
     implementation(libs.hilt.android)
 
-    kapt(libs.hilt.android.compiler)
+    ksp(libs.hilt.android.compiler)
 
     ksp(libs.nibel.compiler)
 }

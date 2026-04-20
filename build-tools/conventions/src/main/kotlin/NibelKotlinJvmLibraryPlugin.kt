@@ -11,8 +11,8 @@ class NibelKotlinJvmLibraryPlugin : NibelConventionPlugin({
     }
 
     tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-            jvmTarget = NibelMetadata.JAVA_VERSION.toString()
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.fromTarget(NibelMetadata.JAVA_VERSION.toString()))
         }
     }
 

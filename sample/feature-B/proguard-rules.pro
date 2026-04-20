@@ -1,0 +1,1 @@
+-dontwarn com.turo.nibel.sample.**
