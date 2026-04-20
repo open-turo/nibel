@@ -10,13 +10,7 @@ class NibelAndroidComposePlugin : NibelConventionPlugin({
         apply(libs.plugins.compose.compiler.get().pluginId)
     }
     android<CommonExtension> {
-        buildFeatures {
-            compose = true
-        }
-
-        composeOptions {
-            kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
-        }
+        buildFeatures.compose = true
     }
 
     dependencies {
