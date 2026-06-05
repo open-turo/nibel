@@ -19,15 +19,15 @@ fun KSFunctionDeclaration.isComposable(): Boolean =
 inline fun <reified A> KSAnnotated.findAnnotation(): KSAnnotation? =
     annotations.find { it.shortName.getShortName() == A::class.simpleName }
 
-fun Any.asImplementationType(): ImplementationType {
-    val name = when (this) {
-        is KSType -> declaration.simpleName.asString()
-        is KSClassDeclaration -> simpleName.asString()
-        else -> error("Unexpected enum value type: ${this::class}")
-    }
-    return when (name) {
+fun KSType.asImplementationType(): ImplementationType =
+    declaration.simpleName.asString().toImplementationType()
+
+fun KSClassDeclaration.asImplementationType(): ImplementationType =
+    simpleName.asString().toImplementationType()
+
+private fun String.toImplementationType(): ImplementationType =
+    when (this) {
         ImplementationType.Fragment.name -> ImplementationType.Fragment
         ImplementationType.Composable.name -> ImplementationType.Composable
         else -> error("Unknown ${ImplementationType::class.qualifiedName}")
     }
-}
