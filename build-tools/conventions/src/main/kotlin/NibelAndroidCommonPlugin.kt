@@ -20,6 +20,7 @@ class NibelAndroidCommonPlugin : NibelConventionPlugin({
 
     tasks.withType<KotlinCompile>().configureEach {
         compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.fromTarget(NibelMetadata.JAVA_VERSION.toString()))
             freeCompilerArgs.addAll("-Xstring-concat=inline")
         }
     }

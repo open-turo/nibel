@@ -2,10 +2,8 @@ package com.turo.nibel.buildtools
 
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import org.gradle.accessors.dm.LibrariesForLibs
-import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
-import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.getByType
 
@@ -15,18 +13,10 @@ typealias CommonExtension = com.android.build.api.dsl.CommonExtension
 // https://github.com/gradle/gradle/issues/15383#issuecomment-1245546796
 val Project.libs get() = extensions.getByType<LibrariesForLibs>()
 
-fun <T : Any> Project.android(body: T.() -> Unit) {
-    @Suppress("UNCHECKED_CAST")
+@Suppress("UNCHECKED_CAST")
+fun <T : CommonExtension> Project.android(body: T.() -> Unit) {
     (extensions.getByName("android") as T).apply(body)
 }
-
-fun <T : Any> NamedDomainObjectContainer<T>.release(body: T.() -> Unit) {
-    getByName("release", body)
-}
-
-val Project.sourceSets: SourceSetContainer
-    get() = (this as ExtensionAware).extensions
-        .getByName("sourceSets") as SourceSetContainer
 
 fun Project.mavenPublishing(configure: MavenPublishBaseExtension.() -> Unit) {
     (this as ExtensionAware).extensions.configure("mavenPublishing", configure)

@@ -1,5 +1,5 @@
 [versions]
-nibel = "1.0.4"
+nibel = "2.1.4"
 androidGradlePlugin = "9.0.0"
 kotlin = "2.3.0"
 ksp = "2.3.6"
