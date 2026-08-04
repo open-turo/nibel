@@ -1,8 +1,8 @@
 [versions]
 nibel = "2.1.4"
 androidGradlePlugin = "9.0.0"
-kotlin = "2.3.0"
-ksp = "2.3.6"
+kotlin = "2.4.10"
+ksp = "2.3.11"
 autoService = "1.1.1"
 autoServiceKsp = "1.2.0"
 dagger = "2.59.2"
