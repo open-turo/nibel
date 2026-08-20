@@ -1,7 +1,7 @@
 {
   "extends": [
-    "github>open-turo/renovate-config#v1.18.0",
-    "github>open-turo/renovate-config:jvm#v1.18.0"
+    "github>open-turo/renovate-config#v1.21.2",
+    "github>open-turo/renovate-config:jvm#v1.21.2"
   ],
   "ignorePresets": ["group:allNonMajor"],
   "labels": ["dependencies"],
