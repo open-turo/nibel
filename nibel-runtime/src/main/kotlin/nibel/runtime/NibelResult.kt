@@ -13,8 +13,10 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.findFragment
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import java.util.UUID
 
@@ -65,17 +67,15 @@ internal fun <R : Parcelable> rememberResultLauncher(
     val request = rememberSaveable(saver = ResultRequestSaver) { ResultRequest(UUID.randomUUID().toString()) }
     val fragmentManager = LocalContext.current.findFragmentActivity().supportFragmentManager
     val lifecycleOwner = LocalLifecycleOwner.current
+    val view = LocalView.current
     val currentOnResult by rememberUpdatedState(onResult)
 
     DisposableEffect(fragmentManager, request, lifecycleOwner) {
-        val stopObserving = fragmentManager.observeResults(request, resultType, lifecycleOwner) {
+        val hostFragment = { runCatching { view.findFragment<Fragment>() }.getOrNull() }
+        val stopObserving = fragmentManager.observeResults(request, resultType, lifecycleOwner, hostFragment) {
             currentOnResult(it)
         }
-        onDispose {
-            // The caller left the composition, so the screen it opened covers it.
-            if (request.pending) request.pausedSinceLaunch = true
-            stopObserving()
-        }
+        onDispose { stopObserving() }
     }
     return remember(request) { ResultLauncher(resultType, request) }
 }
@@ -90,6 +90,8 @@ private val ResultRequestSaver = Saver<ResultRequest, Bundle>(
  * fragment, so that results sent while it was destroyed are delivered after it is recreated.
  *
  * [name] distinguishes several launchers of the same fragment and must be unique within it.
+ *
+ * @throws IllegalStateException if a launcher with the same [name] is already registered.
  */
 inline fun <reified R : Parcelable> Fragment.registerForNibelResult(
     name: String = "default",
@@ -104,11 +106,15 @@ internal fun <R : Parcelable> Fragment.registerForNibelResult(
 ): ResultLauncher<R> {
     // Saved with this fragment instance, so two instances of one fragment class get their own keys.
     val registryKey = "nibel_result_launcher:$name"
+    check(savedStateRegistry.getSavedStateProvider(registryKey) == null) {
+        "A result launcher named '$name' is already registered in ${javaClass.name}. " +
+            "Give each launcher of a fragment its own name."
+    }
     val request = savedStateRegistry.consumeRestoredStateForKey(registryKey)
         ?.let(ResultRequest::fromBundle)
         ?: ResultRequest(UUID.randomUUID().toString())
     savedStateRegistry.registerSavedStateProvider(registryKey) { request.toBundle() }
-    requireActivity().supportFragmentManager.observeResults(request, resultType, this, onResult)
+    requireActivity().supportFragmentManager.observeResults(request, resultType, this, { this }, onResult)
     return ResultLauncher(resultType, request)
 }
 

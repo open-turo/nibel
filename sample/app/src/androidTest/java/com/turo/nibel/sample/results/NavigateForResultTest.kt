@@ -1,9 +1,12 @@
 package com.turo.nibel.sample.results
 
+import android.content.Intent
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.fragment.app.commitNow
+import androidx.lifecycle.Lifecycle
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -15,6 +18,9 @@ import nibel.runtime.ComposableEntry
 import nibel.runtime.ComposeNavigationContext
 import nibel.runtime.ComposeNavigationSpec
 import nibel.runtime.FragmentEntry
+import nibel.runtime.FragmentSpec
+import nibel.runtime.FragmentTransactionSpec
+import nibel.runtime.NibelNavigationController
 import nibel.runtime.ResultEntry
 import nibel.runtime.prepareFragment
 import nibel.runtime.setNibelResult
@@ -289,6 +295,162 @@ class NavigateForResultTest {
 
     // endregion
 
+    // region Callers that stay visible and failed navigation (review fixes)
+
+    @Test
+    fun backgroundingWithAnAddedPickerDoesNotCancel() {
+        showComposeCaller()
+        onUi {
+            TestHost.callerNavigator.navigateForResult(
+                ResultEntry(FragmentEntry(TestPlainPickerFragment())),
+                TestHost.callerLauncher,
+                fragmentSpec = FragmentTransactionSpec(replace = false),
+            )
+        }
+        assertViewShown("Test plain picker")
+
+        backgroundAndResume()
+        assertEquals(emptyList<TestResult?>(), TestHost.callerResults)
+
+        onUi { TestHost.plainPicker!!.setNibelResult(a) }
+        pressBack()
+
+        idle()
+        assertEquals(listOf(a), TestHost.callerResults)
+    }
+
+    @Test
+    fun backgroundingAFragmentCallerWithAnAddedPickerDoesNotCancel() {
+        showFragmentCaller("first")
+        onUi {
+            val caller = TestHost.fragmentCallers.getValue("first")
+            val picker = caller.launcher.prepareFragment(ResultEntry(FragmentEntry(TestPlainPickerFragment())))
+            composeRule.activity.supportFragmentManager.commit {
+                add(android.R.id.content, picker)
+                addToBackStack(null)
+            }
+        }
+        idle()
+
+        backgroundAndResume()
+        assertEquals(null, TestHost.fragmentCallerResults["first"])
+
+        onUi { TestHost.plainPicker!!.setNibelResult(a) }
+
+        idle()
+        assertEquals(listOf(a), TestHost.fragmentCallerResults["first"])
+    }
+
+    @Test
+    fun backgroundingWhileAReplacingPickerIsShownDoesNotCancel() {
+        showComposeCaller()
+        onUi {
+            TestHost.callerNavigator.navigateForResult(
+                ResultEntry(FragmentEntry(TestPlainPickerFragment())),
+                TestHost.callerLauncher,
+            )
+        }
+        assertViewShown("Test plain picker")
+
+        backgroundAndResume()
+        assertViewShown("Test plain picker")
+        onUi { TestHost.plainPicker!!.setNibelResult(a) }
+        pressBack()
+
+        assertShown("Test caller")
+        assertEquals(listOf(a), TestHost.callerResults)
+    }
+
+    @Test
+    fun systemBackFromAFragmentPickerToAComposeCallerDeliversNull() {
+        showComposeCaller()
+        onUi {
+            TestHost.callerNavigator.navigateForResult(
+                ResultEntry(FragmentEntry(TestPlainPickerFragment())),
+                TestHost.callerLauncher,
+            )
+        }
+        assertViewShown("Test plain picker")
+
+        pressBack()
+
+        assertShown("Test caller")
+        assertEquals(listOf(null), TestHost.callerResults)
+    }
+
+    @Test
+    fun failedFragmentNavigationLeavesNoPendingRequest() {
+        showComposeCaller()
+        val unknownSpec = object : FragmentSpec<Unit> {
+            override fun Unit.navigateTo(entry: FragmentEntry) = Unit
+        }
+
+        assertThrows(IllegalStateException::class.java) {
+            onUi {
+                TestHost.callerNavigator.navigateForResult(
+                    ResultEntry(FragmentEntry(TestPlainPickerFragment())),
+                    TestHost.callerLauncher,
+                    fragmentSpec = unknownSpec,
+                )
+            }
+        }
+        backgroundAndResume()
+
+        assertShown("Test caller")
+        assertEquals(emptyList<TestResult?>(), TestHost.callerResults)
+    }
+
+    @Test
+    fun screenOpenedInAnotherActivityDeliversNullOnReturn() {
+        showComposeCaller()
+        val newActivitySpec = object : FragmentSpec<Unit> {
+            override fun Unit.navigateTo(entry: FragmentEntry) = Unit
+        }
+        val controller = TestHost.callerNavigator as NibelNavigationController
+        val activityController = object : NibelNavigationController(
+            controller.internalNavController,
+            controller.fragmentManager,
+            controller.onBackPressedDispatcher,
+            controller.exploredEntries,
+        ) {
+            override fun navigateTo(entry: FragmentEntry, fragmentSpec: FragmentSpec<*>) {
+                if (fragmentSpec === newActivitySpec) {
+                    composeRule.activity.startActivity(Intent(composeRule.activity, MainActivity::class.java))
+                } else {
+                    super.navigateTo(entry, fragmentSpec)
+                }
+            }
+        }
+        onUi {
+            activityController.navigateForResult(
+                ResultEntry(FragmentEntry(TestPlainPickerFragment())),
+                TestHost.callerLauncher,
+                fragmentSpec = newActivitySpec,
+            )
+        }
+        assertViewShown("Feature A | Zero Screen")
+
+        pressBack()
+
+        assertShown("Test caller")
+        assertEquals(listOf(null), TestHost.callerResults)
+    }
+
+    @Test
+    fun twoLaunchersWithTheSameNameFail() {
+        val error = assertThrows(IllegalStateException::class.java) {
+            onUi {
+                composeRule.activity.supportFragmentManager.commitNow {
+                    replace(android.R.id.content, TestDuplicateLaunchersFragment())
+                }
+            }
+        }
+
+        assertTrue(error.message!!.contains("A result launcher named 'default' is already registered"))
+    }
+
+    // endregion
+
     private fun showComposeCaller() {
         show(TestCallerScreenEntry.newInstance().fragment)
         assertShown("Test caller")
@@ -333,6 +495,12 @@ class NavigateForResultTest {
     private fun onUi(block: () -> Unit) = composeRule.runOnUiThread(block)
 
     private fun idle() = composeRule.waitForIdle()
+
+    private fun backgroundAndResume() {
+        composeRule.activityRule.scenario.moveToState(Lifecycle.State.CREATED)
+        composeRule.activityRule.scenario.moveToState(Lifecycle.State.RESUMED)
+        idle()
+    }
 
     private fun assertShown(text: String) {
         idle()

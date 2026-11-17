@@ -117,3 +117,13 @@ class TestFragmentCaller : Fragment() {
         }
     }
 }
+
+/** Registers two launchers with the default name, which isn't allowed. */
+class TestDuplicateLaunchersFragment : Fragment() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        registerForNibelResult<TestResult> {}
+        registerForNibelResult<OtherResult> {}
+    }
+}

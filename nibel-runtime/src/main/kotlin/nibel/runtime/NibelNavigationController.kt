@@ -96,8 +96,12 @@ open class NibelNavigationController(
         when (val target = entry.entry) {
             is FragmentEntry -> {
                 launcher.attachTo(target)
-                launcher.request.launch(callerCovered = false)
                 navigateTo(target, fragmentSpec)
+                // Only once navigation didn't throw, so a failed call leaves no pending request.
+                // A fragment transaction covers the caller only if it replaces it, which the caller
+                // detects itself. Any other spec, for example one that starts an activity, is
+                // assumed to cover it.
+                launcher.request.launch(callerCovered = fragmentSpec !is FragmentTransactionSpec)
             }
 
             is ComposableEntry<*> -> {
