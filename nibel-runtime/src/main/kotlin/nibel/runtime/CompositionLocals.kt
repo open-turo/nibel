@@ -25,3 +25,10 @@ val LocalImplementationType = compositionLocalOf<ImplementationType?> {
 val LocalArgs = compositionLocalOf<Parcelable?> {
     null
 }
+
+/**
+ * Result target of a [ComposableFragment] opened for a result, handed to its root compose screen.
+ */
+internal val LocalRootResultTarget = compositionLocalOf<ResultTarget?> {
+    null
+}

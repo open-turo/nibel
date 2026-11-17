@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
@@ -44,6 +45,7 @@ open class ComposeNavigationDelegate : NavigationDelegate<NavigationControllerAr
     @Composable
     override fun Content(rootArgs: Parcelable?, content: @Composable () -> Unit) {
         val internalNavController = rememberNavController()
+        val rootResultTarget = LocalRootResultTarget.current
         val exploredEntries = rememberSaveable(
             saver = ExploredEntriesSaver(),
             init = { ExploredEntriesRegistry() },
@@ -63,6 +65,11 @@ open class ComposeNavigationDelegate : NavigationDelegate<NavigationControllerAr
                     argsType = rootArgs?.javaClass,
                     defaultArgs = rootArgs,
                 ) {
+                    // Once per back stack entry, not on every recomposition.
+                    DisposableEffect(it) {
+                        rootResultTarget?.writeTo(it.savedStateHandle)
+                        onDispose {}
+                    }
                     val args = it.arguments?.getNibelArgs<Parcelable>()
                     CompositionLocalProvider(LocalArgs provides args) {
                         content()

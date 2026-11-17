@@ -7,6 +7,7 @@ import com.google.devtools.ksp.symbol.KSClassDeclaration
 import nibel.compiler.template.fragmentExternalEntryFactoryTemplate
 import nibel.compiler.template.fragmentInternalEntryFactoryTemplate
 import nibel.compiler.template.legacyEntryTemplate
+import nibel.compiler.template.withResultFactoryMethod
 
 class LegacyEntryGenerator(
     private val resolver: Resolver,
@@ -59,7 +60,7 @@ class LegacyEntryGenerator(
         generateLegacyEntryFile(
             packageName = packageName,
             legacyEntryName = legacyEntryName,
-            fragmentEntryFactory = legacyEntryFactory.trimIndent(),
+            fragmentEntryFactory = legacyEntryFactory.withResultFactoryMethod(metadata).trimIndent(),
         )
     }
 

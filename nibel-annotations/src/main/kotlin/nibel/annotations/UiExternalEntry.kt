@@ -1,7 +1,9 @@
 package nibel.annotations
 
+import android.os.Parcelable
 import nibel.annotations.ImplementationType.Composable
 import nibel.annotations.ImplementationType.Fragment
+import nibel.runtime.NoResult
 import kotlin.annotation.AnnotationTarget.FUNCTION
 import kotlin.reflect.KClass
 
@@ -178,4 +180,15 @@ annotation class UiExternalEntry(
      * See [UiExternalEntry], [ExternalDestination].
      */
     val destination: KClass<out ExternalDestination>,
+    /**
+     * Optional `Parcelable` result the screen returns to a caller that opened it with
+     * `NavigationController.navigateForResult`. If not specified, the screen returns no result.
+     *
+     * Must match the result type of the destination: a destination that implements
+     * [DestinationWithResult] requires the same result here, and a result here requires the
+     * destination to implement [DestinationWithResult].
+     *
+     * See [UiExternalEntry].
+     */
+    val result: KClass<out Parcelable> = NoResult::class,
 )

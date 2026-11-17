@@ -4,6 +4,7 @@ import android.os.Parcelable
 import nibel.annotations.ImplementationType.Composable
 import nibel.annotations.ImplementationType.Fragment
 import nibel.runtime.NoArgs
+import nibel.runtime.NoResult
 import kotlin.annotation.AnnotationTarget.FUNCTION
 import kotlin.reflect.KClass
 
@@ -136,4 +137,13 @@ annotation class UiEntry(
      * See [UiEntry].
      */
     val args: KClass<out Parcelable> = NoArgs::class,
+    /**
+     * Optional `Parcelable` result the screen returns to a caller that opened it with
+     * `NavigationController.navigateForResult`. If not specified, the screen returns no result.
+     *
+     * A screen with a result gets a typed `newInstanceForResult` factory in its generated entry.
+     *
+     * See [UiEntry].
+     */
+    val result: KClass<out Parcelable> = NoResult::class,
 )

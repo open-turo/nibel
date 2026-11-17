@@ -1,0 +1,16 @@
+<journey name="Result from compose to a fragment caller">
+  <description>
+    A plain fragment opens a compose screen for a result and receives the picked color.
+  </description>
+  <actions>
+    <action>Verify that "Last result: none" is shown</action>
+    <action>Tap "Pick color (fragment → compose)"</action>
+    <action>Verify that "Color Picker (type.fragment)" is shown</action>
+    <action>Tap "Pick Green"</action>
+    <action>Verify that "Feature A | Zero Screen" and "Last result: Green" are shown</action>
+    <action>Tap "Pick color (fragment → compose)"</action>
+    <action>Verify that "Color Picker (type.fragment)" is shown</action>
+    <action>Tap "Cancel"</action>
+    <action>Verify that "Feature A | Zero Screen" and "Last result: cancelled" are shown</action>
+  </actions>
+</journey>

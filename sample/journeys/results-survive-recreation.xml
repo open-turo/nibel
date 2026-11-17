@@ -1,0 +1,48 @@
+<journey name="Results survive activity recreation and process death">
+  <description>
+    Results are delivered after the caller was recreated by a configuration change or by process
+    death while the picker was open.
+  </description>
+  <actions>
+    <action>Tap "Results Demo (type.fragment, internal)"</action>
+    <action>Verify that "Results Demo" and "Last result: none" are shown</action>
+    <action>Tap "Pick color (compose → compose)"</action>
+    <action>Verify that "Picker level: 1" is shown</action>
+    <action>Turn dark mode on</action>
+    <action>Verify that "Picker level: 1" is shown</action>
+    <action>Tap "Pick Blue"</action>
+    <action>Verify that "Results Demo" and "Last result: Blue" are shown</action>
+    <action>Turn dark mode off</action>
+    <action>Verify that "Results Demo" and "Last result: Blue" are shown</action>
+    <action>Tap "Pick color (compose → compose)"</action>
+    <action>Verify that "Picker level: 1" is shown</action>
+    <action>Restart the app process</action>
+    <action>Verify that "Picker level: 1" is shown</action>
+    <action>Tap "Pick Green"</action>
+    <action>Verify that "Results Demo" and "Last result: Green" are shown</action>
+    <action>Tap "Pick color (compose → fragment)"</action>
+    <action>Verify that "Color Picker (legacy fragment)" is shown</action>
+    <action>Restart the app process</action>
+    <action>Verify that "Color Picker (legacy fragment)" is shown</action>
+    <action>Tap "Pick Red"</action>
+    <action>Verify that "Results Demo" and "Last result: Red" are shown</action>
+    <action>Tap "Pick color (compose → compose)"</action>
+    <action>Verify that "Picker level: 1" is shown</action>
+    <action>Tap "Open nested picker"</action>
+    <action>Verify that "Picker level: 2" is shown</action>
+    <action>Restart the app process</action>
+    <action>Verify that "Picker level: 2" is shown</action>
+    <action>Tap "Pick Blue"</action>
+    <action>Verify that "Picker level: 1" and "Nested result: Blue" are shown</action>
+    <action>Tap "Pick Green"</action>
+    <action>Verify that "Results Demo" and "Last result: Green" are shown</action>
+    <action>Press the system back button</action>
+    <action>Verify that "Feature A | Zero Screen" is shown</action>
+    <action>Tap "Pick color (fragment → compose)"</action>
+    <action>Verify that "Color Picker (type.fragment)" is shown</action>
+    <action>Restart the app process</action>
+    <action>Verify that "Color Picker (type.fragment)" is shown</action>
+    <action>Tap "Pick Blue"</action>
+    <action>Verify that "Feature A | Zero Screen" and "Last result: Blue" are shown</action>
+  </actions>
+</journey>
