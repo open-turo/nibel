@@ -39,20 +39,25 @@ Between compose screens no fragment transaction is involved; the `FragmentManage
 sequenceDiagram
     autonumber
     participant Caller as Caller screen<br/>(NavBackStackEntry A)
-    participant Nav as Nibel NavHost<br/>(NavController)
+    participant Ctrl as NibelNavigationController<br/>(drives the NavHost)
     participant Picker as Picker screen<br/>(NavBackStackEntry B)
     participant FM as Activity FragmentManager<br/>(result store)
 
     Caller->>FM: setFragmentResultListener(key, lifecycle of A)
-    Caller->>Nav: navigateForResult(entry, launcher)
-    Nav->>Picker: navigate(), A is paused
-    Nav->>Picker: write key + result type into B's SavedStateHandle
+    Caller->>Ctrl: navigateForResult(entry, launcher)
+    Ctrl->>Picker: navigate(), A is paused
+    Ctrl->>Ctrl: check that B is the opened entry
+    Ctrl->>Picker: write key + result type into B's SavedStateHandle
+    Ctrl->>Caller: request pending, caller already covered
+    Caller->>FM: A leaves composition, listener cleared
     Note over Caller,FM: No fragment transaction. FM is only a keyed mailbox.
-    Picker->>FM: setResultAndNavigateBack(result)<br/>setFragmentResult(key, bundle)
-    Note over FM: Kept in FM saved state<br/>(survives process death)
-    Picker->>Nav: popBackStack()
-    Nav->>Caller: A is started again
-    FM->>Caller: deliver bundle to listener
+    Picker->>Ctrl: setResultAndNavigateBack(result)
+    Ctrl->>FM: type check, setFragmentResult(key, bundle)
+    Note over FM: Stored, also across process death
+    Ctrl->>Picker: navigateBack(), onBackPressed() pops B
+    Note over Caller: A recomposes and starts again
+    Caller->>FM: setFragmentResultListener(key, lifecycle of A)
+    FM->>Caller: deliver stored bundle, request no longer pending
     Caller->>Caller: onResult(result)
 ```
 
@@ -88,7 +93,7 @@ flowchart TB
 
 ### Cancellation detected on the caller side
 
-Each launcher saves its pending request: the key, plus whether the caller has been paused since launching. When the caller resumes after having been paused and the request is still pending, the opened screen is gone without a result, so the launcher delivers `null` and clears the request. A real result clears the request first, because the FragmentManager delivers it at `ON_START`, before `ON_RESUME`. The launcher registers its FragmentManager listener before its own lifecycle observer so this order holds when observers replay. Explicit cancel sends a `null` result through the same transport. Compose navigation pauses the caller inside `navigate()`, before the request starts, so a request opened on a compose entry starts as already paused.
+Each launcher saves its pending request: the key, plus whether the opened screen has replaced the caller. When a replaced caller resumes and the request is still pending, the opened screen is gone without a result, so the launcher delivers `null` and clears the request. A caller counts as replaced when compose navigation hides it, when its fragment is being removed by a fragment transaction (checked on `ON_STOP`, before its state is saved), or when the screen was opened with a fragment spec that isn't a `FragmentTransactionSpec`, for example one that starts an activity. Pausing alone doesn't count: backgrounding the app, or a screen added over a caller that stays visible, never cancels a request. A real result clears the request first, because the FragmentManager delivers it at `ON_START`, before `ON_RESUME`. The launcher registers its FragmentManager listener before its own lifecycle observer so this order holds when observers replay. Explicit cancel sends a `null` result through the same transport. Compose navigation hides the caller inside `navigate()`, before the request starts, so a request opened on a compose entry starts as already replaced.
 
 This covers system back, predictive back, `popBackStack` from anywhere and new-activity specs (the caller resumes with nothing delivered), for every type of opened screen, including plain fragments that know nothing about Nibel.
 
@@ -96,18 +101,30 @@ Alternative: detect removal on the opened screen's side with a ViewModel whose `
 
 ```mermaid
 stateDiagram-v2
-    direction LR
+    Visible: Pending, caller visible
+    Covered: Pending, caller replaced
     [*] --> Idle
-    Idle --> Pending: navigateForResult()
-    Pending --> Covered: caller paused
-    Covered --> Delivered: result or cancel stored
-    Covered --> Cancelled: caller resumed, nothing stored
-    Delivered --> Idle: onResult(result or null)
-    Cancelled --> Idle: onResult(null)
-    note right of Cancelled
-        System back, predictive back,
-        popBackStack, or any other
-        removal of the opened screen
+    Idle --> Visible: open a fragment
+    Idle --> Covered: open a compose entry
+    Visible --> Covered: caller's fragment replaced
+    Visible --> Idle: result delivered right away
+    Covered --> Idle: caller started, stored result delivered
+    Covered --> Idle: caller resumed, nothing stored, so null
+    note right of Idle
+        Results that arrive while idle are ignored.
+        Launching again restarts the request
+        with the same key.
+    end note
+    note right of Visible
+        Backgrounding the app or a screen added
+        over the caller doesn't replace it,
+        so neither cancels the request.
+    end note
+    note right of Covered
+        A stored result or explicit cancel is
+        delivered on start, before the resume
+        check, because the listener is registered
+        before the lifecycle observer.
     end note
 ```
 
@@ -145,7 +162,7 @@ Alternatives: KGP's built-in `abiValidation` isn't available on AGP 9's Kotlin e
 ## Risks / Trade-offs
 
 - [The caller-side cancel misfires if the caller resumes while the opened screen is still shown] → A caller can't be resumed while another screen covers it in Nibel's navigation. The pending request also requires the caller to have been paused since the launch. Covered by instrumentation tests.
-- [`FragmentTransactionSpec(replace = false)` adds the opened fragment over a caller that stays resumed, so back can't be detected] → The result and explicit cancel still work. Documented as a limit of add transactions.
+- [`FragmentTransactionSpec(replace = false)` adds the opened fragment over a caller that stays resumed, so back can't be detected] → The result and explicit cancel still work, and backgrounding the app doesn't cancel. Leaving with back delivers nothing until the launcher is used again. Documented as a limit of add transactions.
 - [A result set on an opened screen whose caller was removed (for example a cleared back stack) stays in the FragmentManager] → It is overwritten by the next request with that key, and keys are random. Negligible memory.
 - [Writing the key into `SavedStateHandle` right after `navigate()` depends on `NavController` updating its back stack synchronously] → That is the documented behavior. The check that throws on a mismatch makes a regression loud.
 - [More public API to keep stable] → API dumps and the compatibility check.

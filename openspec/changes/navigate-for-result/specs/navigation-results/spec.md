@@ -89,6 +89,22 @@ The caller's callback SHALL be invoked with `null` when the opened screen is clo
 - **WHEN** an opened screen sets a result and the user then leaves it with system back
 - **THEN** the caller's callback is invoked once, with the result, and not again with `null`
 
+### Requirement: Callers that stay visible are not cancelled
+
+A request SHALL be cancelled only when the opened screen replaced the caller. Backgrounding the app, or an opened screen added over a caller that stays visible, SHALL NOT cancel a pending request.
+
+#### Scenario: Backgrounding while the opened screen is shown
+
+- **GIVEN** a caller opened a screen for a result
+- **WHEN** the app goes to the background and comes back while the opened screen is still shown, and the screen then returns `X`
+- **THEN** the caller's callback is invoked once with `X`
+
+#### Scenario: Opened screen added over the caller
+
+- **GIVEN** a caller opened a fragment for a result with a transaction that adds it over the caller
+- **WHEN** the app goes to the background and comes back, and the fragment then returns `X`
+- **THEN** the caller's callback is invoked once with `X`, and never with `null` before it
+
 ### Requirement: Results reach the caller only when it is visible
 
 A result or cancellation SHALL be delivered once the caller is at least started again, never while the opened screen or another screen covers the caller.

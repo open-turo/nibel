@@ -369,7 +369,7 @@ navigator.navigateForResult(ResultEntry<ColorResult>(FragmentEntry(ColorPickerFr
 
 - Results don't cross activities. A screen opened in another activity, for example with a custom fragment spec that starts one, returns `null` to its caller.
 - A custom `ComposeSpec` must show the entry on Nibel's internal `NavController` right away. Otherwise `navigateForResult` throws.
-- With `FragmentTransactionSpec(replace = false)` the caller stays resumed under the opened fragment, so leaving it with back delivers nothing. Results and explicit cancels still work.
+- With `FragmentTransactionSpec(replace = false)` the caller stays resumed under the opened fragment, so leaving it with back delivers nothing. Results and explicit cancels still work, and backgrounding the app doesn't cancel the request.
 - Screens embedded with `Nibel.ExternalContent` can't be opened for a result. Screens they navigate to within their own navigation can.
 
 ## Sample app
