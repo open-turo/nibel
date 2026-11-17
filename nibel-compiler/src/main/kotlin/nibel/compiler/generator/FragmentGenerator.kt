@@ -8,6 +8,7 @@ import com.google.devtools.ksp.symbol.KSFunctionDeclaration
 import nibel.compiler.template.fragmentEntryTemplate
 import nibel.compiler.template.fragmentExternalEntryFactoryTemplate
 import nibel.compiler.template.fragmentInternalEntryFactoryTemplate
+import nibel.compiler.template.withResultFactoryMethod
 
 @Suppress("unused")
 class FragmentGenerator(
@@ -72,7 +73,7 @@ class FragmentGenerator(
             packageName = packageName,
             fragmentName = fragmentName,
             composableContent = composableContent,
-            fragmentEntryFactory = fragmentEntryFactory,
+            fragmentEntryFactory = fragmentEntryFactory.withResultFactoryMethod(metadata),
         )
     }
 

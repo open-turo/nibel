@@ -11,7 +11,9 @@ import com.google.devtools.ksp.symbol.KSVisitorVoid
 import com.google.devtools.ksp.symbol.Modifier
 import nibel.annotations.DestinationWithArgs
 import nibel.annotations.DestinationWithNoArgs
+import nibel.annotations.DestinationWithResult
 import nibel.runtime.NoArgs
+import nibel.runtime.NoResult
 
 abstract class AbstractEntryGeneratingVisitor(
     private val resolver: Resolver,
@@ -30,6 +32,10 @@ abstract class AbstractEntryGeneratingVisitor(
         }
 
         val reference = declaration.findDestinationSuperType(symbol) ?: return null
+        val result = parseResult(symbol) ?: return null
+        if (!declaration.matchesResult(result, symbol)) {
+            return null
+        }
 
         val ref = reference.toString()
         return when {
@@ -52,6 +58,7 @@ abstract class AbstractEntryGeneratingVisitor(
                     destinationPackageName = destinationPackageName.asString(),
                     destinationQualifiedName = destinationClassName.asString(),
                     argsQualifiedName = argsClassName,
+                    resultQualifiedName = result.qualifiedName,
                     parameters = emptyMap(),
                 )
             }
@@ -62,11 +69,76 @@ abstract class AbstractEntryGeneratingVisitor(
                     destinationPackageName = destinationPackageName.asString(),
                     destinationQualifiedName = destinationClassName.asString(),
                     argsQualifiedName = null,
+                    resultQualifiedName = result.qualifiedName,
                     parameters = emptyMap(),
                 )
 
             else -> null
         }
+    }
+
+    /**
+     * A parsed `result` annotation argument. [qualifiedName] is `null` for screens without a result.
+     */
+    private class ParsedResult(val qualifiedName: String?)
+
+    /**
+     * Parses the `result` annotation argument, or returns `null` after reporting an error if the
+     * declared result type isn't valid.
+     */
+    private fun Arguments.parseResult(symbol: KSNode): ParsedResult? {
+        val type = this["result"] as? KSType ?: return ParsedResult(null)
+        val declaration = type.declaration as KSClassDeclaration
+        val qualifiedName = declaration.qualifiedName!!.asString()
+        if (qualifiedName == NoResult::class.qualifiedName) {
+            return ParsedResult(null)
+        }
+        if (Modifier.DATA !in declaration.modifiers && declaration.classKind != ClassKind.OBJECT) {
+            logger.error(
+                message = "Result types are allowed to be only 'data class' or 'object'.",
+                symbol = symbol,
+            )
+            return null
+        }
+        if (declaration.typeParameters.isNotEmpty()) {
+            logger.error(
+                message = "Result types are not allowed to have generic type parameters.",
+                symbol = symbol,
+            )
+            return null
+        }
+        return ParsedResult(qualifiedName)
+    }
+
+    /**
+     * Checks that a destination declares the same result type with [DestinationWithResult] as its
+     * screen's annotation, reporting an error otherwise.
+     */
+    private fun KSClassDeclaration.matchesResult(result: ParsedResult, symbol: KSNode): Boolean {
+        val destinationName = qualifiedName!!.asString()
+        val destinationResult = superTypes
+            .map { it.resolve() }
+            .find { it.declaration.qualifiedName?.asString() == DestinationWithResult::class.qualifiedName }
+            ?.arguments?.firstOrNull()?.type?.resolve()?.declaration?.qualifiedName?.asString()
+        val annotationResult = result.qualifiedName
+
+        val error = when {
+            destinationResult == annotationResult -> return true
+            annotationResult == null ->
+                "Destination $destinationName declares result type $destinationResult, so the annotation " +
+                    "must declare result = ${destinationResult?.substringAfterLast('.')}::class."
+
+            destinationResult == null ->
+                "The annotation declares result type $annotationResult, so destination $destinationName " +
+                    "must implement ${DestinationWithResult::class.simpleName}" +
+                    "<${annotationResult.substringAfterLast('.')}>."
+
+            else ->
+                "Result type $annotationResult of the annotation doesn't match result type " +
+                    "$destinationResult of destination $destinationName."
+        }
+        logger.error(message = error, symbol = symbol)
+        return false
     }
 
     protected fun Arguments.parseInternalEntry(symbol: KSNode): InternalEntryMetadata? {
@@ -75,19 +147,14 @@ abstract class AbstractEntryGeneratingVisitor(
         if (!declaration.isCorrectArgsDeclaration(symbol)) {
             return null
         }
+        val result = parseResult(symbol) ?: return null
 
         val argsClassName = arg.declaration.qualifiedName!!.asString()
-        return if (argsClassName == NoArgs::class.qualifiedName) {
-            InternalEntryMetadata(
-                argsQualifiedName = null,
-                parameters = emptyMap(),
-            )
-        } else {
-            InternalEntryMetadata(
-                argsQualifiedName = argsClassName,
-                parameters = emptyMap(),
-            )
-        }
+        return InternalEntryMetadata(
+            argsQualifiedName = argsClassName.takeUnless { it == NoArgs::class.qualifiedName },
+            resultQualifiedName = result.qualifiedName,
+            parameters = emptyMap(),
+        )
     }
 
     private fun KSClassDeclaration.isCorrectDestinationDeclaration(symbol: KSNode): Boolean {
@@ -136,8 +203,13 @@ abstract class AbstractEntryGeneratingVisitor(
     }
 
     private fun KSClassDeclaration.findDestinationSuperType(symbol: KSNode): KSTypeReference? {
+        // DestinationWithResult only declares a result type and can be listed before the args type.
         val destinationSuperType = superTypes.toList()
-            .find { it.toString().startsWith("DestinationWith") }
+            .find {
+                val name = it.toString()
+                name.startsWith("DestinationWith") &&
+                    !name.startsWith(DestinationWithResult::class.simpleName!!)
+            }
 
         if (destinationSuperType == null) {
             logger.error(
