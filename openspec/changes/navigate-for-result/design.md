@@ -33,11 +33,53 @@ See proposal.md for motivation and specs for the required behavior.
 
 Alternatives: `NavBackStackEntry.savedStateHandle` of the previous entry is the Navigation-recommended pattern, but it only works inside one `NavHost`, while Nibel crosses hosts and fragment transactions. A process-wide callback registry (PR #38) loses callbacks on process death and leaks.
 
+Between compose screens no fragment transaction is involved; the `FragmentManager` is only the store:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Caller as Caller screen<br/>(NavBackStackEntry A)
+    participant Nav as Nibel NavHost<br/>(NavController)
+    participant Picker as Picker screen<br/>(NavBackStackEntry B)
+    participant FM as Activity FragmentManager<br/>(result store)
+
+    Caller->>FM: setFragmentResultListener(key, lifecycle of A)
+    Caller->>Nav: navigateForResult(entry, launcher)
+    Nav->>Picker: navigate(), A is paused
+    Nav->>Picker: write key + result type into B's SavedStateHandle
+    Note over Caller,FM: No fragment transaction. FM is only a keyed mailbox.
+    Picker->>FM: setResultAndNavigateBack(result)<br/>setFragmentResult(key, bundle)
+    Note over FM: Kept in FM saved state<br/>(survives process death)
+    Picker->>Nav: popBackStack()
+    Nav->>Caller: A is started again
+    FM->>Caller: deliver bundle to listener
+    Caller->>Caller: onResult(result)
+```
+
 ### The request key belongs to the opened screen
 
 Each request has a key. For fragment entries it is written into the fragment's arguments before the transaction. For compose entries it is written into the new `NavBackStackEntry`'s `SavedStateHandle` right after navigating. `ComposableFragment` hands its key to its root route's entry. When a screen sets a result, the controller reads the key of `internalNavController.currentBackStackEntry`. Chained requests can't overwrite each other because each screen carries its own key. That bug crashed PR #38.
 
 If the current entry after navigating isn't the requested one (a custom `ComposeSpec` that navigates differently), `navigateForResult` throws instead of attaching the key to the wrong screen.
+
+Every direction uses the same store, so callers and opened screens only need to agree on the key:
+
+```mermaid
+flowchart TB
+    subgraph Callers["Callers listen on their key"]
+        FC["Fragment<br/>registerForNibelResult"]
+        CC["Compose screen<br/>rememberResultLauncher"]
+    end
+    FM[("Activity supportFragmentManager<br/>result store: key → Bundle")]
+    subgraph Opened["Opened screens send to the caller's key"]
+        CP["Compose screen<br/>setResultAndNavigateBack"]
+        PP["Plain fragment<br/>setNibelResult"]
+    end
+    FC -- listens --> FM
+    CC -- listens --> FM
+    CP -- sends --> FM
+    PP -- sends --> FM
+```
 
 ### Launcher keys
 
@@ -51,6 +93,23 @@ Each launcher saves its pending request: the key, plus whether the caller has be
 This covers system back, predictive back, `popBackStack` from anywhere and new-activity specs (the caller resumes with nothing delivered), for every type of opened screen, including plain fragments that know nothing about Nibel.
 
 Alternative: detect removal on the opened screen's side with a ViewModel whose `onCleared` sends the cancel. It's precise for Nibel-generated screens, but plain fragments need a `FragmentLifecycleCallbacks` registration that is lost on process death, and it needs a FragmentManager reference outliving the screen.
+
+```mermaid
+stateDiagram-v2
+    direction LR
+    [*] --> Idle
+    Idle --> Pending: navigateForResult()
+    Pending --> Covered: caller paused
+    Covered --> Delivered: result or cancel stored
+    Covered --> Cancelled: caller resumed, nothing stored
+    Delivered --> Idle: onResult(result or null)
+    Cancelled --> Idle: onResult(null)
+    note right of Cancelled
+        System back, predictive back,
+        popBackStack, or any other
+        removal of the opened screen
+    end note
+```
 
 ### Typing without new sealed subtypes
 
