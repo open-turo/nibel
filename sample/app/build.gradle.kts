@@ -11,6 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.turo.nibel.sample"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 }
 
@@ -31,4 +32,12 @@ dependencies {
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+
+    androidTestImplementation(platform(libs.bom.androidx.compose))
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.junit)
+    androidTestImplementation(libs.androidx.test.espresso)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    kspAndroidTest(libs.nibel.compiler)
 }
