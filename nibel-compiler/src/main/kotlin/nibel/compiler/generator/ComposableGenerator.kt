@@ -9,6 +9,7 @@ import nibel.compiler.template.composableEntryWithArgsTemplate
 import nibel.compiler.template.composableEntryWithNoArgsTemplate
 import nibel.compiler.template.composableExternalEntryFactoryTemplate
 import nibel.compiler.template.composableInternalEntryFactoryTemplate
+import nibel.compiler.template.withResultFactoryMethod
 
 @Suppress("unused")
 class ComposableGenerator(
@@ -71,7 +72,7 @@ class ComposableGenerator(
             composableHolderName = composableHolderName,
             argsQualifiedName = metadata.argsQualifiedName,
             composableContent = composableContent,
-            composableEntryFactory = composableEntryFactory,
+            composableEntryFactory = composableEntryFactory.withResultFactoryMethod(metadata),
         )
     }
 

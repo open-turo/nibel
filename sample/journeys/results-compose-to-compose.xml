@@ -1,0 +1,26 @@
+<journey name="Result between compose screens">
+  <description>
+    A compose screen opens another compose screen for a result. Picking, cancelling, and leaving
+    with the system back button, which also cancels.
+  </description>
+  <actions>
+    <action>Tap "Results Demo (type.fragment, internal)"</action>
+    <action>Verify that "Results Demo" and "Last result: none" are shown</action>
+    <action>Tap "Pick color (compose → compose)"</action>
+    <action>Verify that "Color Picker (type.composable)" and "Picker level: 1" are shown</action>
+    <action>Tap "Pick Red"</action>
+    <action>Verify that "Results Demo" and "Last result: Red" are shown</action>
+    <action>Tap "Pick color (compose → compose)"</action>
+    <action>Verify that "Color Picker (type.composable)" is shown</action>
+    <action>Tap "Cancel"</action>
+    <action>Verify that "Results Demo" and "Last result: cancelled" are shown</action>
+    <action>Tap "Pick color (compose → compose)"</action>
+    <action>Verify that "Color Picker (type.composable)" is shown</action>
+    <action>Tap "Pick Blue"</action>
+    <action>Verify that "Results Demo" and "Last result: Blue" are shown</action>
+    <action>Tap "Pick color (compose → compose)"</action>
+    <action>Verify that "Color Picker (type.composable)" is shown</action>
+    <action>Press the system back button</action>
+    <action>Verify that "Results Demo" and "Last result: cancelled" are shown</action>
+  </actions>
+</journey>

@@ -10,6 +10,7 @@ lifecycle = "2.9.2"
 dokka = "1.8.20"
 mavenPublish = "0.34.0"
 detekt = "1.23.8"
+binaryCompatibilityValidator = "0.18.2"
 nibelConventionPlugin = "ignored"
 
 [libraries]
@@ -49,6 +50,13 @@ autoService-annotations = { group = "com.google.auto.service", name = "auto-serv
 # ===== Tests =====
 junit = "junit:junit:4.12"
 kotest-assertions = "io.kotest:kotest-assertions-core:6.0.4"
+androidx-test-runner = "androidx.test:runner:1.7.0"
+androidx-test-junit = "androidx.test.ext:junit:1.3.0"
+androidx-test-espresso = "androidx.test.espresso:espresso-core:3.7.0"
+androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+# kctfork must match the Kotlin compiler version.
+kctfork-ksp = "dev.zacsweers.kctfork:ksp:0.12.1"
 # ===== Gradle plugins =====
 gradlePlugin-android = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
 gradlePlugin-android-api = { module = "com.android.tools.build:gradle-api", version.ref = "androidGradlePlugin" }
@@ -56,6 +64,7 @@ gradlePlugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", ve
 gradlePlugin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 gradlePlugin-mavenPublish = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublish" }
 gradlePlugin-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+gradlePlugin-binaryCompatibilityValidator = { module = "org.jetbrains.kotlinx:binary-compatibility-validator", version.ref = "binaryCompatibilityValidator" }
 # ===== Detekt =====
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 
@@ -70,6 +79,7 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlinx-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "binaryCompatibilityValidator" }
 
 # ===== Convention Plugins =====
 nibel-metadata = { id = "nibel.metadata", version.ref = "nibelConventionPlugin" }
@@ -78,6 +88,7 @@ nibel-android-compose = { id = "nibel.android.compose", version.ref = "nibelConv
 nibel-android-common = { id = "nibel.android.common", version.ref = "nibelConventionPlugin" }
 nibel-kotlin-jvm-library = { id = "nibel.kotlin.jvm.library", version.ref = "nibelConventionPlugin" }
 nibel-maven-publish = { id = "nibel.maven.publish", version.ref = "nibelConventionPlugin" }
+nibel-android-apiValidation = { id = "nibel.android.api.validation", version.ref = "nibelConventionPlugin" }
 nibel-detekt = { id = "nibel.detekt", version.ref = "nibelConventionPlugin" }
 sample-android-application = { id = "sample.android.application", version.ref = "nibelConventionPlugin" }
 sample-android-library = { id = "sample.android.library", version.ref = "nibelConventionPlugin" }

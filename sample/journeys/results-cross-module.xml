@@ -1,0 +1,18 @@
+<journey name="Result from another feature module">
+  <description>
+    A feature-A screen opens a feature-B screen for a result through a destination in the
+    navigation module, without depending on feature-B.
+  </description>
+  <actions>
+    <action>Tap "Results Demo (type.fragment, internal)"</action>
+    <action>Verify that "Results Demo" and "Last size: none" are shown</action>
+    <action>Tap "Pick size (feature-B, external)"</action>
+    <action>Verify that "Size Picker (feature-B, external)" is shown</action>
+    <action>Tap "Pick size M"</action>
+    <action>Verify that "Results Demo" and "Last size: M" are shown</action>
+    <action>Tap "Pick size (feature-B, external)"</action>
+    <action>Verify that "Size Picker (feature-B, external)" is shown</action>
+    <action>Press the system back button</action>
+    <action>Verify that "Results Demo" and "Last size: cancelled" are shown</action>
+  </actions>
+</journey>

@@ -44,6 +44,7 @@ open class ComposeNavigationDelegate : NavigationDelegate<NavigationControllerAr
     @Composable
     override fun Content(rootArgs: Parcelable?, content: @Composable () -> Unit) {
         val internalNavController = rememberNavController()
+        val rootResultTarget = LocalRootResultTarget.current
         val exploredEntries = rememberSaveable(
             saver = ExploredEntriesSaver(),
             init = { ExploredEntriesRegistry() },
@@ -63,6 +64,7 @@ open class ComposeNavigationDelegate : NavigationDelegate<NavigationControllerAr
                     argsType = rootArgs?.javaClass,
                     defaultArgs = rootArgs,
                 ) {
+                    rootResultTarget?.writeTo(it.savedStateHandle)
                     val args = it.arguments?.getNibelArgs<Parcelable>()
                     CompositionLocalProvider(LocalArgs provides args) {
                         content()

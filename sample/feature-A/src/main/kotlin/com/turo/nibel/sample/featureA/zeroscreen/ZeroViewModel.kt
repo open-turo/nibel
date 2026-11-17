@@ -24,6 +24,12 @@ class ZeroViewModel @Inject constructor() : ViewModel() {
 
             DearbornNextButton.ThirdScreen ->
                 _sideEffects.tryEmit(ZeroSideEffect.NavigateToThirdScreen)
+
+            DearbornNextButton.ResultsDemo ->
+                _sideEffects.tryEmit(ZeroSideEffect.NavigateToResultsDemo)
+
+            DearbornNextButton.PickColor ->
+                _sideEffects.tryEmit(ZeroSideEffect.PickColor)
         }
     }
 }

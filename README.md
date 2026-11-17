@@ -15,6 +15,7 @@ Nibel supports both **single-module** and **multi-module** navigation out-of-the
 - [Installation](#installation)
 - [Basic usage](#basic-usage)
 - [Multi-module navigation](#multi-module-navigation)
+- [Navigating for a result](#navigating-for-a-result)
 - [Sample app](#sample-app)
 
 ## Materials
@@ -243,6 +244,133 @@ Then, use the destination for navigation.
 val args = ThirdScreenArgs(...)
 navigator.navigateTo(ThirdScreenDestination(args))
 ```
+
+## Navigating for a result
+
+A screen can return a `Parcelable` result to the screen that opened it, in every navigation direction: fragment → compose, compose → compose and compose → fragment. Results survive configuration changes and process death, and reach the caller once it is visible again.
+
+### Declaring a screen with a result
+
+Pass the class of the `Parcelable` result in the annotation of the screen.
+
+```kotlin
+@UiEntry(
+  type = ImplementationType.Composable,
+  args = PickerArgs::class,
+  result = ColorResult::class
+)
+@Composable
+fun ColorPickerScreen(args: PickerArgs, navigator: NavigationController) { ... }
+```
+
+Besides `newInstance`, the generated entry gets a `newInstanceForResult` factory that returns a `ResultEntry` typed with the result. `@UiExternalEntry`, `@LegacyEntry` and `@LegacyExternalEntry` accept `result` the same way.
+
+> **Warning**: Result types must be a `data class` or an `object` without type parameters, or a compile time error will be thrown.
+
+### Receiving a result
+
+The caller registers a `ResultLauncher` for the result type. In a composable, remember one:
+
+```kotlin
+@UiEntry(type = ImplementationType.Composable)
+@Composable
+fun ProfileScreen(navigator: NavigationController) {
+  var color by rememberSaveable { mutableStateOf<String?>(null) }
+  val launcher = rememberResultLauncher<ColorResult> { result ->
+    color = result?.color // null when the picker was closed without a result
+  }
+  ...
+  navigator.navigateForResult(ColorPickerScreenEntry.newInstanceForResult(PickerArgs(level = 1)), launcher)
+}
+```
+
+In a fragment, register one in `onCreate`, on every creation of the fragment:
+
+```kotlin
+class ProfileFragment : Fragment() {
+  private lateinit var colorLauncher: ResultLauncher<ColorResult>
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    colorLauncher = registerForNibelResult { result -> ... }
+  }
+}
+```
+
+A fragment that opens screens with its own fragment transaction prepares the fragment with the launcher first:
+
+```kotlin
+val fragment = colorLauncher.prepareFragment(ColorPickerFragmentScreenEntry.newInstanceForResult())
+requireActivity().supportFragmentManager.commit {
+  replace(android.R.id.content, fragment)
+  addToBackStack(null)
+}
+```
+
+The result types of the entry and the launcher must match, or the call doesn't compile. A launcher has at most one request in flight: opening another screen with it replaces the previous request.
+
+### Returning a result
+
+The opened screen returns with its `NavigationController`:
+
+```kotlin
+navigator.setResultAndNavigateBack(ColorResult("Red"))
+navigator.cancelResultAndNavigateBack() // the caller receives null
+```
+
+The caller also receives `null` when the screen is closed any other way, for example with the system back button or the predictive back gesture. A screen that wasn't opened for a result can call the same functions: they only navigate back.
+
+### Multi-module results
+
+A destination declares the result type of its screen with `DestinationWithResult`, combined with `DestinationWithNoArgs` or `DestinationWithArgs`.
+
+```kotlin
+// navigation module
+object SizePickerDestination : DestinationWithNoArgs, DestinationWithResult<SizeResult>
+```
+
+Its screen declares the same result type.
+
+```kotlin
+// feature module
+@UiExternalEntry(
+  type = ImplementationType.Composable,
+  destination = SizePickerDestination::class,
+  result = SizeResult::class
+)
+@Composable
+fun SizePickerScreen(navigator: NavigationController) { ... }
+```
+
+> **Warning**: If the result types of the destination and the annotation don't match, a compile time error will be thrown.
+
+Callers in other feature modules open it with the destination.
+
+```kotlin
+navigator.navigateForResult(SizePickerDestination, sizeLauncher)
+```
+
+### Fragments
+
+Fragments return their result with `setNibelResult`, then navigate back themselves:
+
+```kotlin
+setNibelResult(ColorResult("Blue")) // or setNibelResult(null) to cancel
+requireActivity().onBackPressedDispatcher.onBackPressed()
+```
+
+A fragment annotated with `@LegacyEntry(result = ...)` gets a `newInstanceForResult` factory. Any other fragment can be opened for a result by wrapping it with its result type:
+
+```kotlin
+navigator.navigateForResult(ResultEntry<ColorResult>(FragmentEntry(ColorPickerFragment())), launcher)
+```
+
+### Limits
+
+- Results don't cross activities. A screen opened in another activity, for example with a custom fragment spec that starts one, returns `null` to its caller.
+- A custom `ComposeSpec` must show the entry on Nibel's internal `NavController` right away. Otherwise `navigateForResult` throws.
+- With `FragmentTransactionSpec(replace = false)` the caller stays resumed under the opened fragment, so leaving it with back delivers nothing. Results and explicit cancels still work.
+- Screens embedded with `Nibel.ExternalContent` can't be opened for a result. Screens they navigate to within their own navigation can.
 
 ## Sample app
 

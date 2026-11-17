@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.nibel.android.library)
     alias(libs.plugins.nibel.android.compose)
     alias(libs.plugins.nibel.maven.publish)
+    alias(libs.plugins.nibel.android.apiValidation)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.dokka)
 }

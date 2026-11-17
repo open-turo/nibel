@@ -1,8 +1,11 @@
 package nibel.runtime
 
+import android.os.Parcelable
 import androidx.activity.OnBackPressedDispatcher
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
+import nibel.annotations.DestinationWithResult
 import nibel.annotations.ExternalDestination
 
 /**
@@ -70,5 +73,66 @@ open class NibelNavigationController(
 
             else -> error("Unknown compose navigation spec '${composeSpec.javaClass}'")
         }
+    }
+
+    override fun <D, R : Parcelable> navigateForResult(
+        destination: D,
+        launcher: ResultLauncher<R>,
+        fragmentSpec: FragmentSpec<*>,
+        composeSpec: ComposeSpec<*>,
+    ) where D : ExternalDestination, D : DestinationWithResult<R> {
+        val destinationEntry = Nibel.findEntryFactory(destination)
+            ?.newInstance(destination)
+            ?: error("Unable to find destination '${destination.javaClass}'")
+        navigateForResult(ResultEntry(destinationEntry), launcher, fragmentSpec, composeSpec)
+    }
+
+    override fun <R : Parcelable> navigateForResult(
+        entry: ResultEntry<R>,
+        launcher: ResultLauncher<R>,
+        fragmentSpec: FragmentSpec<*>,
+        composeSpec: ComposeSpec<*>,
+    ) {
+        when (val target = entry.entry) {
+            is FragmentEntry -> {
+                launcher.attachTo(target)
+                launcher.request.launch(callerCovered = false)
+                navigateTo(target, fragmentSpec)
+            }
+
+            is ComposableEntry<*> -> {
+                navigateTo(target, composeSpec)
+                // The target belongs to the opened screen, not to this controller, so that
+                // chained requests don't overwrite each other.
+                val openedEntry = internalNavController.currentBackStackEntry
+                check(openedEntry != null && openedEntry.isFor(target)) {
+                    "${composeSpec.javaClass.name} didn't show '${target.name}' right away, so it can't " +
+                        "be used with navigateForResult()."
+                }
+                launcher.target.writeTo(openedEntry.savedStateHandle)
+                // navigate() already paused the caller, before the request started.
+                launcher.request.launch(callerCovered = true)
+            }
+        }
+    }
+
+    override fun setResultAndNavigateBack(result: Parcelable) {
+        sendResult(result)
+        navigateBack()
+    }
+
+    override fun cancelResultAndNavigateBack() {
+        sendResult(null)
+        navigateBack()
+    }
+
+    private fun sendResult(result: Parcelable?) {
+        val target = ResultTarget.from(internalNavController.currentBackStackEntry?.savedStateHandle) ?: return
+        fragmentManager.sendResult(target, result)
+    }
+
+    private fun NavBackStackEntry.isFor(entry: ComposableEntry<*>): Boolean {
+        val route = destination.route ?: return false
+        return route == entry.name || route.startsWith("${entry.name}/")
     }
 }

@@ -1,0 +1,18 @@
+<journey name="Chained results">
+  <description>
+    A screen opened for a result opens another screen for a result. Each result reaches its own
+    caller.
+  </description>
+  <actions>
+    <action>Tap "Results Demo (type.fragment, internal)"</action>
+    <action>Verify that "Results Demo" and "Last result: none" are shown</action>
+    <action>Tap "Pick color (compose → compose)"</action>
+    <action>Verify that "Picker level: 1" and "Nested result: none" are shown</action>
+    <action>Tap "Open nested picker"</action>
+    <action>Verify that "Picker level: 2" and "Nested result: none" are shown</action>
+    <action>Tap "Pick Green"</action>
+    <action>Verify that "Picker level: 1" and "Nested result: Green" are shown</action>
+    <action>Tap "Pick Red"</action>
+    <action>Verify that "Results Demo" and "Last result: Red" are shown</action>
+  </actions>
+</journey>
