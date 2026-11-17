@@ -130,13 +130,19 @@ public abstract class nibel/runtime/NavigationController {
 	public fun <init> ()V
 	public fun <init> (Lnibel/runtime/FragmentSpec;Lnibel/runtime/ComposeSpec;)V
 	public synthetic fun <init> (Lnibel/runtime/FragmentSpec;Lnibel/runtime/ComposeSpec;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun cancelResultAndNavigateBack ()V
 	public final fun getComposeSpec ()Lnibel/runtime/ComposeSpec;
 	public final fun getFragmentSpec ()Lnibel/runtime/FragmentSpec;
 	public abstract fun navigateBack ()V
+	public fun navigateForResult (Lnibel/annotations/ExternalDestination;Lnibel/runtime/ResultLauncher;Lnibel/runtime/FragmentSpec;Lnibel/runtime/ComposeSpec;)V
+	public fun navigateForResult (Lnibel/runtime/ResultEntry;Lnibel/runtime/ResultLauncher;Lnibel/runtime/FragmentSpec;Lnibel/runtime/ComposeSpec;)V
+	public static synthetic fun navigateForResult$default (Lnibel/runtime/NavigationController;Lnibel/annotations/ExternalDestination;Lnibel/runtime/ResultLauncher;Lnibel/runtime/FragmentSpec;Lnibel/runtime/ComposeSpec;ILjava/lang/Object;)V
+	public static synthetic fun navigateForResult$default (Lnibel/runtime/NavigationController;Lnibel/runtime/ResultEntry;Lnibel/runtime/ResultLauncher;Lnibel/runtime/FragmentSpec;Lnibel/runtime/ComposeSpec;ILjava/lang/Object;)V
 	public abstract fun navigateTo (Lnibel/annotations/ExternalDestination;Lnibel/runtime/FragmentSpec;Lnibel/runtime/ComposeSpec;)V
 	public abstract fun navigateTo (Lnibel/runtime/Entry;Lnibel/runtime/FragmentSpec;Lnibel/runtime/ComposeSpec;)V
 	public static synthetic fun navigateTo$default (Lnibel/runtime/NavigationController;Lnibel/annotations/ExternalDestination;Lnibel/runtime/FragmentSpec;Lnibel/runtime/ComposeSpec;ILjava/lang/Object;)V
 	public static synthetic fun navigateTo$default (Lnibel/runtime/NavigationController;Lnibel/runtime/Entry;Lnibel/runtime/FragmentSpec;Lnibel/runtime/ComposeSpec;ILjava/lang/Object;)V
+	public fun setResultAndNavigateBack (Landroid/os/Parcelable;)V
 }
 
 public final class nibel/runtime/NavigationControllerArgs {
@@ -189,6 +195,7 @@ public class nibel/runtime/NibelNavigationController : nibel/runtime/NavigationC
 	public static final field $stable I
 	public fun <init> (Landroidx/navigation/NavController;Landroidx/fragment/app/FragmentManager;Landroidx/activity/OnBackPressedDispatcher;Lnibel/runtime/ExploredEntriesRegistry;Lnibel/runtime/FragmentSpec;Lnibel/runtime/ComposeSpec;)V
 	public synthetic fun <init> (Landroidx/navigation/NavController;Landroidx/fragment/app/FragmentManager;Landroidx/activity/OnBackPressedDispatcher;Lnibel/runtime/ExploredEntriesRegistry;Lnibel/runtime/FragmentSpec;Lnibel/runtime/ComposeSpec;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun cancelResultAndNavigateBack ()V
 	protected final fun getComposeNavigationContext ()Lnibel/runtime/ComposeNavigationContext;
 	public final fun getExploredEntries ()Lnibel/runtime/ExploredEntriesRegistry;
 	public final fun getFragmentManager ()Landroidx/fragment/app/FragmentManager;
@@ -196,10 +203,20 @@ public class nibel/runtime/NibelNavigationController : nibel/runtime/NavigationC
 	public final fun getInternalNavController ()Landroidx/navigation/NavController;
 	public final fun getOnBackPressedDispatcher ()Landroidx/activity/OnBackPressedDispatcher;
 	public fun navigateBack ()V
+	public fun navigateForResult (Lnibel/annotations/ExternalDestination;Lnibel/runtime/ResultLauncher;Lnibel/runtime/FragmentSpec;Lnibel/runtime/ComposeSpec;)V
+	public fun navigateForResult (Lnibel/runtime/ResultEntry;Lnibel/runtime/ResultLauncher;Lnibel/runtime/FragmentSpec;Lnibel/runtime/ComposeSpec;)V
 	public fun navigateTo (Lnibel/annotations/ExternalDestination;Lnibel/runtime/FragmentSpec;Lnibel/runtime/ComposeSpec;)V
 	public fun navigateTo (Lnibel/runtime/ComposableEntry;Lnibel/runtime/ComposeSpec;)V
 	public fun navigateTo (Lnibel/runtime/Entry;Lnibel/runtime/FragmentSpec;Lnibel/runtime/ComposeSpec;)V
 	public fun navigateTo-hKZxcZY (Landroidx/fragment/app/Fragment;Lnibel/runtime/FragmentSpec;)V
+	public fun setResultAndNavigateBack (Landroid/os/Parcelable;)V
+}
+
+public final class nibel/runtime/NibelResultKt {
+	public static final fun prepareFragment (Lnibel/runtime/ResultLauncher;Lnibel/runtime/ResultEntry;)Landroidx/fragment/app/Fragment;
+	public static final fun registerForNibelResult (Landroidx/fragment/app/Fragment;Ljava/lang/Class;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lnibel/runtime/ResultLauncher;
+	public static final fun rememberResultLauncher (Ljava/lang/Class;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;I)Lnibel/runtime/ResultLauncher;
+	public static final fun setNibelResult (Landroidx/fragment/app/Fragment;Landroid/os/Parcelable;)V
 }
 
 public final class nibel/runtime/NoArgs : android/os/Parcelable {
@@ -230,6 +247,16 @@ public final class nibel/runtime/ParcelableType : androidx/navigation/NavType {
 	public synthetic fun parseValue (Ljava/lang/String;)Ljava/lang/Object;
 	public fun put (Landroid/os/Bundle;Ljava/lang/String;Landroid/os/Parcelable;)V
 	public synthetic fun put (Landroid/os/Bundle;Ljava/lang/String;Ljava/lang/Object;)V
+}
+
+public final class nibel/runtime/ResultEntry {
+	public static final field $stable I
+	public fun <init> (Lnibel/runtime/Entry;)V
+	public final fun getEntry ()Lnibel/runtime/Entry;
+}
+
+public final class nibel/runtime/ResultLauncher {
+	public static final field $stable I
 }
 
 public abstract interface class nibel/runtime/RootDelegate {
