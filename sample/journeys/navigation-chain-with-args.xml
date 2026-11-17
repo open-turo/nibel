@@ -1,0 +1,25 @@
+<journey name="Navigation chain with args">
+  <description>
+    Existing navigation across fragment and compose screens in feature-A, feature-B and
+    feature-C, passing the input text as args, and back to the start.
+  </description>
+  <actions>
+    <action>Tap "First Screen (type.fragment, internal)"</action>
+    <action>Verify that "Feature A | First Screen" and "Implementation Type: Fragment" are shown</action>
+    <action>Type "hello" into the "Input text" field</action>
+    <action>Tap "Second Screen (type.composable, internal)"</action>
+    <action>Verify that "Feature A | Second Screen", "Implementation Type: Composable" and the input text "hello" are shown</action>
+    <action>Tap "Third Screen (type.composable, external)"</action>
+    <action>Verify that "Feature B | Third Screen" and the input text "hello" are shown</action>
+    <action>Tap "Fourth Screen (legacy fragment, external)"</action>
+    <action>Verify that "Feature C | Fourth Screen", "Legacy" and the read-only input text "hello" are shown</action>
+    <action>Press the system back button</action>
+    <action>Verify that "Feature B | Third Screen" is shown</action>
+    <action>Press the system back button</action>
+    <action>Verify that "Feature A | Second Screen" is shown</action>
+    <action>Press the system back button</action>
+    <action>Verify that "Feature A | First Screen" is shown</action>
+    <action>Press the system back button</action>
+    <action>Verify that "Feature A | Zero Screen" is shown</action>
+  </actions>
+</journey>

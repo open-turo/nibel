@@ -1,0 +1,15 @@
+<journey name="Embedded external content">
+  <description>
+    A feature-B composable embedded in a feature-A screen with Nibel.ExternalContent.
+  </description>
+  <actions>
+    <action>Tap "First Screen (type.fragment, internal)"</action>
+    <action>Verify that "Feature A | First Screen" is shown</action>
+    <action>Tap "Second Screen (type.composable, internal)"</action>
+    <action>Verify that "Feature A | Second Screen" is shown</action>
+    <action>Tap "ExternalContent Demo (type.composable, external)"</action>
+    <action>Verify that "External Content Demo", "Fifth Screen (feature-B)" and "Label: Hello from feature-A!" are shown</action>
+    <action>Press the system back button</action>
+    <action>Verify that "Feature A | Second Screen" is shown</action>
+  </actions>
+</journey>
