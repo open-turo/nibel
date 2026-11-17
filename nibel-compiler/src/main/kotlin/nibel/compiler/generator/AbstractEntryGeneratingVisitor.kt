@@ -1,12 +1,13 @@
 package nibel.compiler.generator
 
+import com.google.devtools.ksp.getAllSuperTypes
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSNode
 import com.google.devtools.ksp.symbol.KSType
-import com.google.devtools.ksp.symbol.KSTypeReference
+import com.google.devtools.ksp.symbol.KSTypeAlias
 import com.google.devtools.ksp.symbol.KSVisitorVoid
 import com.google.devtools.ksp.symbol.Modifier
 import nibel.annotations.DestinationWithArgs
@@ -31,16 +32,15 @@ abstract class AbstractEntryGeneratingVisitor(
             return null
         }
 
-        val reference = declaration.findDestinationSuperType(symbol) ?: return null
+        val destinationSuperType = declaration.findDestinationSuperType(symbol) ?: return null
         val result = parseResult(symbol) ?: return null
         if (!declaration.matchesResult(result, symbol)) {
             return null
         }
 
-        val ref = reference.toString()
-        return when {
-            ref.startsWith(DestinationWithArgs::class.simpleName!!) -> {
-                val argsReference = reference.element?.typeArguments?.first()?.type?.resolve()
+        return when (destinationSuperType.declaration.qualifiedName?.asString()) {
+            DestinationWithArgs::class.qualifiedName -> {
+                val argsReference = destinationSuperType.arguments.first().type?.resolve()?.expandTypeAliases()
                 val argsDeclaration = argsReference?.declaration as KSClassDeclaration
                 if (!argsDeclaration.isCorrectArgsDeclaration(symbol)) {
                     return null
@@ -63,7 +63,7 @@ abstract class AbstractEntryGeneratingVisitor(
                 )
             }
 
-            ref.startsWith(DestinationWithNoArgs::class.simpleName!!) ->
+            DestinationWithNoArgs::class.qualifiedName ->
                 ExternalEntryMetadata(
                     destinationName = destinationSimpleName.asString(),
                     destinationPackageName = destinationPackageName.asString(),
@@ -116,10 +116,12 @@ abstract class AbstractEntryGeneratingVisitor(
      */
     private fun KSClassDeclaration.matchesResult(result: ParsedResult, symbol: KSNode): Boolean {
         val destinationName = qualifiedName!!.asString()
-        val destinationResult = superTypes
-            .map { it.resolve() }
+        // Searches the whole hierarchy, so DestinationWithResult can come from another interface.
+        val destinationResult = getAllSuperTypes()
+            .map { it.expandTypeAliases() }
             .find { it.declaration.qualifiedName?.asString() == DestinationWithResult::class.qualifiedName }
-            ?.arguments?.firstOrNull()?.type?.resolve()?.declaration?.qualifiedName?.asString()
+            ?.arguments?.firstOrNull()?.type?.resolve()?.expandTypeAliases()
+            ?.declaration?.qualifiedName?.asString()
         val annotationResult = result.qualifiedName
 
         val error = when {
@@ -202,14 +204,14 @@ abstract class AbstractEntryGeneratingVisitor(
         return true
     }
 
-    private fun KSClassDeclaration.findDestinationSuperType(symbol: KSNode): KSTypeReference? {
-        // DestinationWithResult only declares a result type and can be listed before the args type.
-        val destinationSuperType = superTypes.toList()
-            .find {
-                val name = it.toString()
-                name.startsWith("DestinationWith") &&
-                    !name.startsWith(DestinationWithResult::class.simpleName!!)
-            }
+    private fun KSClassDeclaration.findDestinationSuperType(symbol: KSNode): KSType? {
+        // Resolved rather than matched by name, so qualified names and typealiases work, and
+        // DestinationWithResult can be listed in any position.
+        val destinationTypes =
+            setOf(DestinationWithArgs::class.qualifiedName, DestinationWithNoArgs::class.qualifiedName)
+        val destinationSuperType = superTypes
+            .map { it.resolve().expandTypeAliases() }
+            .find { it.declaration.qualifiedName?.asString() in destinationTypes }
 
         if (destinationSuperType == null) {
             logger.error(
@@ -220,5 +222,13 @@ abstract class AbstractEntryGeneratingVisitor(
             return null
         }
         return destinationSuperType
+    }
+
+    private fun KSType.expandTypeAliases(): KSType {
+        var type = this
+        while (true) {
+            val alias = type.declaration as? KSTypeAlias ?: return type
+            type = alias.type.resolve()
+        }
     }
 }

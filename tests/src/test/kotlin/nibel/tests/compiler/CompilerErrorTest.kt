@@ -188,6 +188,58 @@ class CompilerErrorTest {
         result.sourcesGeneratedBySymbolProcessor.map { it.name }.toList() shouldContain "PickerScreenEntry.kt"
     }
 
+    @Test
+    fun `result type inherited through another interface is valid`() {
+        assertValid(
+            """
+            interface ColorPicking : DestinationWithResult<PickedColor>
+
+            object PickerDestination : DestinationWithNoArgs, ColorPicking
+            """,
+        )
+    }
+
+    @Test
+    fun `fully qualified destination supertypes are valid`() {
+        assertValid(
+            """
+            object PickerDestination :
+                nibel.annotations.DestinationWithNoArgs,
+                nibel.annotations.DestinationWithResult<PickedColor>
+            """,
+        )
+    }
+
+    @Test
+    fun `destination supertypes through typealiases are valid`() {
+        assertValid(
+            """
+            typealias NoArgs = DestinationWithNoArgs
+            typealias ColorResultOf = DestinationWithResult<PickedColor>
+
+            object PickerDestination : NoArgs, ColorResultOf
+            """,
+        )
+    }
+
+    private fun assertValid(destination: String) {
+        val result = compile(
+            imports + resultTypes + destination.trimIndent() + """
+
+            @UiExternalEntry(
+                type = ImplementationType.Composable,
+                destination = PickerDestination::class,
+                result = PickedColor::class,
+            )
+            @Composable
+            fun PickerScreen() = Unit
+            """,
+        )
+
+        result.messages shouldNotContain "e: [ksp]"
+        result.sourcesGeneratedBySymbolProcessor.map { it.name }.toList() shouldContain "PickerScreenEntry.kt"
+    }
+
     // endregion
 
     // region Caller result types
