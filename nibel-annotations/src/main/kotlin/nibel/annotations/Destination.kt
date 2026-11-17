@@ -32,6 +32,22 @@ interface DestinationWithArgs<A : Parcelable> : ExternalDestination {
 }
 
 /**
+ * Declares the type of result returned by the screen associated with a destination, so callers
+ * can open it with `NavigationController.navigateForResult` and a launcher for the same type.
+ *
+ * Combine it with [DestinationWithNoArgs] or [DestinationWithArgs]. The associated screen must
+ * declare the same result type in its [UiExternalEntry] or [LegacyExternalEntry] annotation.
+ * ```
+ * object DatePickerDestination : DestinationWithNoArgs, DestinationWithResult<PickedDate>
+ *
+ * data class EditNameDestination(
+ *     override val args: EditNameArgs,
+ * ) : DestinationWithArgs<EditNameArgs>, DestinationWithResult<EditedName>
+ * ```
+ */
+interface DestinationWithResult<R : Parcelable>
+
+/**
  * A base type for destinations for internal single-module navigation.
  */
 interface InternalDestination : Destination

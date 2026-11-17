@@ -28,6 +28,9 @@ jobs:
       - name: Android lint
         run: ./gradlew lintDebug
 
+      - name: Public API check
+        run: ./gradlew apiCheck
+
   build:
     name: Build
     runs-on: [ubuntu-latest]
@@ -63,3 +66,32 @@ jobs:
           checkout-repo: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
           gradle-task: tests:test
+
+  instrumentation-test:
+    name: Instrumentation test
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+
+      - name: Set up JDK
+        uses: open-turo/action-setup-tools@v3
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v4
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Instrumentation tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          # Retry once: emulator start-up on shared runners is occasionally flaky.
+          script: ./gradlew :sample:app:connectedDebugAndroidTest || ./gradlew :sample:app:connectedDebugAndroidTest

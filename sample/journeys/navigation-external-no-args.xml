@@ -1,0 +1,16 @@
+<journey name="External navigation without args">
+  <description>
+    Fragment to external fragment screen, then external navigation back into feature-A with no
+    args.
+  </description>
+  <actions>
+    <action>Tap "Third Screen (type.fragment, external)"</action>
+    <action>Verify that "Feature B | Third Screen" is shown and the "Input text" field is empty</action>
+    <action>Tap "First Screen (type.fragment, external, no args)"</action>
+    <action>Verify that "Feature A | First Screen" is shown and the "Input text" field is empty</action>
+    <action>Press the system back button</action>
+    <action>Verify that "Feature B | Third Screen" is shown</action>
+    <action>Press the system back button</action>
+    <action>Verify that "Feature A | Zero Screen" is shown</action>
+  </actions>
+</journey>

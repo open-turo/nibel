@@ -39,6 +39,7 @@ abstract class ComposableFragment : Fragment() {
             Nibel.RootDelegate.Content {
                 CompositionLocalProvider(
                     LocalImplementationType provides ImplementationType.Fragment,
+                    LocalRootResultTarget provides ResultTarget.from(arguments),
                 ) {
                     Nibel.NavigationDelegate.Content(rootArgs = args) {
                         ComposableContent()

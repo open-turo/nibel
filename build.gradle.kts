@@ -10,4 +10,21 @@ plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.detekt) apply false
     alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.kotlinx.binaryCompatibilityValidator)
+}
+
+apiValidation {
+    // Only the modules consumers compile against have a public API to keep stable. KSP loads the
+    // compiler's processors through a service loader, so its public classes are internal in practice.
+    ignoredProjects += listOf(
+        "nibel-compiler",
+        "tests",
+        "sample",
+        "app",
+        "common",
+        "navigation",
+        "feature-A",
+        "feature-B",
+        "feature-C",
+    )
 }

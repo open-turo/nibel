@@ -24,6 +24,7 @@ dependencies {
     compileOnly(libs.gradlePlugin.kotlin)
     compileOnly(libs.gradlePlugin.mavenPublish)
     compileOnly(libs.gradlePlugin.detekt)
+    compileOnly(libs.gradlePlugin.binaryCompatibilityValidator)
 }
 
 @Suppress("UNUSED_VARIABLE")
@@ -56,6 +57,10 @@ gradlePlugin {
         val detekt by registering {
             id = "nibel.detekt"
             implementationClass = "NibelDetektPlugin"
+        }
+        val androidApiValidation by registering {
+            id = "nibel.android.api.validation"
+            implementationClass = "NibelAndroidApiValidationPlugin"
         }
         val sampleApplication by registering {
             id = "sample.android.application"

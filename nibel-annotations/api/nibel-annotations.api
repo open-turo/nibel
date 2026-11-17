@@ -1,0 +1,49 @@
+public abstract interface class nibel/annotations/Destination {
+}
+
+public abstract interface class nibel/annotations/DestinationWithArgs : nibel/annotations/ExternalDestination {
+	public abstract fun getArgs ()Landroid/os/Parcelable;
+}
+
+public abstract interface class nibel/annotations/DestinationWithNoArgs : nibel/annotations/ExternalDestination {
+}
+
+public abstract interface class nibel/annotations/DestinationWithResult {
+}
+
+public abstract interface class nibel/annotations/ExternalDestination : nibel/annotations/Destination {
+}
+
+public final class nibel/annotations/ImplementationType : java/lang/Enum {
+	public static final field Composable Lnibel/annotations/ImplementationType;
+	public static final field Fragment Lnibel/annotations/ImplementationType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lnibel/annotations/ImplementationType;
+	public static fun values ()[Lnibel/annotations/ImplementationType;
+}
+
+public abstract interface class nibel/annotations/InternalDestination : nibel/annotations/Destination {
+}
+
+public abstract interface annotation class nibel/annotations/LegacyEntry : java/lang/annotation/Annotation {
+	public abstract fun args ()Ljava/lang/Class;
+	public abstract fun result ()Ljava/lang/Class;
+}
+
+public abstract interface annotation class nibel/annotations/LegacyExternalEntry : java/lang/annotation/Annotation {
+	public abstract fun destination ()Ljava/lang/Class;
+	public abstract fun result ()Ljava/lang/Class;
+}
+
+public abstract interface annotation class nibel/annotations/UiEntry : java/lang/annotation/Annotation {
+	public abstract fun args ()Ljava/lang/Class;
+	public abstract fun result ()Ljava/lang/Class;
+	public abstract fun type ()Lnibel/annotations/ImplementationType;
+}
+
+public abstract interface annotation class nibel/annotations/UiExternalEntry : java/lang/annotation/Annotation {
+	public abstract fun destination ()Ljava/lang/Class;
+	public abstract fun result ()Ljava/lang/Class;
+	public abstract fun type ()Lnibel/annotations/ImplementationType;
+}
+
