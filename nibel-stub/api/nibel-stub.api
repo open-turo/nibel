@@ -5,3 +5,7 @@ public final class nibel/runtime/NoArgs : android/os/Parcelable {
 	public static final field INSTANCE Lnibel/runtime/NoArgs;
 }
 
+public final class nibel/runtime/NoResult : android/os/Parcelable {
+	public static final field INSTANCE Lnibel/runtime/NoResult;
+}
+

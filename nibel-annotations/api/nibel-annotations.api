@@ -8,6 +8,9 @@ public abstract interface class nibel/annotations/DestinationWithArgs : nibel/an
 public abstract interface class nibel/annotations/DestinationWithNoArgs : nibel/annotations/ExternalDestination {
 }
 
+public abstract interface class nibel/annotations/DestinationWithResult {
+}
+
 public abstract interface class nibel/annotations/ExternalDestination : nibel/annotations/Destination {
 }
 
@@ -24,19 +27,23 @@ public abstract interface class nibel/annotations/InternalDestination : nibel/an
 
 public abstract interface annotation class nibel/annotations/LegacyEntry : java/lang/annotation/Annotation {
 	public abstract fun args ()Ljava/lang/Class;
+	public abstract fun result ()Ljava/lang/Class;
 }
 
 public abstract interface annotation class nibel/annotations/LegacyExternalEntry : java/lang/annotation/Annotation {
 	public abstract fun destination ()Ljava/lang/Class;
+	public abstract fun result ()Ljava/lang/Class;
 }
 
 public abstract interface annotation class nibel/annotations/UiEntry : java/lang/annotation/Annotation {
 	public abstract fun args ()Ljava/lang/Class;
+	public abstract fun result ()Ljava/lang/Class;
 	public abstract fun type ()Lnibel/annotations/ImplementationType;
 }
 
 public abstract interface annotation class nibel/annotations/UiExternalEntry : java/lang/annotation/Annotation {
 	public abstract fun destination ()Ljava/lang/Class;
+	public abstract fun result ()Ljava/lang/Class;
 	public abstract fun type ()Lnibel/annotations/ImplementationType;
 }
 
