@@ -2,6 +2,7 @@ package nibel.runtime
 
 import android.os.Parcelable
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -73,12 +74,8 @@ open class ComposeNavigationDelegate : NavigationDelegate<NavigationControllerAr
                         name = entry.name,
                         argsType = entry.args?.javaClass,
                         defaultArgs = null,
-                    ) {
-                        val args = it.arguments?.getNibelArgs<Parcelable>()
-                        CompositionLocalProvider(LocalArgs provides args) {
-                            entry.ComposableEntry()
-                        }
-                    }
+                        content = entryDestinationContent(entry),
+                    )
                 }
             }
         }
@@ -88,12 +85,10 @@ open class ComposeNavigationDelegate : NavigationDelegate<NavigationControllerAr
         name: String,
         argsType: Class<A>?,
         defaultArgs: A?,
-        content: @Composable (NavBackStackEntry) -> Unit,
+        content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit,
     ) {
         if (argsType == null) {
-            composable(route = name) {
-                content(it)
-            }
+            composable(route = name, content = content)
         } else {
             val route = if (defaultArgs == null) {
                 "$name/{${Nibel.argsKey}}"
@@ -110,9 +105,8 @@ open class ComposeNavigationDelegate : NavigationDelegate<NavigationControllerAr
                         }
                     },
                 ),
-            ) {
-                content(it)
-            }
+                content = content,
+            )
         }
     }
 }
